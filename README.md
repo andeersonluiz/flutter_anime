@@ -1,6 +1,6 @@
 # flutter_anime
 
-App of informations about animes using flutter with MobX.
+Developing an app of informations about animes using flutter with MobX.
 
 ## Getting Started
 
