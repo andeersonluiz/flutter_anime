@@ -1,6 +1,6 @@
 # flutter_anime
 
-A new Flutter project.
+App of informations about animes using flutter with MobX.
 
 ## Getting Started
 
