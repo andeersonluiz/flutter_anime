@@ -1,4 +1,4 @@
-# project1
+# flutter_anime
 
 A new Flutter project.
 
