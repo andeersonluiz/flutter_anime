@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'AnimeApi.dart';
+part of 'anime_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,8 +8,8 @@ part of 'AnimeApi.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$AnimeApi on _AnimeApi, Store {
-  final _$animesAtom = Atom(name: '_AnimeApi.animes');
+mixin _$AnimeStore on _AnimeStore, Store {
+  final _$animesAtom = Atom(name: '_AnimeStore.animes');
 
   @override
   ObservableFuture<List<Anime>> get animes {
@@ -24,14 +24,14 @@ mixin _$AnimeApi on _AnimeApi, Store {
     });
   }
 
-  final _$getAnimesAsyncAction = AsyncAction('_AnimeApi.getAnimes');
+  final _$getAnimesAsyncAction = AsyncAction('_AnimeStore.getAnimes');
 
   @override
   Future getAnimes(String filter) {
     return _$getAnimesAsyncAction.run(() => super.getAnimes(filter));
   }
 
-  final _$loadMoreAnimesAsyncAction = AsyncAction('_AnimeApi.loadMoreAnimes');
+  final _$loadMoreAnimesAsyncAction = AsyncAction('_AnimeStore.loadMoreAnimes');
 
   @override
   Future loadMoreAnimes() {
