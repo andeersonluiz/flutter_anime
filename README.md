@@ -1,6 +1,6 @@
-# project1
+# flutter_anime
 
-A new Flutter project.
+Developing an app of informations about animes using flutter with MobX.
 
 ## Getting Started
 
