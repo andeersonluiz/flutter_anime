@@ -3,25 +3,49 @@ import 'package:mobx/mobx.dart';
 
 import 'dart:convert';
 import 'package:project1/model/anime_model.dart';
+import 'package:project1/support/global_variables.dart';
+
 part 'anime_store.g.dart';
+
+
 
 class AnimeStore = _AnimeStore with _$AnimeStore;
 
 abstract class _AnimeStore with Store {
+  
   http.Response response;
   static String nextPage;
   int qtdAnim = 10;
+  
   static ObservableFuture<List<Anime>> emptyResponse =
       ObservableFuture.value([]);
-  List<Anime> localAnimes = [];
+
+
   
   @observable
-  ObservableFuture<List<Anime>> animes = emptyResponse;
+  ObservableFuture<List<Anime>> animesPopular = emptyResponse;
+
+  @observable
+  ObservableFuture<List<Anime>> animesHighest = emptyResponse;
+
+  @observable
+  ObservableFuture<List<Anime>> animesUpcoming = emptyResponse;
+
+  @observable
+  ObservableFuture<List<Anime>> animesAiring = emptyResponse;
+
+  @observable
+  String actualBar = "Most Popular";
+
 
   bool loadedAllList = false;
 
   _AnimeStore() {
-    getAnimes('Most Popular');
+    getAnimes("Most Popular");
+    getAnimes("Top Airing");
+    getAnimes("Highest Rated");
+    getAnimes("Top Upcoming");
+
   }
 
   @action
@@ -29,26 +53,26 @@ abstract class _AnimeStore with Store {
     loadedAllList = false;
     switch (filter) {
       case "Most Popular":
-        this.animes = ObservableFuture(_decode(
+        this.animesPopular = ObservableFuture(_decode(
                 "https://kitsu.io/api/edge/anime?sort=-userCount,-favoritesCount&page[limit]=$qtdAnim&page[offset]=0"))
-            .then((animes) => animes);
+            .then((animesPopular) => animesPopular);
 
         break;
       case "Highest Rated":
-        this.animes = ObservableFuture(_decode(
+        this.animesHighest = ObservableFuture(_decode(
                 "https://kitsu.io/api/edge/anime?sort=-averageRating&page[limit]=$qtdAnim&page[offset]=0"))
-            .then((animes) => animes);
+            .then((animesHighest) => animesHighest);
 
         break;
       case "Top Upcoming":
-        this.animes = ObservableFuture(_decode(
+        this.animesUpcoming = ObservableFuture(_decode(
                 "https://kitsu.io/api/edge/anime?sort=-userCount,-favoritesCount&filter[status]=upcoming&page[limit]=$qtdAnim&page[offset]=0"))
-            .then((animes) => animes);
+            .then((animesUpcoming) => animesUpcoming);
         break;
       case "Top Airing":
-        this.animes = ObservableFuture(_decode(
+        this.animesAiring = ObservableFuture(_decode(
                 "https://kitsu.io/api/edge/anime?sort=-userCount,-favoritesCount&filter[status]=current&page[limit]=$qtdAnim&page[offset]=0"))
-            .then((animes) => animes);
+            .then((animesAiring) => animesAiring);
 
         break;
     }
@@ -56,8 +80,26 @@ abstract class _AnimeStore with Store {
 
   @action
   loadMoreAnimes() async {
-    this.animes = (animes.replace(ObservableFuture(_decode(nextPage))
-        .then((anime) => animes.value + anime)));
+    print("xx"+actualBar);
+    switch(actualBar){
+      case "Most Popular":
+        this.animesPopular = (animesPopular.replace(ObservableFuture(_decode(nextPage))
+        .then((anime) => animesPopular.value + anime)));
+        break;
+      case "Highest Rated":
+        this.animesHighest = (animesHighest.replace(ObservableFuture(_decode(nextPage))
+        .then((anime) => animesHighest.value + anime)));
+        break;
+      case "Top Upcoming":
+        this.animesUpcoming = (animesUpcoming.replace(ObservableFuture(_decode(nextPage))
+        .then((anime) => animesUpcoming.value + anime)));
+        break;
+      case "Top Airing":
+        this.animesAiring = (animesAiring.replace(ObservableFuture(_decode(nextPage))
+        .then((anime) => animesAiring.value + anime)));
+        break;
+    }
+    
   }
 
   _decode(String url) async {
@@ -68,8 +110,7 @@ abstract class _AnimeStore with Store {
       loadedAllList=true;
     }
 
-    localAnimes =
-        decoded['data'].map<Anime>((value) => Anime.fromJson(value)).toList();
+    List<Anime> localAnimes =decoded['data'].map<Anime>((value) => Anime.fromJson(value)).toList();
 
     return localAnimes;
   }

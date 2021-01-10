@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:project1/support/circle_painter.dart';
 import 'package:project1/support/global_variables.dart' as globals;
 import 'package:transparent_image/transparent_image.dart';
+import 'package:project1/widgets/listAnimes_widget.dart';
+
+
 class AnimeTile extends StatelessWidget {
   final anime;
   final index;
@@ -72,14 +75,14 @@ class AnimeTile extends StatelessWidget {
                   padding: const EdgeInsets.all(4.0),
                   child: Container(
                     width: width,
-                    height: height*0.13,
+                    height: height*0.135,
                     decoration: BoxDecoration(),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
                         
                           child: Text('${anime.canonicalTitle}',
-                              style: TextStyle(fontSize: 15),
+                              style: TextStyle(fontSize: 14),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2)),
                     ),
