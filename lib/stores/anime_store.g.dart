@@ -9,6 +9,39 @@ part of 'anime_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AnimeStore on _AnimeStore, Store {
+  Computed<ObservableFuture<List<Anime>>> _$getAnimesPopularComputed;
+
+  @override
+  ObservableFuture<List<Anime>> get getAnimesPopular =>
+      (_$getAnimesPopularComputed ??= Computed<ObservableFuture<List<Anime>>>(
+              () => super.getAnimesPopular,
+              name: '_AnimeStore.getAnimesPopular'))
+          .value;
+  Computed<ObservableFuture<List<Anime>>> _$getAnimesHighestComputed;
+
+  @override
+  ObservableFuture<List<Anime>> get getAnimesHighest =>
+      (_$getAnimesHighestComputed ??= Computed<ObservableFuture<List<Anime>>>(
+              () => super.getAnimesHighest,
+              name: '_AnimeStore.getAnimesHighest'))
+          .value;
+  Computed<ObservableFuture<List<Anime>>> _$getAnimesUpcomingComputed;
+
+  @override
+  ObservableFuture<List<Anime>> get getAnimesUpcoming =>
+      (_$getAnimesUpcomingComputed ??= Computed<ObservableFuture<List<Anime>>>(
+              () => super.getAnimesUpcoming,
+              name: '_AnimeStore.getAnimesUpcoming'))
+          .value;
+  Computed<ObservableFuture<List<Anime>>> _$getAnimesAiringComputed;
+
+  @override
+  ObservableFuture<List<Anime>> get getAnimesAiring =>
+      (_$getAnimesAiringComputed ??= Computed<ObservableFuture<List<Anime>>>(
+              () => super.getAnimesAiring,
+              name: '_AnimeStore.getAnimesAiring'))
+          .value;
+
   final _$animesPopularAtom = Atom(name: '_AnimeStore.animesPopular');
 
   @override
@@ -69,18 +102,34 @@ mixin _$AnimeStore on _AnimeStore, Store {
     });
   }
 
+  final _$actualBarAtom = Atom(name: '_AnimeStore.actualBar');
+
+  @override
+  String get actualBar {
+    _$actualBarAtom.reportRead();
+    return super.actualBar;
+  }
+
+  @override
+  set actualBar(String value) {
+    _$actualBarAtom.reportWrite(value, super.actualBar, () {
+      super.actualBar = value;
+    });
+  }
+
   final _$getAnimesAsyncAction = AsyncAction('_AnimeStore.getAnimes');
 
   @override
-  Future getAnimes(String filter) {
+  Future<void> getAnimes(String filter) {
     return _$getAnimesAsyncAction.run(() => super.getAnimes(filter));
   }
 
   final _$loadMoreAnimesAsyncAction = AsyncAction('_AnimeStore.loadMoreAnimes');
 
   @override
-  Future loadMoreAnimes() {
-    return _$loadMoreAnimesAsyncAction.run(() => super.loadMoreAnimes());
+  Future loadMoreAnimes(String actualBar) {
+    return _$loadMoreAnimesAsyncAction
+        .run(() => super.loadMoreAnimes(actualBar));
   }
 
   @override
@@ -89,7 +138,12 @@ mixin _$AnimeStore on _AnimeStore, Store {
 animesPopular: ${animesPopular},
 animesHighest: ${animesHighest},
 animesUpcoming: ${animesUpcoming},
-animesAiring: ${animesAiring}
+animesAiring: ${animesAiring},
+actualBar: ${actualBar},
+getAnimesPopular: ${getAnimesPopular},
+getAnimesHighest: ${getAnimesHighest},
+getAnimesUpcoming: ${getAnimesUpcoming},
+getAnimesAiring: ${getAnimesAiring}
     ''';
   }
 }
