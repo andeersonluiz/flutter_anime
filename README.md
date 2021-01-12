@@ -1,6 +1,6 @@
 # flutter_anime
 
-Developing an app of informations about animes using flutter with MobX.
+Developing an app of informations about animes using flutter with MobX. The API used is https://kitsu.docs.apiary.io
 
 ## Getting Started
 
