@@ -1,5 +1,9 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:project1/model/anime_model.dart';
+import 'package:project1/screens/animeInfo_page.dart';
 import 'package:project1/screens/home_page.dart';
 import 'package:provider/provider.dart';
 import 'stores/anime_store.dart';
@@ -20,11 +24,24 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'AnimesAPI',
       debugShowCheckedModeBanner: false,
+      initialRoute:'/',
+      onGenerateRoute: _generateRoute,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.white,
       ),
-      home: MyHomePage(),
     );
+  }
+
+  static Route<dynamic> _generateRoute(RouteSettings settings){
+      switch(settings.name){
+            case '/':
+              return MaterialPageRoute(builder:(_)=> MyHomePage());
+            case '/animeInfo':
+              final anime= settings.arguments as Anime;
+              return MaterialPageRoute(builder:(_)=> AnimeInfoPage(anime));
+            default:
+              return null;
+          }
   }
 }
 
