@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage>
         child: Column(
           children: [
             TabBar(
-                indicatorColor: Colors.red,
+                indicatorColor: Colors.black,
                 labelColor: Colors.black,
                 controller: _tabController,
                 isScrollable: true,

@@ -17,7 +17,7 @@ class AnimeTile extends StatelessWidget {
     final height = width/globals.childAspectRatio;
     
     return GestureDetector(
-      onTap:()=>{},
+      onTap:()=> Navigator.pushNamed(context, '/animeInfo',arguments:anime),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Container(

@@ -5,8 +5,8 @@ class Anime {
   String ageRatingGuide;
   String posterImage;
   String coverImage;
-  String episodeCount;
-  String episodeLength;
+  int episodeCount;
+  int episodeLength;
   String youtubeVideoId;
   String status;
   Anime({
@@ -23,14 +23,16 @@ class Anime {
   });
 
   factory Anime.fromJson(Map<String, dynamic> json) {
+   print("pa"+json['attributes']['episodeLength'].toString());
+    print(json['attributes']['episodeLength']==null);
     return Anime(
       id: json['id'].toString(),
-      synopsis: json['attributes']['synopsis'],
+      synopsis: json['attributes']['synopsis']==""?"No synopsis at the moment :(":json['attributes']['synopsis'],
       canonicalTitle: json['attributes']['canonicalTitle'],
-      ageRatingGuide: json['attributes']['ageRatingGuide'],
-      episodeCount: json['attributes']['episodeCount'].toString(),
-      episodeLength: json['attributes']['episodeLength'].toString(),
-      youtubeVideoId: json['attributes']['youtubeVideoId'] ?? "1",
+      ageRatingGuide: json['attributes']['ageRatingGuide']??"-",
+      episodeCount: json['attributes']['episodeCount']??0,
+      episodeLength: json['attributes']['episodeLength']??0,
+      youtubeVideoId: json['attributes']['youtubeVideoId'] ?? "",
       posterImage: json['attributes']['posterImage']['medium'] ??
           json['attributes']['posterImage']['large'] ??
           json['attributes']['posterImage']['original'],
