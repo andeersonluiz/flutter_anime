@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:project1/support/circle_painter.dart';
 import 'package:project1/support/global_variables.dart' as globals;
 import 'package:transparent_image/transparent_image.dart';
-import 'package:project1/widgets/listAnimes_widget.dart';
 
 
 class AnimeTile extends StatelessWidget {

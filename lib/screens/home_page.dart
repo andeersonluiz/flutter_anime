@@ -1,15 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
-import 'package:project1/model/anime_model.dart';
 import 'package:project1/stores/anime_store.dart';
-import 'package:project1/widgets/animeTile_widget.dart';
 import 'package:project1/support/global_variables.dart' as globals;
-import 'dart:developer';
-import 'package:project1/support/global_variables.dart';
+import 'package:project1/widgets/errorLoading_widget.dart';
+import 'package:project1/widgets/listAnimes_widget.dart';
+import 'package:project1/widgets/loading_widget.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -75,19 +73,25 @@ class _MyHomePageState extends State<MyHomePage>
                                   .getAnimes(globals.stringAnimesPopular);
                           switch (storeAnimes.animesPopular.status) {
                             case FutureStatus.pending:
-                              return _loadingWidget();
+                              return Loading();
                             case FutureStatus.rejected:
-                              return _errorWidget(
-                                  "Error to load page, verify your connection.");
-                            case FutureStatus.fulfilled:
-                              return _listAnimeWidget(
-                                globals.stringAnimesPopular,
-                                storeAnimes.getAnimesPopular.value,
-                                storeAnimes.dataListPopular[0],
+                              return ErrorLoading(
+                                msg:
+                                    "Error to load page, verify your connection.",
+                                refresh: _refresh,
                               );
+                            case FutureStatus.fulfilled:
+                              return AnimeList(
+                                keyName: globals.stringAnimesPopular,
+                                animes: storeAnimes.getAnimesPopular.value,
+                                loadedAllList: storeAnimes.dataListPopular[0],
+                                scrollController: _scrollController,
+                              );
+                            default:
+                              return ErrorLoading(
+                                  msg: "Error to load page, try again later.",
+                                  refresh: _refresh);
                           }
-                          return _errorWidget(
-                              "Error to load page, try again later.");
                         }),
                   ),
                   RefreshIndicator(
@@ -99,19 +103,24 @@ class _MyHomePageState extends State<MyHomePage>
                               storeAnimes.getAnimes(globals.stringAnimesAiring);
                           switch (storeAnimes.animesAiring.status) {
                             case FutureStatus.pending:
-                              return _loadingWidget();
+                              return Loading();
                             case FutureStatus.rejected:
-                              return _errorWidget(
-                                  "Error to load page, verify your connection.");
+                              return ErrorLoading(
+                                  msg:
+                                      "Error to load page, verify your connection.",
+                                  refresh: _refresh);
                             case FutureStatus.fulfilled:
-                              return _listAnimeWidget(
-                                globals.stringAnimesAiring,
-                                storeAnimes.getAnimesAiring.value,
-                                storeAnimes.dataListAiring[0],
+                              return AnimeList(
+                                keyName: globals.stringAnimesAiring,
+                                animes: storeAnimes.getAnimesAiring.value,
+                                loadedAllList: storeAnimes.dataListAiring[0],
+                                scrollController: _scrollController,
                               );
                           }
-                          return _errorWidget(
-                              "Error to load page, try again later.");
+                          return ErrorLoading(
+                            msg: "Error to load page, try again later.",
+                            refresh: _refresh,
+                          );
                         }),
                   ),
                   RefreshIndicator(
@@ -124,19 +133,24 @@ class _MyHomePageState extends State<MyHomePage>
                                   .getAnimes(globals.stringAnimesHighest);
                           switch (storeAnimes.animesHighest.status) {
                             case FutureStatus.pending:
-                              return _loadingWidget();
+                              return Loading();
                             case FutureStatus.rejected:
-                              return _errorWidget(
-                                  "Error to load page, verify your connection.");
+                              return ErrorLoading(
+                                  msg:
+                                      "Error to load page, verify your connection.",
+                                  refresh: _refresh);
                             case FutureStatus.fulfilled:
-                              return _listAnimeWidget(
-                                globals.stringAnimesHighest,
-                                storeAnimes.getAnimesHighest.value,
-                                storeAnimes.dataListHighest[0],
+                              return AnimeList(
+                                keyName: globals.stringAnimesHighest,
+                                animes: storeAnimes.getAnimesHighest.value,
+                                loadedAllList: storeAnimes.dataListHighest[0],
+                                scrollController: _scrollController,
                               );
                           }
-                          return _errorWidget(
-                              "Error to load page, try again later.");
+                          return ErrorLoading(
+                            msg: "Error to load page, try again later.",
+                            refresh: _refresh,
+                          );
                         }),
                   ),
                   RefreshIndicator(
@@ -149,85 +163,34 @@ class _MyHomePageState extends State<MyHomePage>
                                   .getAnimes(globals.stringAnimesUpcoming);
                           switch (storeAnimes.animesUpcoming.status) {
                             case FutureStatus.pending:
-                              return _loadingWidget();
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+
                             case FutureStatus.rejected:
-                              return _errorWidget(
-                                  "Error to load page, verify your connection.");
+                              return ErrorLoading(
+                                  msg:
+                                      "Error to load page, verify your connection.",
+                                  refresh: _refresh);
                             case FutureStatus.fulfilled:
-                              return _listAnimeWidget(
-                                globals.stringAnimesUpcoming,
-                                storeAnimes.getAnimesUpcoming.value,
-                                storeAnimes.dataListUpComing[0],
+                              return AnimeList(
+                                keyName: globals.stringAnimesUpcoming,
+                                animes: storeAnimes.getAnimesUpcoming.value,
+                                loadedAllList: storeAnimes.dataListUpComing[0],
+                                scrollController: _scrollController,
                               );
                           }
-                          return _errorWidget(
-                              "Error to load page, try again later.");
+                          return ErrorLoading(
+                              msg: "Error to load page, try again later.",
+                              refresh: _refresh);
                         }),
                   ),
                 ],
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  CustomScrollView _listAnimeWidget(
-      String keyName, List<Anime> animes, bool loadedAllList) {
-    return CustomScrollView(
-      scrollDirection: Axis.vertical,
-      key: PageStorageKey(keyName),
-      controller: _scrollController,
-      slivers: <Widget>[
-        SliverGrid(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              mainAxisSpacing: globals.mainAxisSpacing,
-              crossAxisSpacing: globals.crossAxisSpacing,
-              childAspectRatio: 0.6,
-              crossAxisCount: globals.crossAxisCount),
-          delegate: SliverChildBuilderDelegate(
-              (ctx, index) => AnimeTile(index: index, anime: animes[index]),
-              childCount: animes.length ?? 0),
-        ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-              (ctx, index) => Center(
-                  child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: loadedAllList
-                          ? Container()
-                          : CircularProgressIndicator(
-                              backgroundColor: Colors.green,
-                            ))),
-              childCount: 1),
-        ),
-      ],
-    );
-  }
-
-  Widget _loadingWidget() {
-    return Center(
-      child: CircularProgressIndicator(
-        backgroundColor: Colors.red,
-      ),
-    );
-  }
-
-  Widget _errorWidget(String menssage) {
-    return RefreshIndicator(
-      onRefresh: _refresh,
-      child: Center(
-        child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Column(children: [
-            Image(
-              image: AssetImage('assets/unhappyIcon.png'),
-              width: MediaQuery.of(context).size.width / 2,
-              height: MediaQuery.of(context).size.height / 3.5,
-            ),
-            Text(menssage, style: TextStyle(fontSize: 17)),
-          ]),
         ),
       ),
     );
