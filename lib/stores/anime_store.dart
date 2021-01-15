@@ -1,14 +1,9 @@
 import 'package:http/http.dart' as http;
 import 'package:mobx/mobx.dart';
-import 'dart:math';
 import 'dart:async';
-
 import 'dart:convert';
 import 'package:project1/model/anime_model.dart';
 import 'package:project1/support/global_variables.dart' as globals;
-import 'package:project1/support/shared_preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:developer' as dev;
 
 part 'anime_store.g.dart';
 
@@ -18,9 +13,6 @@ abstract class _AnimeStore with Store {
   http.Response response;
   static String nextPage;
   int qtdAnim = 10;
-
-  static ObservableFuture<List<Anime>> emptyResponse =
-      ObservableFuture.value([]);
 
   @observable
   ObservableFuture<List<Anime>> animesPopular;
@@ -57,7 +49,7 @@ abstract class _AnimeStore with Store {
 
   List<dynamic> dataListUpComing = [false, ""];
 
-  _AnimeStore() {}
+  _AnimeStore();
 
   @action
   Future<void> getAnimes(String filter) async {
@@ -110,6 +102,7 @@ abstract class _AnimeStore with Store {
   @action
   loadMoreAnimes(String actualBar) async {
     var stopWatch = new Stopwatch()..start();
+    print("loading more animes...");
     switch (actualBar) {
       case "Most Popular":
         animesPopular = (animesPopular.replace(

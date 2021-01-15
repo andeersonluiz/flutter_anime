@@ -1,12 +1,30 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:project1/model/anime_model.dart';
+import 'package:project1/stores/episode_store.dart';
+import 'package:project1/widgets/errorLoading_widget.dart';
+import 'package:project1/widgets/layoutInfos_widget.dart';
+import 'package:project1/widgets/layoutTrailer_widget.dart';
+import 'package:project1/widgets/listEpisodes_widget.dart';
+import 'package:project1/widgets/movieTile_widget.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-import 'package:project1/support/anime_flutter_icons.dart';
-class AnimeInfoPage extends StatelessWidget {
+
+class AnimeInfoPage extends StatefulWidget {
   static const routeName = '/animeInfo';
   final Anime anime;
+
+  AnimeInfoPage(this.anime);
+
+  @override
+  _AnimeInfoPageState createState() => _AnimeInfoPageState();
+}
+
+class _AnimeInfoPageState extends State<AnimeInfoPage> {
+  final storeEpisodes = EpisodeStore();
+  bool lockLoad = false;
   final List<Padding> myTabs = [
     Padding(
       padding: const EdgeInsets.all(8.0),
@@ -18,19 +36,30 @@ class AnimeInfoPage extends StatelessWidget {
     Padding(
       padding: const EdgeInsets.all(10.0),
       child: Text("Infos", style: TextStyle(fontSize: 16)),
-    )
+    ),
+    Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Text("Episodes", style: TextStyle(fontSize: 16)),
+    ),
   ];
 
-    YoutubePlayerController _controllerYoutube;
+  YoutubePlayerController _controllerYoutube;
+  ScrollController _scrollController;
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_scrollListener);
 
-  AnimeInfoPage(this.anime);
+    _controllerYoutube = YoutubePlayerController(
+      initialVideoId: widget.anime.youtubeVideoId,
+      params: YoutubePlayerParams(
+        showControls: true,
+      ),
+    );
+  }
 
-
-  
   @override
   Widget build(BuildContext context) {
-    
-
     final heightToolBar = (MediaQuery.of(context).padding.top + kToolbarHeight);
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     return DefaultTabController(
@@ -40,10 +69,17 @@ class AnimeInfoPage extends StatelessWidget {
           physics: NeverScrollableScrollPhysics(),
           slivers: [
             SliverAppBar(
-              leading: IconButton(icon: Icon(Anime_flutter.imgbin_arrow_font_awesome_computer_icons_png,color:Colors.black),onPressed: (){
-                _controllerYoutube??_controllerYoutube.close();
-                Navigator.of(context).pop();
-              },),
+              leading: IconButton(
+                icon: Image.asset(
+                  "assets/arrow_back.png",
+                  width: MediaQuery.of(context).size.width / 15,
+                  height: MediaQuery.of(context).size.height / 15,
+                ),
+                onPressed: () {
+                  _controllerYoutube ?? _controllerYoutube.close();
+                  Navigator.of(context).pop();
+                },
+              ),
               expandedHeight: MediaQuery.of(context).size.height * 0.2,
               pinned: true,
               flexibleSpace: LayoutBuilder(builder: (ctx, constraints) {
@@ -52,15 +88,15 @@ class AnimeInfoPage extends StatelessWidget {
                     title: AnimatedOpacity(
                         duration: Duration(milliseconds: 300),
                         opacity: top == heightToolBar ? 1.0 : 0.0,
-                        child: Text(anime.canonicalTitle)),
+                        child: Text(widget.anime.canonicalTitle)),
                     background: Image.network(
-                      anime.coverImage,
+                      widget.anime.coverImage,
                       fit: BoxFit.fill,
                     ));
               }),
             ),
             SliverFillRemaining(
-              fillOverscroll: true,
+                fillOverscroll: true,
                 child: Scaffold(
                     appBar: TabBar(
                       indicatorPadding: EdgeInsets.all(8.0),
@@ -68,65 +104,89 @@ class AnimeInfoPage extends StatelessWidget {
                       indicatorSize: TabBarIndicatorSize.tab,
                     ),
                     body: TabBarView(
-                      
                       children: [
                         Padding(
-                            padding: const EdgeInsets.all(8.0),
-                              child: AutoSizeText(
-                                anime.synopsis,
-                                style: TextStyle(fontSize: 15),maxLines: 40,maxFontSize: 15,minFontSize: 12,
-                              ),
-                            ),
-                          
-                        
+                          padding: const EdgeInsets.all(8.0),
+                          child: AutoSizeText(
+                            widget.anime.synopsis,
+                            style: TextStyle(fontSize: 15),
+                            maxLines: 40,
+                            maxFontSize: 15,
+                            minFontSize: 12,
+                          ),
+                        ),
                         Column(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                    child: _layoutText("Episodes", context)),
-                                Expanded(
-                                    child: _layoutResult(
-                                        anime.episodeCount == 0
-                                            ? "-"
-                                            : anime.episodeCount.toString(),
-                                        context)),
-                              ],
+                            LayoutInfo(
+                              layoutInfoText: "Episodes",
+                              layoutInfoResult: widget.anime.episodeCount == 0
+                                  ? "-"
+                                  : widget.anime.episodeCount.toString(),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(child: _layoutText("Genres", context)),
-                                Expanded(
-                                    child: _layoutResult(
-                                        anime.ageRatingGuide.toString(),
-                                        context)),
-                              ],
+                            LayoutInfo(
+                              layoutInfoText: "Genres",
+                              layoutInfoResult:
+                                  widget.anime.ageRatingGuide.toString(),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Expanded(child: _layoutText("Status", context)),
-                                Expanded(
-                                    child:
-                                        _layoutResult(anime.status, context)),
-                              ],
-                            ),
-                            
-                            anime.youtubeVideoId!=""?_singleLayoutTrailer("Trailer"): Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                "There is no trailer at the moment",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-                            )
-                  
-
-                   
-                            
+                            LayoutInfo(
+                                layoutInfoText: "Status",
+                                layoutInfoResult: widget.anime.status),
+                            LayoutInfo(
+                                layoutInfoText: "Size ep",
+                                layoutInfoResult: _durationString(
+                                        widget.anime.episodeLength) +
+                                    " min."),
+                            widget.anime.youtubeVideoId != ""
+                                ? LayoutTrailer(
+                                    controllerYoutube: _controllerYoutube,
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      "There is no trailer at the moment",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
                           ],
                         ),
+                        Observer(builder: (_) {
+                          storeEpisodes.listEpisodes ??
+                              storeEpisodes
+                                  .getEpisodes(widget.anime.linkEpisodeList);
+                          if (widget.anime.episodeLength > 0 &&
+                              storeEpisodes.isMovie == true) {
+                            return MovieTile(anime: widget.anime);
+                          } else if (storeEpisodes.isMovie == true) {
+                            return ErrorLoading(
+                                msg: "Movie not released yet.",
+                                refresh: _refresh);
+                          }
+                          if (storeEpisodes.nullEps == true) {
+                            return ErrorLoading(
+                                msg: "Episodes not released yet.",
+                                refresh: _refresh);
+                          }
+                          switch (storeEpisodes.listEpisodes.status) {
+                            case FutureStatus.pending:
+                              return Center(
+                                  child: CircularProgressIndicator(
+                                      backgroundColor: Colors.red));
+                            case FutureStatus.rejected:
+                              return ErrorLoading(
+                                  msg:
+                                      "Error to load episodes, verify your connection.",
+                                  refresh: _refresh);
+                            case FutureStatus.fulfilled:
+                              return ListEpisodes(
+                                  episodes: storeEpisodes.listEpisodes.value,
+                                  loadedAllList: storeEpisodes.loadedAllList,
+                                  scrollController: _scrollController);
+                            default:
+                              return ErrorLoading(msg: "Error to load page, try again later.",refresh: _refresh,);
+                          }
+                        }),
                       ],
                     ))),
           ],
@@ -135,82 +195,25 @@ class AnimeInfoPage extends StatelessWidget {
     );
   }
 
-  Padding _layoutText(String text, BuildContext ctx) {
-    return Padding(
-      padding:
-          const EdgeInsets.only(left: 8.0, right: 0, top: 8.0, bottom: 8.0),
-      child: Container(
-          padding: EdgeInsets.only(
-              left: MediaQuery.of(ctx).size.width / 50,
-              right: MediaQuery.of(ctx).size.width / 50,
-              bottom: 0,
-              top: 0),
-          decoration: BoxDecoration(border: Border.all()),
-          child: Center(
-            child: Text(
-              text,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-          )),
-    );
+  Future<void> _refresh() {
+    return storeEpisodes.getEpisodes(widget.anime.linkEpisodeList);
   }
 
-  Padding _layoutResult(String text, BuildContext ctx) {
-    return Padding(
-      padding:
-          const EdgeInsets.only(left: 0, right: 8.0, top: 8.0, bottom: 8.0),
-      child: Container(
-          padding: EdgeInsets.only(
-              left: MediaQuery.of(ctx).size.width / 50,
-              right: MediaQuery.of(ctx).size.width / 50,
-              bottom: 0,
-              top: 0),
-          decoration: BoxDecoration(border: Border.all()),
-          child: Center(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 15,
-              ),
-            ),
-          )),
-    );
+  void _scrollListener() {
+    if (_scrollController.offset >=
+            (_scrollController.position.maxScrollExtent) / 2 &&
+        !_scrollController.position.outOfRange &&
+        !storeEpisodes.lockLoad) {
+      if (storeEpisodes.loadedAllList == false) {
+        storeEpisodes.loadMoreEpisodes();
+        storeEpisodes.lockLoad = true;
+      }
+    }
   }
 
-  Column _singleLayoutTrailer(String text) {
-    _controllerYoutube = YoutubePlayerController(
-      initialVideoId: anime.youtubeVideoId,
-      params: YoutubePlayerParams(
-        showControls: true,
-      ),
-    );
-    return Column(
-      children: [
-
-        Padding(
-        padding:
-            const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 8.0),
-        child: Text(
-                text,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            
-      ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            
-            decoration: BoxDecoration(border: Border.all(),image: DecorationImage(image: AssetImage("assets/loading.gif",),fit: BoxFit.fitWidth,),),
-            child:YoutubePlayerIFrame(
-                                    
-                                    controller: _controllerYoutube,
-                                  ),
-                                
-          ),
-        ),
-        
-        
-        ]
-    );
+  String _durationString(int minutes) {
+    var d = Duration(minutes: minutes);
+    List<String> parts = d.toString().split(":");
+    return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
   }
 }

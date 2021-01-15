@@ -59,10 +59,7 @@ flutter:
   #  - images/a_dot_ham.jpeg
 
 
-  fonts:
-    - family:  Anime_flutter
-      fonts:
-        - asset: fonts/Anime_flutter.ttf
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
