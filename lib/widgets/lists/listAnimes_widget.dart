@@ -1,21 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:project1/widgets/episodeTile_widget.dart';
+import 'package:project1/support/global_variables.dart' as globals;
+import 'package:project1/widgets/tiles/animeTile_widget.dart';
 
-class ListEpisodes extends StatelessWidget {
+class AnimeList extends StatelessWidget {
+  final keyName;
   final scrollController;
-  final episodes;
+  final animes;
   final loadedAllList;
-  ListEpisodes({this.scrollController, this.episodes, this.loadedAllList});
+
+  AnimeList(
+      {this.keyName, this.scrollController, this.animes, this.loadedAllList});
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       scrollDirection: Axis.vertical,
+      key: PageStorageKey(keyName),
       controller: scrollController,
       slivers: <Widget>[
-        SliverList(
+        SliverGrid(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              mainAxisSpacing: globals.mainAxisSpacing,
+              crossAxisSpacing: globals.crossAxisSpacing,
+              childAspectRatio: 0.6,
+              crossAxisCount: globals.crossAxisCount),
           delegate: SliverChildBuilderDelegate(
-              (ctx, index) => EpisodeTile(episode: episodes[index]),
-              childCount: episodes.length ?? 0),
+              (ctx, index) => AnimeTile(index: index, anime: animes[index]),
+              childCount: animes.length ?? 0),
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(

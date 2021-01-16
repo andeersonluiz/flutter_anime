@@ -6,7 +6,7 @@ import 'package:mobx/mobx.dart';
 import 'package:project1/stores/anime_store.dart';
 import 'package:project1/support/global_variables.dart' as globals;
 import 'package:project1/widgets/errorLoading_widget.dart';
-import 'package:project1/widgets/listAnimes_widget.dart';
+import 'package:project1/widgets/lists/listAnimes_widget.dart';
 import 'package:project1/widgets/loading_widget.dart';
 
 class MyHomePage extends StatefulWidget {

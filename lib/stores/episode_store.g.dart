@@ -39,6 +39,17 @@ mixin _$EpisodeStore on _EpisodeStoreBase, Store {
   }
 
   @override
+  dynamic loadMoreEpisodes() {
+    final _$actionInfo = _$_EpisodeStoreBaseActionController.startAction(
+        name: '_EpisodeStoreBase.loadMoreEpisodes');
+    try {
+      return super.loadMoreEpisodes();
+    } finally {
+      _$_EpisodeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 listEpisodes: ${listEpisodes}

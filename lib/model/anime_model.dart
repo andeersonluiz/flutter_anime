@@ -13,6 +13,7 @@ class Anime {
   String status;
   List<Episode> episodes;
   String linkEpisodeList;
+  String linkCharacterList;
   Anime({
     this.id,
     this.synopsis,
@@ -25,6 +26,7 @@ class Anime {
     this.youtubeVideoId,
     this.status,
     this.linkEpisodeList,
+    this.linkCharacterList,
   });
 
   factory Anime.fromJson(Map<String, dynamic> json) {
@@ -48,6 +50,7 @@ class Anime {
           : json['attributes']['coverImage']['large'],
       status: json['attributes']['status'],
       linkEpisodeList: json['relationships']['episodes']['links']['related'],
+      linkCharacterList:json['relationships']['characters']['links']['related'],
     );
   }
 
@@ -63,5 +66,6 @@ class Anime {
         'coverImage': coverImage,
         'status': status,
         'linkEpisodeList': linkEpisodeList,
+        'linkCharacterList':linkCharacterList,
       };
 }

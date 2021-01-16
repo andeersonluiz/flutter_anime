@@ -4,12 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:project1/model/anime_model.dart';
+import 'package:project1/stores/character_store.dart';
 import 'package:project1/stores/episode_store.dart';
 import 'package:project1/widgets/errorLoading_widget.dart';
-import 'package:project1/widgets/layoutInfos_widget.dart';
-import 'package:project1/widgets/layoutTrailer_widget.dart';
-import 'package:project1/widgets/listEpisodes_widget.dart';
-import 'package:project1/widgets/movieTile_widget.dart';
+import 'package:project1/widgets/layouts/layoutInfos_widget.dart';
+import 'package:project1/widgets/layouts/layoutTrailer_widget.dart';
+import 'package:project1/widgets/lists/listCharacters_widget.dart';
+import 'package:project1/widgets/lists/listEpisodes_widget.dart';
+import 'package:project1/widgets/loading_widget.dart';
+import 'package:project1/widgets/tiles/movieTile_widget.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class AnimeInfoPage extends StatefulWidget {
@@ -24,6 +27,7 @@ class AnimeInfoPage extends StatefulWidget {
 
 class _AnimeInfoPageState extends State<AnimeInfoPage> {
   final storeEpisodes = EpisodeStore();
+  final storeCharacters = CharacterStore();
   bool lockLoad = false;
   final List<Padding> myTabs = [
     Padding(
@@ -41,15 +45,22 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
       padding: const EdgeInsets.all(10.0),
       child: Text("Episodes", style: TextStyle(fontSize: 16)),
     ),
+    Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Text("Characters", style: TextStyle(fontSize: 16)),
+    ),
   ];
+
 
   YoutubePlayerController _controllerYoutube;
   ScrollController _scrollController;
+    ScrollController _scrollControllerCharacters;
+
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()..addListener(_scrollListener);
-
+    _scrollController = ScrollController()..addListener(_scrollListener)..addListener(_scrollListenerCharacter);
+    _scrollControllerCharacters= ScrollController()..addListener(_scrollListenerCharacter);
     _controllerYoutube = YoutubePlayerController(
       initialVideoId: widget.anime.youtubeVideoId,
       params: YoutubePlayerParams(
@@ -64,11 +75,13 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     return DefaultTabController(
       length: myTabs.length,
+
       child: Scaffold(
         body: CustomScrollView(
           physics: NeverScrollableScrollPhysics(),
           slivers: [
             SliverAppBar(
+              
               leading: IconButton(
                 icon: Image.asset(
                   "assets/arrow_back.png",
@@ -99,6 +112,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                 fillOverscroll: true,
                 child: Scaffold(
                     appBar: TabBar(
+                      isScrollable: true,
                       indicatorPadding: EdgeInsets.all(8.0),
                       tabs: myTabs,
                       indicatorSize: TabBarIndicatorSize.tab,
@@ -143,7 +157,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                                 : Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      "There is no trailer at the moment",
+                                      "There is no trailer at the moment.",
                                       style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
@@ -170,9 +184,8 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                           }
                           switch (storeEpisodes.listEpisodes.status) {
                             case FutureStatus.pending:
-                              return Center(
-                                  child: CircularProgressIndicator(
-                                      backgroundColor: Colors.red));
+                              return Loading();
+
                             case FutureStatus.rejected:
                               return ErrorLoading(
                                   msg:
@@ -187,6 +200,29 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                               return ErrorLoading(msg: "Error to load page, try again later.",refresh: _refresh,);
                           }
                         }),
+
+
+                        Observer(
+
+                          builder: (_){
+                          storeCharacters.listCharacters??storeCharacters.getCharacters(widget.anime.linkCharacterList);
+                          
+                          switch(storeCharacters.listCharacters.status){
+                            case FutureStatus.pending:
+                              return Loading();
+                            case FutureStatus.rejected:
+                              return ErrorLoading(msg: "Error to load Characters, verify your connection.",refresh:_refreshCharacter);
+                            case FutureStatus.fulfilled:
+                              if(storeCharacters.listCharacters.value.length==0){
+                                return ErrorLoading(msg:"Characters not currently avaliable.",refresh:_refreshCharacter);
+                              }
+                              return ListCharacter(characters:storeCharacters.listCharacters.value,loadedAllList:storeCharacters.loadedAllList,scrollController: _scrollControllerCharacters,);
+                          
+                          }
+
+
+                          },
+                        )
                       ],
                     ))),
           ],
@@ -194,11 +230,23 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
       ),
     );
   }
-
+  Future<void> _refreshCharacter() {
+    return storeCharacters.getCharacters(widget.anime.linkCharacterList);
+  }
   Future<void> _refresh() {
     return storeEpisodes.getEpisodes(widget.anime.linkEpisodeList);
   }
-
+  void _scrollListenerCharacter(){
+    if (_scrollControllerCharacters.offset >=
+            (_scrollControllerCharacters.position.maxScrollExtent) / 2 &&
+        !_scrollControllerCharacters.position.outOfRange &&
+        !storeCharacters.lockLoad) {
+      if (storeCharacters.loadedAllList == false) {
+        storeCharacters.loadMoreCharacters();
+        storeCharacters.lockLoad = true;
+      }
+    }
+  }
   void _scrollListener() {
     if (_scrollController.offset >=
             (_scrollController.position.maxScrollExtent) / 2 &&
