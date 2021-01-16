@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:project1/widgets/layoutInfoResult_widget.dart';
-import 'package:project1/widgets/layoutInfoText_widget.dart';
+import 'package:project1/widgets/layouts/layoutInfoResult_widget.dart';
+import 'package:project1/widgets/layouts/layoutInfoText_widget.dart';
 
 class LayoutInfo extends StatelessWidget {
   final layoutInfoText;

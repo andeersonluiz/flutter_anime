@@ -144,8 +144,8 @@ abstract class _AnimeStore with Store {
   }
 
   _decode(String url, String nameBar) async {
-    response = await http.get(url);
-    var decoded = json.decode(response.body);
+    response = await http.get(url,headers:{'Content-Type':'application/json;charset=utf-8'});
+    var decoded = json.decode(utf8.decode(response.bodyBytes));
     nextPage = decoded['links']['next'];
     switch (nameBar) {
       case globals.stringAnimesHighest:
