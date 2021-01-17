@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'character_store.dart';
+part of 'animeCharacter_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,8 +8,9 @@ part of 'character_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$CharacterStore on _CharacterStoreBase, Store {
-  final _$listCharactersAtom = Atom(name: '_CharacterStoreBase.listCharacters');
+mixin _$AnimeCharacterStore on _AnimeCharacterStoreBase, Store {
+  final _$listCharactersAtom =
+      Atom(name: '_AnimeCharacterStoreBase.listCharacters');
 
   @override
   ObservableFuture<List<Character>> get listCharacters {
@@ -24,28 +25,28 @@ mixin _$CharacterStore on _CharacterStoreBase, Store {
     });
   }
 
-  final _$_CharacterStoreBaseActionController =
-      ActionController(name: '_CharacterStoreBase');
+  final _$_AnimeCharacterStoreBaseActionController =
+      ActionController(name: '_AnimeCharacterStoreBase');
 
   @override
-  dynamic getListCharacters() {
-    final _$actionInfo = _$_CharacterStoreBaseActionController.startAction(
-        name: '_CharacterStoreBase.getListCharacters');
+  dynamic getCharacters(String url) {
+    final _$actionInfo = _$_AnimeCharacterStoreBaseActionController.startAction(
+        name: '_AnimeCharacterStoreBase.getCharacters');
     try {
-      return super.getListCharacters();
+      return super.getCharacters(url);
     } finally {
-      _$_CharacterStoreBaseActionController.endAction(_$actionInfo);
+      _$_AnimeCharacterStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   dynamic loadMoreCharacters() {
-    final _$actionInfo = _$_CharacterStoreBaseActionController.startAction(
-        name: '_CharacterStoreBase.loadMoreCharacters');
+    final _$actionInfo = _$_AnimeCharacterStoreBaseActionController.startAction(
+        name: '_AnimeCharacterStoreBase.loadMoreCharacters');
     try {
       return super.loadMoreCharacters();
     } finally {
-      _$_CharacterStoreBaseActionController.endAction(_$actionInfo);
+      _$_AnimeCharacterStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 

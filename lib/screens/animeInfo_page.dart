@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:project1/model/anime_model.dart';
-import 'package:project1/stores/character_store.dart';
+import 'package:project1/stores/animeCharacter_store.dart';
 import 'package:project1/stores/episode_store.dart';
 import 'package:project1/widgets/errorLoading_widget.dart';
 import 'package:project1/widgets/layouts/layoutInfos_widget.dart';
@@ -27,7 +27,7 @@ class AnimeInfoPage extends StatefulWidget {
 
 class _AnimeInfoPageState extends State<AnimeInfoPage> {
   final storeEpisodes = EpisodeStore();
-  final storeCharacters = CharacterStore();
+  final storeCharacters = AnimeCharacterStore();
   bool lockLoad = false;
   final List<Padding> myTabs = [
     Padding(
@@ -216,8 +216,10 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                               if(storeCharacters.listCharacters.value.length==0){
                                 return ErrorLoading(msg:"Characters not currently avaliable.",refresh:_refreshCharacter);
                               }
-                              return ListCharacter(characters:storeCharacters.listCharacters.value,loadedAllList:storeCharacters.loadedAllList,scrollController: _scrollControllerCharacters,);
-                          
+                              return ListCharacter(characters:storeCharacters.listCharacters.value,loadedAllList:storeCharacters.loadedAllList,scrollController: _scrollControllerCharacters,crossAxisCount:3);
+                            default:
+                              return ErrorLoading(msg: "Error to load Characters, try again later.",refresh:_refreshCharacter);
+
                           }
 
 

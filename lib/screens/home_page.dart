@@ -5,9 +5,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:project1/stores/anime_store.dart';
 import 'package:project1/support/global_variables.dart' as globals;
+import 'package:project1/widgets/drawerSideBar_widget.dart';
 import 'package:project1/widgets/errorLoading_widget.dart';
 import 'package:project1/widgets/lists/listAnimes_widget.dart';
 import 'package:project1/widgets/loading_widget.dart';
+import 'package:project1/widgets/search.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -48,7 +50,20 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+        final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
+      drawer:DrawerSideBar(),
+      appBar:AppBar(
+        actions: [
+          SizedBox(width: width*0.76,height:height*0.76,child: Image.asset("assets/no-thumbnail.jpg",fit:BoxFit.fill )),
+          IconButton(icon: Icon(Icons.search),onPressed: ()=>{
+            showSearch(context: context,delegate:Search())
+          },),
+        ],
+
+      ),
       body: SafeArea(
         child: Column(
           children: [
