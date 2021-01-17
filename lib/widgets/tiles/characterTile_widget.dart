@@ -8,19 +8,29 @@ CharacterTile({this.character});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        elevation: 2,
-        child:Column(
-            children: [
-              Expanded(child: Image.network(character.image,fit: BoxFit.fill,),),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AutoSizeText(character.cannonicalName,maxLines: 1,maxFontSize: 15,minFontSize: 5,textAlign: TextAlign.center,),
-              ),
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
 
-            ],
+    return  Card(
+          elevation: 2,
+          child: Column(
+                children: [
+                  Expanded(child: Image.network(character.image,fit: BoxFit.fill,width: width,height: height,),flex: 8,),
+                  Expanded(
+                    flex:2,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: AutoSizeText(character.name,maxLines: 2,maxFontSize: 15,minFontSize: 5,textAlign: TextAlign.center,),
+                      ),
+                    ),
+                  ),
 
-        )
+                ],
+
+            
+          )
+      
     );
   }
 }

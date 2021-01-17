@@ -2,7 +2,8 @@ class Character {
   String id;
   String createdAt;
   String japaneseName;
-  String cannonicalName;
+  String name;
+  List<String> otherNames;
   String malId;
   String description;
   String image;
@@ -11,7 +12,8 @@ class Character {
       {this.id,
       this.createdAt,
       this.japaneseName,
-       this.cannonicalName,
+       this.name,
+       this.otherNames,
       this.malId,
       this.description,
       this.image});
@@ -21,7 +23,8 @@ class Character {
       id: json['id'],
       createdAt: json['attributes']['createdAt'],
       japaneseName:json['attributes']['names']==null?"":json['attributes']['names']['ja_jp']==null?"":json['attributes']['names']['ja_jp'],
-      cannonicalName: json['attributes']['canonicalName'],
+      name: json['attributes']['canonicalName'],
+      otherNames:json['attributes']['otherNames'].length>0?json['attributes']['otherNames'].map<String>((value)=> value as String ).toList():[],
       malId: json['attributes']['malId'].toString(),
       description: json['attributes']['description'].toString(),
       image: json['attributes']['image'] == null
@@ -34,7 +37,8 @@ class Character {
   Map<String, dynamic> toJson() => {
         'id': id,
         'createdAt': createdAt,
-        'cannonicalName': cannonicalName,
+        'name': name,
+        'otherNames':otherNames,
         'malId': malId,
         'description': description,
         'image': image,

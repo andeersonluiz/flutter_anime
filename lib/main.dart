@@ -5,6 +5,7 @@ import 'package:project1/model/anime_model.dart';
 import 'package:project1/model/character_model.dart';
 import 'package:project1/screens/animeInfo_page.dart';
 import 'package:project1/screens/characterInfo_page.dart';
+import 'package:project1/screens/character_page.dart';
 import 'package:project1/screens/home_page.dart';
 import 'package:provider/provider.dart';
 import 'stores/anime_store.dart';
@@ -39,9 +40,11 @@ class MyApp extends StatelessWidget {
       case '/animeInfo':
         final anime = settings.arguments as Anime;
         return MaterialPageRoute(builder: (_) => AnimeInfoPage(anime));
-      case '/animeInfo/character':
+      case '/characterInfo':
         final character = settings.arguments as Character;
-        return MaterialPageRoute(builder:(_)=>CharacterPage(character));
+        return MaterialPageRoute(builder:(_)=>CharacterInfoPage(character));
+      case '/characterList':
+        return MaterialPageRoute(builder:(_)=>CharacterPage());
       default:
         return null;
     }
