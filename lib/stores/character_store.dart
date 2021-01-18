@@ -21,7 +21,7 @@ abstract class _CharacterStoreBase with Store {
   @action
   getListCharacters(){
     print("get list Character...");
-    listCharacters =  ObservableFuture(_decode("https://kitsu.io/api/edge/characters?sort=slug&page[limit]=20")).then((listCharacters) => listCharacters);
+    listCharacters =  ObservableFuture(_decode("https://kitsu.io/api/edge/characters?sort=name&page[limit]=20")).then((listCharacters) => listCharacters);
   }
   @action
   loadMoreCharacters(){

@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage>
         actions: [
           SizedBox(width: width*0.76,height:height*0.76,child: Image.asset("assets/no-thumbnail.jpg",fit:BoxFit.fill )),
           IconButton(icon: Icon(Icons.search),onPressed: ()=>{
-            showSearch(context: context,delegate:Search())
+            showSearch(context: context,delegate:Search(actualTab:globals.stringTabSearchAnimes))
           },),
         ],
 

@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:project1/stores/search_store.dart';
-import 'package:project1/widgets/lists/listSearch_widget.dart';
+import 'package:project1/widgets/lists/listSearchAnime_widget.dart';
+import 'package:project1/widgets/lists/listSearchCategorie_widget.dart';
+import 'package:project1/widgets/lists/listSearchCharacter_widget.dart';
+import 'package:project1/support/global_variables.dart' as globals;
 
 class Search extends SearchDelegate {
-  final storeSearch = SearchStore();
+  final store=SearchStore();
   String lastQuery;
+  String actualTab;
+  Search({this.actualTab});
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
       IconButton(
         icon: Icon(Icons.close),
         onPressed: () {
-          storeSearch.searchResults=null;
+          store.setListResult(actualTab,null);
           query = "";
         },
       )
@@ -33,7 +38,7 @@ class Search extends SearchDelegate {
     if (query == "") {
       return Container();
     }else {
-     return ListSearch(storeSearch:storeSearch);
+     return listSearchByName();
     } 
     
   }
@@ -41,22 +46,36 @@ class Search extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     if (query == "") {
-      if(storeSearch.searchResults==null){
+      if(store.getListResult(actualTab)==null){
         return Container();
       }else{
-        return ListSearch(storeSearch:storeSearch);
+        return listSearchByName();
       }
-    } else if (storeSearch.lastQuery != query) {
-      storeSearch.searchAnime(query);
-      return ListSearch(storeSearch:storeSearch);
+    } else if (store.lastQuery != query) {
+      store.search(query,actualTab);
+      return listSearchByName();
     } else{
-     if(storeSearch.searchResults==null){
+     if(store.getListResult(actualTab)==null){
         return Container();
       }else{
-        return ListSearch(storeSearch:storeSearch);
+        return listSearchByName();
       }
     }
   }
   
+
+  Widget listSearchByName(){
+    switch(actualTab){
+      case globals.stringTabSearchAnimes:      
+          return ListSearchAnime(storeSearch:store,query: query,actualBar: globals.stringTabSearchAnimes,);
+      case globals.stringTabSearchCharacters:     
+          return ListSearchCharacter(storeSearch:store,query: query,actualBar: globals.stringTabSearchCharacters,);
+        case globals.stringTabSearchCategories:     
+          return ListSearchCategorie(storeSearch:store,query: query,actualBar: globals.stringTabSearchCategories,);
+      default:
+        return Container();
+    
+    }
+  }
 
 }

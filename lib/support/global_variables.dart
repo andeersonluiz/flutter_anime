@@ -4,6 +4,9 @@ const stringAnimesHighest = "Highest Rated";
 const stringAnimesPopular = "Most Popular";
 const stringAnimesUpcoming = "Top Upcoming";
 
+const stringTabSearchAnimes = "Anime";
+const stringTabSearchCharacters = "Character";
+const stringTabSearchCategories = "Categorie";
 
 
 double mainAxisSpacing = 10.0;

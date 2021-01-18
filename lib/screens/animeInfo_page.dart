@@ -235,7 +235,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
   Future<void> _refreshCharacter() {
     return storeCharacters.getCharacters(widget.anime.linkCharacterList);
   }
-  Future<void> _refresh() {
+  Future<void> _refresh() async {
     return storeEpisodes.getEpisodes(widget.anime.linkEpisodeList);
   }
   void _scrollListenerCharacter(){
