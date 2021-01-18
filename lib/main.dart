@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:project1/model/anime_model.dart';
 import 'package:project1/model/character_model.dart';
+import 'package:project1/screens/animeCategorie_page.dart';
 import 'package:project1/screens/animeInfo_page.dart';
+import 'package:project1/screens/categorie_page.dart';
 import 'package:project1/screens/characterInfo_page.dart';
 import 'package:project1/screens/character_page.dart';
 import 'package:project1/screens/home_page.dart';
@@ -45,6 +47,12 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute(builder:(_)=>CharacterInfoPage(character));
       case '/characterList':
         return MaterialPageRoute(builder:(_)=>CharacterPage());
+      case '/categorieList':
+        return MaterialPageRoute(builder:(_)=>CategoriePage());
+      case '/animeListByCategorie':
+         final nameCategorie = settings.arguments as String;
+        return MaterialPageRoute(builder:(_)=>AnimeCategoriePage(nameCategorie:nameCategorie,));
+
       default:
         return null;
     }

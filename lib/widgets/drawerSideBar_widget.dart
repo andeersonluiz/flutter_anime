@@ -26,7 +26,7 @@ class DrawerSideBar extends StatelessWidget {
                     ],),
                   ListTile(title: Text('Animes'),onTap:()=>Navigator.of(context).pushNamed("/"),),
                   ListTile(title: Text('Characters'),onTap:()=>Navigator.of(context).pushNamed("/characterList")),
-                  ListTile(title: Text('Categories')),
+                  ListTile(title: Text('Categories'),onTap:()=>Navigator.of(context).pushNamed("/categorieList")),
                   ListTile(title: Text('My favorites')),
                   Divider(),
                   ListTile(title: Text('Login')),
