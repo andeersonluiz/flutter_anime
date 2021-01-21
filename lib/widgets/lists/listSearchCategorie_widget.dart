@@ -3,9 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:project1/widgets/errorLoading_widget.dart';
 import 'package:project1/widgets/loading_widget.dart';
-import 'package:project1/widgets/tiles/animeSearchTile_widget.dart';
 import 'package:project1/widgets/tiles/categorieSearchTile_widget.dart';
-import 'package:project1/widgets/tiles/characterSearchTile_widget.dart';
 
 class ListSearchCategorie extends StatelessWidget {
   final storeSearch;

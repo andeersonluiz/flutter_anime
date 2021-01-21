@@ -49,7 +49,6 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
     );
   }
   Future<void> _refresh() async {
-    print("refreshing..."+widget.nameCategorie);
     return storeAnimesCategories.getAnimesByCategorie(widget.nameCategorie);
   }
   _scrollListener(){

@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage>
       drawer:DrawerSideBar(),
       appBar:AppBar(
         actions: [
-          SizedBox(width: width*0.76,height:height*0.76,child: Image.asset("assets/no-thumbnail.jpg",fit:BoxFit.fill )),
+          SizedBox(width: width*0.76,height:height*0.76,child: Image.asset("assets/logo_black.png",fit:BoxFit.contain )),
           IconButton(icon: Icon(Icons.search),onPressed: ()=>{
             showSearch(context: context,delegate:Search(actualTab:globals.stringTabSearchAnimes))
           },),
