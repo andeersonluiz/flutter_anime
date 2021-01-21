@@ -3,21 +3,27 @@ import 'package:project1/model/categorie_model.dart';
 import 'package:project1/widgets/tiles/categorieTile_widget.dart';
 
 class ListCategories extends StatelessWidget {
-
   final List<Categorie> categories;
   final ScrollController scrollController;
   final bool loadedAllList;
-  ListCategories({this.categories,this.scrollController,this.loadedAllList});
+  ListCategories({this.categories, this.scrollController, this.loadedAllList});
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       scrollDirection: Axis.vertical,
       controller: scrollController,
-      
       slivers: <Widget>[
-          SliverList(
+        SliverList(
           delegate: SliverChildBuilderDelegate(
-              (ctx, index) => int.parse(categories[index].totalMediaCount)>0?GestureDetector(onTap: ()=>Navigator.pushNamed(context,'/animeListByCategorie',arguments: categories[index].name),child: CategorieTile(categorie: categories[index],)):Container(),
+              (ctx, index) => int.parse(categories[index].totalMediaCount) > 0
+                  ? GestureDetector(
+                      onTap: () => Navigator.pushNamed(
+                          context, '/animeListByCategorie',
+                          arguments: categories[index].name),
+                      child: CategorieTile(
+                        categorie: categories[index],
+                      ))
+                  : Container(),
               childCount: categories.length ?? 0),
         ),
         SliverList(
@@ -36,5 +42,3 @@ class ListCategories extends StatelessWidget {
     );
   }
 }
-
-

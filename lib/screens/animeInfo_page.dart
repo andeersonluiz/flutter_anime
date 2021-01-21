@@ -51,16 +51,18 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     ),
   ];
 
-
   YoutubePlayerController _controllerYoutube;
   ScrollController _scrollController;
-    ScrollController _scrollControllerCharacters;
+  ScrollController _scrollControllerCharacters;
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()..addListener(_scrollListener)..addListener(_scrollListenerCharacter);
-    _scrollControllerCharacters= ScrollController()..addListener(_scrollListenerCharacter);
+    _scrollController = ScrollController()
+      ..addListener(_scrollListener)
+      ..addListener(_scrollListenerCharacter);
+    _scrollControllerCharacters = ScrollController()
+      ..addListener(_scrollListenerCharacter);
     _controllerYoutube = YoutubePlayerController(
       initialVideoId: widget.anime.youtubeVideoId,
       params: YoutubePlayerParams(
@@ -75,13 +77,11 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     return DefaultTabController(
       length: myTabs.length,
-
       child: Scaffold(
         body: CustomScrollView(
           physics: NeverScrollableScrollPhysics(),
           slivers: [
             SliverAppBar(
-              
               leading: IconButton(
                 icon: Image.asset(
                   "assets/arrow_back.png",
@@ -197,32 +197,49 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                                   loadedAllList: storeEpisodes.loadedAllList,
                                   scrollController: _scrollController);
                             default:
-                              return ErrorLoading(msg: "Error to load page, try again later.",refresh: _refresh,);
+                              return ErrorLoading(
+                                msg: "Error to load page, try again later.",
+                                refresh: _refresh,
+                              );
                           }
                         }),
-
-
                         Observer(
+                          builder: (_) {
+                            storeCharacters.listCharacters ??
+                                storeCharacters.getCharacters(
+                                    widget.anime.linkCharacterList);
 
-                          builder: (_){
-                          storeCharacters.listCharacters??storeCharacters.getCharacters(widget.anime.linkCharacterList);
-                          
-                          switch(storeCharacters.listCharacters.status){
-                            case FutureStatus.pending:
-                              return Loading();
-                            case FutureStatus.rejected:
-                              return ErrorLoading(msg: "Error to load Characters, verify your connection.",refresh:_refreshCharacter);
-                            case FutureStatus.fulfilled:
-                              if(storeCharacters.listCharacters.value.length==0){
-                                return ErrorLoading(msg:"Characters not currently avaliable.",refresh:_refreshCharacter);
-                              }
-                              return ListCharacter(characters:storeCharacters.listCharacters.value,loadedAllList:storeCharacters.loadedAllList,scrollController: _scrollControllerCharacters,crossAxisCount:3);
-                            default:
-                              return ErrorLoading(msg: "Error to load Characters, try again later.",refresh:_refreshCharacter);
-
-                          }
-
-
+                            switch (storeCharacters.listCharacters.status) {
+                              case FutureStatus.pending:
+                                return Loading();
+                              case FutureStatus.rejected:
+                                return ErrorLoading(
+                                    msg:
+                                        "Error to load Characters, verify your connection.",
+                                    refresh: _refreshCharacter);
+                              case FutureStatus.fulfilled:
+                                if (storeCharacters
+                                        .listCharacters.value.length ==
+                                    0) {
+                                  return ErrorLoading(
+                                      msg:
+                                          "Characters not currently avaliable.",
+                                      refresh: _refreshCharacter);
+                                }
+                                return ListCharacter(
+                                    characters:
+                                        storeCharacters.listCharacters.value,
+                                    loadedAllList:
+                                        storeCharacters.loadedAllList,
+                                    scrollController:
+                                        _scrollControllerCharacters,
+                                    crossAxisCount: 3);
+                              default:
+                                return ErrorLoading(
+                                    msg:
+                                        "Error to load Characters, try again later.",
+                                    refresh: _refreshCharacter);
+                            }
                           },
                         )
                       ],
@@ -232,13 +249,16 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
       ),
     );
   }
+
   Future<void> _refreshCharacter() {
     return storeCharacters.getCharacters(widget.anime.linkCharacterList);
   }
+
   Future<void> _refresh() async {
     return storeEpisodes.getEpisodes(widget.anime.linkEpisodeList);
   }
-  void _scrollListenerCharacter(){
+
+  void _scrollListenerCharacter() {
     if (_scrollControllerCharacters.offset >=
             (_scrollControllerCharacters.position.maxScrollExtent) / 2 &&
         !_scrollControllerCharacters.position.outOfRange &&
@@ -249,6 +269,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
       }
     }
   }
+
   void _scrollListener() {
     if (_scrollController.offset >=
             (_scrollController.position.maxScrollExtent) / 2 &&

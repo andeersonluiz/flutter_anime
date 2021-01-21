@@ -40,7 +40,8 @@ abstract class _EpisodeStoreBase with Store {
   }
 
   _decode(String url) async {
-    response = await http.get(url,headers:{'Content-Type':'application/json;charset=utf-8'});
+    response = await http
+        .get(url, headers: {'Content-Type': 'application/json;charset=utf-8'});
     var decoded = json.decode(utf8.decode((response.bodyBytes)));
     decoded['links']['next'] == null
         ? loadedAllList = true

@@ -21,37 +21,42 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
     super.initState();
     _scrollController = ScrollController()..addListener(_scrollListener);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title:Text(widget.nameCategorie+" animes") ,
-        
-
-      ),
-      body:Observer(
-
-        builder:(_){
-          storeAnimesCategories.listAnimes??storeAnimesCategories.getAnimesByCategorie(widget.nameCategorie);
-          switch(storeAnimesCategories.listAnimes.status){
+        appBar: AppBar(
+          title: Text(widget.nameCategorie + " animes"),
+        ),
+        body: Observer(builder: (_) {
+          storeAnimesCategories.listAnimes ??
+              storeAnimesCategories.getAnimesByCategorie(widget.nameCategorie);
+          switch (storeAnimesCategories.listAnimes.status) {
             case FutureStatus.pending:
               return Loading();
             case FutureStatus.rejected:
-              return ErrorLoading(msg:"Error to load animes, verify your connection",refresh:_refresh);
+              return ErrorLoading(
+                  msg: "Error to load animes, verify your connection",
+                  refresh: _refresh);
             case FutureStatus.fulfilled:
-              return AnimeList(keyName:"",animes:storeAnimesCategories.listAnimes.value,loadedAllList: storeAnimesCategories.loadedAllList,scrollController: _scrollController);
+              return AnimeList(
+                  keyName: "",
+                  animes: storeAnimesCategories.listAnimes.value,
+                  loadedAllList: storeAnimesCategories.loadedAllList,
+                  scrollController: _scrollController);
             default:
-                return ErrorLoading(msg:"Error to connect database, try again later",refresh:_refresh);
-
+              return ErrorLoading(
+                  msg: "Error to connect database, try again later",
+                  refresh: _refresh);
           }
-        }
-      )
-    );
+        }));
   }
+
   Future<void> _refresh() async {
     return storeAnimesCategories.getAnimesByCategorie(widget.nameCategorie);
   }
-  _scrollListener(){
+
+  _scrollListener() {
     if (_scrollController.offset >=
             (_scrollController.position.maxScrollExtent) / 2 &&
         !_scrollController.position.outOfRange &&

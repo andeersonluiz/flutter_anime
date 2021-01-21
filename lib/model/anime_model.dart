@@ -45,12 +45,13 @@ class Anime {
           json['attributes']['posterImage']['original'],
       coverImage: json['attributes']['coverImage'] == null
           ? json['attributes']['posterImage']['medium'] ??
-          json['attributes']['posterImage']['large'] ??
-          json['attributes']['posterImage']['original']
+              json['attributes']['posterImage']['large'] ??
+              json['attributes']['posterImage']['original']
           : json['attributes']['coverImage']['large'],
       status: json['attributes']['status'],
       linkEpisodeList: json['relationships']['episodes']['links']['related'],
-      linkCharacterList:json['relationships']['characters']['links']['related'],
+      linkCharacterList: json['relationships']['characters']['links']
+          ['related'],
     );
   }
 
@@ -66,6 +67,6 @@ class Anime {
         'coverImage': coverImage,
         'status': status,
         'linkEpisodeList': linkEpisodeList,
-        'linkCharacterList':linkCharacterList,
+        'linkCharacterList': linkCharacterList,
       };
 }

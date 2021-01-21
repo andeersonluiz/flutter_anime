@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:project1/firebase/auth_firebase.dart';
-import 'package:project1/model/user_model.dart';
 import 'package:project1/stores/firebase_store.dart';
-import 'package:project1/support/global_variables.dart' as globals;
 import 'package:provider/provider.dart';
 import 'package:sign_button/sign_button.dart';
 
@@ -11,11 +8,8 @@ class RegisterDialog extends StatelessWidget {
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  //RegisterDialog({this.store});
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
     final _formKey = GlobalKey<FormState>();
     final firebaseStore = Provider.of<FirebaseStore>(context);
 
@@ -82,34 +76,36 @@ class RegisterDialog extends StatelessWidget {
                 : Container();
           }),
           Center(child: Text("Sign in with:")),
-           Row(
-              children: [
-                Expanded(
-                  child: SignInButton.mini(
-                    buttonType: ButtonType.google,
-                    onPressed: () async {
-                     bool result = await firebaseStore.registerWithCredentials("Google");
-                      if (result) {
-                        Navigator.of(context).pop();
-                        return _showSetUsername(context);
-                      }
-                    },
-                  ),
+          Row(
+            children: [
+              Expanded(
+                child: SignInButton.mini(
+                  buttonType: ButtonType.google,
+                  onPressed: () async {
+                    bool result =
+                        await firebaseStore.registerWithCredentials("Google");
+                    if (result) {
+                      Navigator.of(context).pop();
+                      return _showSetUsername(context);
+                    }
+                  },
                 ),
-                Expanded(
-                  child: SignInButton.mini(
-                    buttonType: ButtonType.facebook,
-                    onPressed: () async {
-                      bool result = await firebaseStore.registerWithCredentials("Facebook");
-                      if (result) {
-                        Navigator.of(context).pop();
-                        return _showSetUsername(context);
-                      }
-                    },
-                  ),
+              ),
+              Expanded(
+                child: SignInButton.mini(
+                  buttonType: ButtonType.facebook,
+                  onPressed: () async {
+                    bool result =
+                        await firebaseStore.registerWithCredentials("Facebook");
+                    if (result) {
+                      Navigator.of(context).pop();
+                      return _showSetUsername(context);
+                    }
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
           ElevatedButton(
             onPressed: () async {
               if (_formKey.currentState.validate()) {
@@ -130,46 +126,48 @@ class RegisterDialog extends StatelessWidget {
     );
   }
 
-   _showSetUsername(BuildContext ctx){
+  _showSetUsername(BuildContext ctx) {
     return showDialog(
-      context:ctx, builder:(context){
-        final firebaseStore = Provider.of<FirebaseStore>(context);
-      final _formKey = GlobalKey<FormState>();
+        context: ctx,
+        builder: (context) {
+          final firebaseStore = Provider.of<FirebaseStore>(context);
+          final _formKey = GlobalKey<FormState>();
 
-        return AlertDialog(
-          content:Theme(
-            data: ThemeData(primaryColor: Colors.black, primaryColorDark: Colors.red),
+          return AlertDialog(
+              content: Theme(
+            data: ThemeData(
+                primaryColor: Colors.black, primaryColorDark: Colors.red),
             child: Form(
-              key:_formKey,
+              key: _formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                Text("Write your username"),
-                TextFormField(
-                  controller: _usernameController,
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "Username",
+                  Text("Write your username"),
+                  TextFormField(
+                    controller: _usernameController,
+                    keyboardType: TextInputType.name,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: "Username",
+                    ),
+                    validator: (value) => value.length >= 4
+                        ? null
+                        : "Username need 4 or more characters",
                   ),
-                  validator: (value) => value.length >= 4
-                      ? null
-                      : "Username need 4 or more characters",
-                ),
-                ElevatedButton(
-                onPressed: () {
-                      if(_formKey.currentState.validate()){
-                        firebaseStore.setNickname(_usernameController.value.text);
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        firebaseStore
+                            .setNickname(_usernameController.value.text);
                         Navigator.of(context).pop();
                       }
                     },
-                child: Text("Submit"),
-              )
-              ],),
+                    child: Text("Submit"),
+                  )
+                ],
+              ),
             ),
-          )
-        );
-      }
-    );
+          ));
+        });
   }
 }

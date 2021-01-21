@@ -6,7 +6,7 @@ import 'package:project1/widgets/lists/listSearchCharacter_widget.dart';
 import 'package:project1/support/global_variables.dart' as globals;
 
 class Search extends SearchDelegate {
-  final store=SearchStore();
+  final store = SearchStore();
   String lastQuery;
   String actualTab;
   Search({this.actualTab});
@@ -16,7 +16,7 @@ class Search extends SearchDelegate {
       IconButton(
         icon: Icon(Icons.close),
         onPressed: () {
-          store.setListResult(actualTab,null);
+          store.setListResult(actualTab, null);
           query = "";
         },
       )
@@ -37,45 +37,53 @@ class Search extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     if (query == "") {
       return Container();
-    }else {
-     return listSearchByName();
-    } 
-    
+    } else {
+      return listSearchByName();
+    }
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     if (query == "") {
-      if(store.getListResult(actualTab)==null){
+      if (store.getListResult(actualTab) == null) {
         return Container();
-      }else{
+      } else {
         return listSearchByName();
       }
     } else if (store.lastQuery != query) {
-      store.search(query,actualTab);
+      store.search(query, actualTab);
       return listSearchByName();
-    } else{
-     if(store.getListResult(actualTab)==null){
+    } else {
+      if (store.getListResult(actualTab) == null) {
         return Container();
-      }else{
+      } else {
         return listSearchByName();
       }
     }
   }
-  
 
-  Widget listSearchByName(){
-    switch(actualTab){
-      case globals.stringTabSearchAnimes:      
-          return ListSearchAnime(storeSearch:store,query: query,actualBar: globals.stringTabSearchAnimes,);
-      case globals.stringTabSearchCharacters:     
-          return ListSearchCharacter(storeSearch:store,query: query,actualBar: globals.stringTabSearchCharacters,);
-        case globals.stringTabSearchCategories:     
-          return ListSearchCategorie(storeSearch:store,query: query,actualBar: globals.stringTabSearchCategories,);
+  Widget listSearchByName() {
+    switch (actualTab) {
+      case globals.stringTabSearchAnimes:
+        return ListSearchAnime(
+          storeSearch: store,
+          query: query,
+          actualBar: globals.stringTabSearchAnimes,
+        );
+      case globals.stringTabSearchCharacters:
+        return ListSearchCharacter(
+          storeSearch: store,
+          query: query,
+          actualBar: globals.stringTabSearchCharacters,
+        );
+      case globals.stringTabSearchCategories:
+        return ListSearchCategorie(
+          storeSearch: store,
+          query: query,
+          actualBar: globals.stringTabSearchCategories,
+        );
       default:
         return Container();
-    
     }
   }
-
 }

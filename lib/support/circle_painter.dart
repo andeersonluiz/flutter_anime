@@ -30,8 +30,6 @@ class _CircleState extends State<Circle> with SingleTickerProviderStateMixin {
     return CustomPaint(
       size: Size(MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height),
-
-
       painter: DrawCircle(center: widget.center, radius: widget.radius),
     );
   }
@@ -49,9 +47,8 @@ class DrawCircle extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.fill
       ..strokeWidth = 30;
-    
-    canvas.drawCircle(Offset(center["x"],center["y"]),radius,brush);
-  
+
+    canvas.drawCircle(Offset(center["x"], center["y"]), radius, brush);
   }
 
   @override

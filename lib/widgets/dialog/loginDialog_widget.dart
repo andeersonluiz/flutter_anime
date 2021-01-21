@@ -62,32 +62,33 @@ class LoginDialog extends StatelessWidget {
           }),
           Center(child: Text("Login with:")),
           Row(
-              children: [
-                Expanded(
-                  child: SignInButton.mini(
-                    buttonType: ButtonType.google,
-                    onPressed: () async {
-                     bool result = await firebaseStore.loginWithCredentials("Google");
-                      if (result) {
-                        Navigator.of(context).pop();
-
-                      }
-                    },
-                  ),
+            children: [
+              Expanded(
+                child: SignInButton.mini(
+                  buttonType: ButtonType.google,
+                  onPressed: () async {
+                    bool result =
+                        await firebaseStore.loginWithCredentials("Google");
+                    if (result) {
+                      Navigator.of(context).pop();
+                    }
+                  },
                 ),
-                Expanded(
-                  child: SignInButton.mini(
-                    buttonType: ButtonType.facebook,
-                    onPressed: () async {
-                      bool result = await firebaseStore.loginWithCredentials("Facebook");
-                      if (result) {
-                        Navigator.of(context).pop();
-                      }
-                    },
-                  ),
+              ),
+              Expanded(
+                child: SignInButton.mini(
+                  buttonType: ButtonType.facebook,
+                  onPressed: () async {
+                    bool result =
+                        await firebaseStore.loginWithCredentials("Facebook");
+                    if (result) {
+                      Navigator.of(context).pop();
+                    }
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
           ElevatedButton(
             onPressed: () async {
               if (_formKey.currentState.validate()) {

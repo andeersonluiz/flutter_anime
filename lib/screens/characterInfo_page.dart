@@ -15,8 +15,16 @@ class CharacterInfoPage extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(),
         slivers: [
           SliverAppBar(
-            title: AutoSizeText(character.name+ (character.japaneseName==""?"":" (${character.japaneseName})"),maxLines: 1,maxFontSize: 15,minFontSize:7,overflow: TextOverflow.ellipsis,)
-          ),
+              title: AutoSizeText(
+            character.name +
+                (character.japaneseName == ""
+                    ? ""
+                    : " (${character.japaneseName})"),
+            maxLines: 1,
+            maxFontSize: 15,
+            minFontSize: 7,
+            overflow: TextOverflow.ellipsis,
+          )),
           SliverFillRemaining(
               fillOverscroll: true,
               child: Column(
@@ -38,44 +46,45 @@ class CharacterInfoPage extends StatelessWidget {
                         style: TextStyle(fontStyle: FontStyle.italic),
                       )),
                     ),
-                    character.otherNames.length>0? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: SizedBox(
-                          height: height*0.02,
-                          child:  ListView.builder(
-                                shrinkWrap: true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount:character.otherNames.length,
-                                itemBuilder:(ctx,index){
-                                  if(index==0){
-                                    return Text(
-                                    "Other names: ${character.otherNames[index]}",
-                                    style: TextStyle(fontStyle: FontStyle.italic));
-                                  }
-                                  if(index==character.otherNames.length-1){
-                                   return Text(
-                            ", ${character.otherNames[index]}",
-                            style: TextStyle(fontStyle: FontStyle.italic));
-                                  }
-                                  return Text(
-                            "${character.otherNames[index]}, ",
-                            style: TextStyle(fontStyle: FontStyle.italic));
-                                }
-                              )
-                              
-                              
-                          
-                        ),
-                      ),
-                    ):Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: Text(
-                                "Other names: -",
-                                style: TextStyle(fontStyle: FontStyle.italic)),
-                      ),
-                    ),
+                    character.otherNames.length > 0
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: SizedBox(
+                                  height: height * 0.02,
+                                  child: ListView.builder(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: character.otherNames.length,
+                                      itemBuilder: (ctx, index) {
+                                        if (index == 0) {
+                                          return Text(
+                                              "Other names: ${character.otherNames[index]}",
+                                              style: TextStyle(
+                                                  fontStyle: FontStyle.italic));
+                                        }
+                                        if (index ==
+                                            character.otherNames.length - 1) {
+                                          return Text(
+                                              ", ${character.otherNames[index]}",
+                                              style: TextStyle(
+                                                  fontStyle: FontStyle.italic));
+                                        }
+                                        return Text(
+                                            "${character.otherNames[index]}, ",
+                                            style: TextStyle(
+                                                fontStyle: FontStyle.italic));
+                                      })),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text("Other names: -",
+                                  style:
+                                      TextStyle(fontStyle: FontStyle.italic)),
+                            ),
+                          ),
                     Container(
                         width: width,
                         color: Colors.grey.withOpacity(0.5),
@@ -85,8 +94,6 @@ class CharacterInfoPage extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ))),
-
-                   
                     Expanded(
                         child: SingleChildScrollView(
                             child: Padding(

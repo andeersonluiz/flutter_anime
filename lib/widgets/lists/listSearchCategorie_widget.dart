@@ -9,42 +9,48 @@ class ListSearchCategorie extends StatelessWidget {
   final storeSearch;
   final query;
   final actualBar;
-  ListSearchCategorie({this.storeSearch,this.query,this.actualBar});
+  ListSearchCategorie({this.storeSearch, this.query, this.actualBar});
   @override
   Widget build(BuildContext context) {
-     return Observer(builder: (_) {
+    return Observer(builder: (_) {
       if (storeSearch.searchResultsCategories != null) {
         switch (storeSearch.searchResultsCategories.status) {
           case FutureStatus.pending:
             return Loading();
           case FutureStatus.rejected:
-            return ErrorLoading(msg:"Error to loading results, verify your connection",refresh:_refresh);
+            return ErrorLoading(
+                msg: "Error to loading results, verify your connection",
+                refresh: _refresh);
 
           case FutureStatus.fulfilled:
             if (storeSearch.searchResultsCategories.value.isEmpty) {
-              return ErrorLoading(msg: "Not found categories", refresh: _refresh);
+              return ErrorLoading(
+                  msg: "Not found categories", refresh: _refresh);
             }
             return ListView.builder(
                 itemCount: storeSearch.searchResultsCategories.value.length,
                 itemBuilder: (ctx, index) {
                   return GestureDetector(
-                    onTap: (){
-                      Navigator.of(context).pushNamed("/animeListByCategorie",arguments:storeSearch.searchResultsCategories.value[index].name);
+                    onTap: () {
+                      Navigator.of(context).pushNamed("/animeListByCategorie",
+                          arguments: storeSearch
+                              .searchResultsCategories.value[index].name);
                     },
                     child: CategorieSearchTile(
-                        categorie: storeSearch.searchResultsCategories.value[index]),
+                        categorie:
+                            storeSearch.searchResultsCategories.value[index]),
                   );
                 });
           default:
-            return ErrorLoading(msg: "Error to load animes.", refresh: _refresh);
-
-              
+            return ErrorLoading(
+                msg: "Error to load animes.", refresh: _refresh);
         }
       } else {
         return Loading();
       }
     });
   }
+
   Future<void> _refresh() async {
     return storeSearch.search(query, actualBar);
   }
