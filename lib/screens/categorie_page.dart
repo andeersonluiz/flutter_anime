@@ -38,7 +38,10 @@ class _CategoriePageState extends State<CategoriePage> {
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () => {
-              showSearch(context: context, delegate: Search(actualTab: globals.stringTabSearchCategories))
+              showSearch(
+                  context: context,
+                  delegate:
+                      Search(actualTab: globals.stringTabSearchCategories))
             },
           ),
         ],
@@ -52,15 +55,16 @@ class _CategoriePageState extends State<CategoriePage> {
                   child: Align(
                     alignment: Alignment.center,
                     child: CheckboxListTile(
-                      contentPadding: EdgeInsets.only(left:width*0.25,right:width*0.25),
-                      title:  Text("Show all categories"),
+                      contentPadding: EdgeInsets.only(
+                          left: width * 0.25, right: width * 0.25),
+                      title: Text("Show all categories"),
                       controlAffinity: ListTileControlAffinity.trailing,
                       onChanged: (checked) {
                         if (checked) {
-                          storeCategories.checkedBox=true;
+                          storeCategories.checkedBox = true;
                           return storeCategories.getAllCategories();
                         } else {
-                          storeCategories.checkedBox=false;
+                          storeCategories.checkedBox = false;
                           return storeCategories.getCategoriesTrends();
                         }
                       },
@@ -83,7 +87,11 @@ class _CategoriePageState extends State<CategoriePage> {
                       msg: "Error to load categories", refresh: _refresh);
                 case FutureStatus.fulfilled:
                   return ListCategories(
-                      categories: storeCategories.listCategories.value,scrollController: _scrollController,loadedAllList: storeCategories.checkedBox?storeCategories.loadedAllList:true);
+                      categories: storeCategories.listCategories.value,
+                      scrollController: _scrollController,
+                      loadedAllList: storeCategories.checkedBox
+                          ? storeCategories.loadedAllList
+                          : true);
 
                 default:
                   return ErrorLoading(
@@ -101,17 +109,17 @@ class _CategoriePageState extends State<CategoriePage> {
     return storeCategories.getCategoriesTrends();
   }
 
-  _scrollListener(){
-    if(storeCategories.checkedBox==true){
+  _scrollListener() {
+    if (storeCategories.checkedBox == true) {
       if (_scrollController.offset >=
-            (_scrollController.position.maxScrollExtent) / 2 &&
-        !_scrollController.position.outOfRange &&
-        !storeCategories.lockLoad) {
-      if (storeCategories.loadedAllList == false) {
-        storeCategories.loadCategories();
-        storeCategories.lockLoad = true;
+              (_scrollController.position.maxScrollExtent) / 2 &&
+          !_scrollController.position.outOfRange &&
+          !storeCategories.lockLoad) {
+        if (storeCategories.loadedAllList == false) {
+          storeCategories.loadCategories();
+          storeCategories.lockLoad = true;
+        }
       }
-    }
     }
   }
 }

@@ -21,11 +21,13 @@ abstract class _AnimeCharacterStoreBase with Store {
     print("get characters...");
     var stopWatch = new Stopwatch()..start();
 
-    listCharacters = ObservableFuture(_decode(url+"?page[limit]=15")).then((listCharacters) {
+    listCharacters = ObservableFuture(_decode(url + "?page[limit]=15"))
+        .then((listCharacters) {
       print("getCharacters executed in ${stopWatch.elapsed}");
       return listCharacters;
     });
   }
+
   @action
   loadMoreCharacters() {
     listCharacters = listCharacters
@@ -36,7 +38,8 @@ abstract class _AnimeCharacterStoreBase with Store {
   }
 
   _decode(String url) async {
-    response = await http.get(url,headers:{'Content-Type':'application/json;charset=utf-8'});
+    response = await http
+        .get(url, headers: {'Content-Type': 'application/json;charset=utf-8'});
     var decoded = json.decode(utf8.decode(response.bodyBytes));
     if (decoded['data'] == null) {
       return [];
@@ -53,7 +56,8 @@ abstract class _AnimeCharacterStoreBase with Store {
     List<Future<Character>> futureListCharacter;
     List<Character> listCharacter = [];
     futureListCharacter = await (urls).map<Future<Character>>((element) async {
-      http.Response resp = await http.get(element,headers:{'Content-Type':'application/json;charset=utf-8'});
+      http.Response resp = await http.get(element,
+          headers: {'Content-Type': 'application/json;charset=utf-8'});
       var decode = json.decode(utf8.decode(resp.bodyBytes));
       return (Character.fromJson(decode['data']));
     }).toList();
@@ -62,6 +66,4 @@ abstract class _AnimeCharacterStoreBase with Store {
     }
     return listCharacter;
   }
-
-
 }

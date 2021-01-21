@@ -51,18 +51,25 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-        final width = MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      drawer:DrawerSideBar(),
-      appBar:AppBar(
+      drawer: DrawerSideBar(),
+      appBar: AppBar(
         actions: [
-          SizedBox(width: width*0.76,height:height*0.76,child: Image.asset("assets/logo_black.png",fit:BoxFit.contain )),
-          IconButton(icon: Icon(Icons.search),onPressed: ()=>{
-            showSearch(context: context,delegate:Search(actualTab:globals.stringTabSearchAnimes))
-          },),
+          SizedBox(
+              width: width * 0.76,
+              height: height * 0.76,
+              child: Image.asset("assets/logo_black.png", fit: BoxFit.contain)),
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () => {
+              showSearch(
+                  context: context,
+                  delegate: Search(actualTab: globals.stringTabSearchAnimes))
+            },
+          ),
         ],
-
       ),
       body: SafeArea(
         child: Column(

@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:project1/model/user_model.dart';
 import 'package:project1/stores/firebase_store.dart';
 import 'package:project1/widgets/dialog/registerDialog_widget.dart';
-import 'package:project1/support/global_variables.dart' as globals;
 import 'package:provider/provider.dart';
 
 import 'dialog/loginDialog_widget.dart';
 
 class DrawerSideBar extends StatelessWidget {
-  final _usernameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     final firebaseStore = Provider.of<FirebaseStore>(context);
@@ -43,7 +36,7 @@ class DrawerSideBar extends StatelessWidget {
                       top: (height * 0.15),
                       left: (width * 0.04),
                       child: firebaseStore.isLogged
-                          ? Text(firebaseStore.user.nickname??"")
+                          ? Text(firebaseStore.user.nickname ?? "")
                           : Text("username")),
                 ],
               );
@@ -62,24 +55,26 @@ class DrawerSideBar extends StatelessWidget {
             Divider(),
             Observer(builder: (_) {
               return firebaseStore.isLogged
-                          ?ListTile(
-                  title: Text('Logout'),
-                  onTap: () => firebaseStore.signOut()):ListTile(
-                  title: Text('Login'),
-                  onTap: () {
-                    firebaseStore.errorMsg="";
-                    return _showDialogLogin(context);});
+                  ? ListTile(
+                      title: Text('Logout'),
+                      onTap: () => firebaseStore.signOut())
+                  : ListTile(
+                      title: Text('Login'),
+                      onTap: () {
+                        firebaseStore.errorMsg = "";
+                        return _showDialogLogin(context);
+                      });
             }),
             Observer(builder: (_) {
               return firebaseStore.isLogged
-                          ? Container():ListTile(
-                  title:Text('Register'),
-                  onTap: () {
-                    firebaseStore.errorMsg="";
-                    return _showDialogRegister(context);
-                  });
+                  ? Container()
+                  : ListTile(
+                      title: Text('Register'),
+                      onTap: () {
+                        firebaseStore.errorMsg = "";
+                        return _showDialogRegister(context);
+                      });
             }),
-
             Expanded(
               child: Align(
                 alignment: FractionalOffset.bottomLeft,
@@ -94,7 +89,6 @@ class DrawerSideBar extends StatelessWidget {
   }
 
   _showDialogRegister(BuildContext ctx) {
-    
     return showDialog(
         context: ctx,
         builder: (context) {
@@ -104,8 +98,7 @@ class DrawerSideBar extends StatelessWidget {
         });
   }
 
-   _showDialogLogin(BuildContext ctx) {
-    
+  _showDialogLogin(BuildContext ctx) {
     return showDialog(
         context: ctx,
         builder: (context) {
@@ -114,7 +107,4 @@ class DrawerSideBar extends StatelessWidget {
           );
         });
   }
-
-
- 
 }

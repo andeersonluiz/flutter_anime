@@ -10,11 +10,7 @@ import 'package:project1/screens/characterInfo_page.dart';
 import 'package:project1/screens/character_page.dart';
 import 'package:project1/screens/home_page.dart';
 import 'package:project1/stores/firebase_store.dart';
-import 'package:project1/widgets/loading_widget.dart';
 import 'package:provider/provider.dart';
-import 'firebase/auth_firebase.dart';
-import 'firebase/cloudFirestore_firebase.dart';
-import 'stores/anime_store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
