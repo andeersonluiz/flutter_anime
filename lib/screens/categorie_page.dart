@@ -34,7 +34,7 @@ class _CategoriePageState extends State<CategoriePage> {
           SizedBox(
               width: width * 0.76,
               height: height * 0.76,
-              child: Image.asset("assets/no-thumbnail.jpg", fit: BoxFit.fill)),
+              child: Image.asset("assets/logo_black.png", fit: BoxFit.fill)),
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () => {
@@ -56,7 +56,6 @@ class _CategoriePageState extends State<CategoriePage> {
                       title:  Text("Show all categories"),
                       controlAffinity: ListTileControlAffinity.trailing,
                       onChanged: (checked) {
-                        print(checked);
                         if (checked) {
                           storeCategories.checkedBox=true;
                           return storeCategories.getAllCategories();
