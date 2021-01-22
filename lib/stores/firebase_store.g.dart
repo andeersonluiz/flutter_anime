@@ -54,6 +54,21 @@ mixin _$FirebaseStore on _FirebaseStoreBase, Store {
     });
   }
 
+  final _$isDarkThemeAtom = Atom(name: '_FirebaseStoreBase.isDarkTheme');
+
+  @override
+  bool get isDarkTheme {
+    _$isDarkThemeAtom.reportRead();
+    return super.isDarkTheme;
+  }
+
+  @override
+  set isDarkTheme(bool value) {
+    _$isDarkThemeAtom.reportWrite(value, super.isDarkTheme, () {
+      super.isDarkTheme = value;
+    });
+  }
+
   final _$registerWithEmailAndPasswordAsyncAction =
       AsyncAction('_FirebaseStoreBase.registerWithEmailAndPassword');
 
@@ -62,6 +77,45 @@ mixin _$FirebaseStore on _FirebaseStoreBase, Store {
       String email, String password, String nickname) {
     return _$registerWithEmailAndPasswordAsyncAction.run(
         () => super.registerWithEmailAndPassword(email, password, nickname));
+  }
+
+  final _$loginWithEmailAndPasswordAsyncAction =
+      AsyncAction('_FirebaseStoreBase.loginWithEmailAndPassword');
+
+  @override
+  Future loginWithEmailAndPassword(String email, String password) {
+    return _$loginWithEmailAndPasswordAsyncAction
+        .run(() => super.loginWithEmailAndPassword(email, password));
+  }
+
+  final _$loadUserAsyncAction = AsyncAction('_FirebaseStoreBase.loadUser');
+
+  @override
+  Future<Person> loadUser() {
+    return _$loadUserAsyncAction.run(() => super.loadUser());
+  }
+
+  final _$setAvatarAsyncAction = AsyncAction('_FirebaseStoreBase.setAvatar');
+
+  @override
+  Future setAvatar(String path) {
+    return _$setAvatarAsyncAction.run(() => super.setAvatar(path));
+  }
+
+  final _$setBackgroundAsyncAction =
+      AsyncAction('_FirebaseStoreBase.setBackground');
+
+  @override
+  Future setBackground(String path) {
+    return _$setBackgroundAsyncAction.run(() => super.setBackground(path));
+  }
+
+  final _$setNicknameAsyncAction =
+      AsyncAction('_FirebaseStoreBase.setNickname');
+
+  @override
+  Future setNickname(String nickname) {
+    return _$setNicknameAsyncAction.run(() => super.setNickname(nickname));
   }
 
   final _$_FirebaseStoreBaseActionController =
@@ -94,7 +148,8 @@ mixin _$FirebaseStore on _FirebaseStoreBase, Store {
     return '''
 isLogged: ${isLogged},
 errorMsg: ${errorMsg},
-user: ${user}
+user: ${user},
+isDarkTheme: ${isDarkTheme}
     ''';
   }
 }

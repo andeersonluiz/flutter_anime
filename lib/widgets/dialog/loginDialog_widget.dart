@@ -8,13 +8,20 @@ class LoginDialog extends StatelessWidget {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  final Function(String) emailValidator = (String str) {
+    return str.contains('@') ? null : "Email invalid";
+  };
+
+  final Function(String) passwordValidator = (String str) {
+    return str.length >= 8 ? null : "Password need 8 or more characters";
+  };
+  
   @override
   Widget build(BuildContext context) {
+    
     final _formKey = GlobalKey<FormState>();
     final firebaseStore = Provider.of<FirebaseStore>(context);
-    return Theme(
-      data: ThemeData(primaryColor: Colors.black, primaryColorDark: Colors.red),
-      child: Form(
+    return Form(
         key: _formKey,
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Padding(
@@ -26,41 +33,25 @@ class LoginDialog extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red)),
-                labelText: "Email",
-              ),
-              validator: (value) =>
-                  value.contains('@') ? null : "Email invalid",
-            ),
+            child: _formFieldModel(_emailController,
+                    TextInputType.emailAddress, "Email", emailValidator),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: _passwordController,
-              keyboardType: TextInputType.visiblePassword,
-              enableSuggestions: false,
-              autocorrect: false,
-              obscureText: true,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: "Password",
-              ),
-              validator: (value) => value.length >= 8
-                  ? null
-                  : "Password need 8 or more characters",
-            ),
+            child: _formFieldModel(_passwordController,
+                    TextInputType.visiblePassword, "Password", passwordValidator,
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    obscureText: true),
           ),
           Observer(builder: (_) {
             return firebaseStore.errorMsg != ""
-                ? Center(child: Text(firebaseStore.errorMsg))
+                ? Center(child: Text(firebaseStore.errorMsg,maxLines: 1,style: TextStyle(color: Colors.red,fontSize: 13)))
                 : Container();
           }),
-          Center(child: Text("Login with:")),
+          Center(child: Text("Login with:",style: TextStyle(
+                        fontSize: 13,
+                      ))),
           Row(
             children: [
               Expanded(
@@ -101,10 +92,37 @@ class LoginDialog extends StatelessWidget {
                 }
               }
             },
-            child: Text("Submit"),
+            child: Text("Login"),
           )
         ]),
+      
+    );
+  }
+
+
+   _formFieldModel(
+    TextEditingController controller,
+    TextInputType keyboardType,
+    String labelText,
+    Function(String) validator, {
+    bool enableSuggestions = true,
+    bool autocorrect = true,
+    bool obscureText = false,
+  }) {
+    return TextFormField(
+      
+      controller: controller,
+      keyboardType: keyboardType,
+      autocorrect:autocorrect,
+      enableSuggestions:enableSuggestions,
+      obscureText:obscureText,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical:5,horizontal:10),
+        border: OutlineInputBorder(),
+        errorStyle: TextStyle(fontSize: 10),
+        labelText: labelText,
       ),
+      validator: validator,
     );
   }
 }

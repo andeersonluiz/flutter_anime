@@ -6,6 +6,7 @@ import 'package:project1/firebase/cloudFirestore_firebase.dart';
 import 'package:project1/model/anime_model.dart';
 import 'package:project1/model/categorie_model.dart';
 import 'package:project1/model/user_model.dart';
+
 part 'firebase_store.g.dart';
 
 class FirebaseStore = _FirebaseStoreBase with _$FirebaseStore;
@@ -19,12 +20,17 @@ abstract class _FirebaseStoreBase with Store {
 
   @observable
   Person user;
+  
+  @observable
+  bool isDarkTheme=false;
 
   Auth auth;
   CloudFirestore cloud;
   Encrypter encrypter;
   final key = Key.fromUtf8("eu nao sei qual key escolher ent");
   final iv = IV.fromLength(16);
+
+
   _FirebaseStoreBase() {
     auth = Auth();
     cloud = CloudFirestore();
@@ -54,7 +60,8 @@ abstract class _FirebaseStoreBase with Store {
           email: encryptedEmail,
           password: encryptedPassword,
           nickname: nickname,
-          background: "",
+          avatar:"assets/avatars/default.jpg",
+          background: "assets/no-thumbnail.jpg",
           favoritesAnimes: List<Anime>(),
           favoritesCategories: List<Categorie>());
       cloud.addUser(user);
@@ -79,7 +86,8 @@ abstract class _FirebaseStoreBase with Store {
               email: encrypter.encrypt(currentUser.email, iv: iv).base64,
               password: "",
               nickname: "",
-              background: "",
+              avatar:"assets/avatars/default.jpg",
+              background: "assets/no-thumbnail.jpg",
               favoritesAnimes: List<Anime>(),
               favoritesCategories: List<Categorie>());
           cloud.addUser(user);
@@ -100,7 +108,8 @@ abstract class _FirebaseStoreBase with Store {
               email: encrypter.encrypt(currentUser.email, iv: iv).base64,
               password: "",
               nickname: "",
-              background: "",
+              avatar:"assets/avatars/default.jpg",
+              background: "assets/no-thumbnail.jpg",
               favoritesAnimes: List<Anime>(),
               favoritesCategories: List<Categorie>());
           cloud.addUser(user);
@@ -178,8 +187,25 @@ abstract class _FirebaseStoreBase with Store {
   }
 
   @action
-  setNickname(String nickname) {
-    cloud = CloudFirestore();
-    cloud.changeNickname(this.user, nickname);
+  setAvatar(String path) async {
+    user.avatar="assets/loading.gif";
+    this.user = user;
+    await Future.delayed(Duration(seconds: 1));
+    user = await cloud.changeAvatar(this.user, path);
   }
+
+  @action
+  setBackground(String path) async {
+    user.background="assets/loading.gif";
+    this.user = user;
+    await Future.delayed(Duration(seconds: 1));
+    user = await cloud.changeBackground(this.user, path);
+  }
+
+  @action
+  setNickname(String nickname) async {
+    user = await cloud.changeNickname(this.user, nickname);
+  }
+
+
 }

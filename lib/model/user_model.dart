@@ -6,6 +6,7 @@ class Person {
   String email;
   String password;
   String nickname;
+  String avatar;
   String background;
   List<Anime> favoritesAnimes;
   List<Categorie> favoritesCategories;
@@ -15,6 +16,7 @@ class Person {
       this.password,
       this.email,
       this.nickname,
+      this.avatar,
       this.background,
       this.favoritesAnimes,
       this.favoritesCategories});
@@ -25,6 +27,7 @@ class Person {
       email: json['email'],
       password: json['password'],
       nickname: json['nickname'],
+      avatar: json['avatar'],
       background: json['background'],
       favoritesAnimes: List<Anime>.from(json['favoritesAnimes']),
       favoritesCategories: List<Categorie>.from(json['favoritesCategories']),
@@ -36,6 +39,7 @@ class Person {
         'email': email,
         'password': password,
         'nickname': nickname,
+        'avatar':avatar,
         'background': background,
         'favoritesAnimes': favoritesAnimes,
         'favoritesCategories': favoritesCategories,

@@ -6,7 +6,8 @@ class ListCategories extends StatelessWidget {
   final List<Categorie> categories;
   final ScrollController scrollController;
   final bool loadedAllList;
-  ListCategories({this.categories, this.scrollController, this.loadedAllList});
+  final color;
+  ListCategories({this.categories, this.scrollController, this.loadedAllList,this.color});
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -21,7 +22,7 @@ class ListCategories extends StatelessWidget {
                           context, '/animeListByCategorie',
                           arguments: categories[index].name),
                       child: CategorieTile(
-                        categorie: categories[index],
+                        categorie: categories[index],color:color,
                       ))
                   : Container(),
               childCount: categories.length ?? 0),

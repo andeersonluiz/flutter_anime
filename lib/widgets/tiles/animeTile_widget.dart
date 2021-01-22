@@ -1,7 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:project1/stores/firebase_store.dart';
 import 'package:project1/support/circle_painter.dart';
 import 'package:project1/support/global_variables.dart' as globals;
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class AnimeTile extends StatelessWidget {
@@ -10,6 +13,8 @@ class AnimeTile extends StatelessWidget {
   AnimeTile({this.index, this.anime});
   @override
   Widget build(BuildContext context) {
+    final firebaseStore = Provider.of<FirebaseStore>(context);
+
     final size = MediaQuery.of(context).size;
     final width = (size.width -
             ((globals.crossAxisCount - 1) * globals.crossAxisSpacing)) /
@@ -21,31 +26,39 @@ class AnimeTile extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Container(
-          decoration: BoxDecoration(color: Colors.white, boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 1,
-              blurRadius: 3,
-              offset: Offset(0, 3),
-            )
-          ]),
+          decoration: BoxDecoration(
+              color: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 3,
+                  blurRadius: 3,
+                  offset: Offset(0, 3),
+                )
+              ]),
           child: Center(
               child: Stack(
             children: [
               SizedBox(
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Container(
-                      height: height * 0.7,
-                      width: width,
-                      child: FadeInImage.memoryNetwork(
-                        image: anime.posterImage,
-                        placeholder: kTransparentImage,
-                        fit: BoxFit.cover,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black, width: 2),
-                      )),
+                  child: Observer(builder: (_) {
+                    return Container(
+                        height: height * 0.7,
+                        width: width,
+                        child: FadeInImage.memoryNetwork(
+                          image: anime.posterImage,
+                          placeholder: kTransparentImage,
+                          fit: BoxFit.cover,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: firebaseStore.isDarkTheme
+                                  ? Colors.white
+                                  : Colors.black,
+                              width: 2),
+                        ));
+                  }),
                 ),
               ),
               Positioned(
@@ -84,7 +97,9 @@ class AnimeTile extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
                           child: Text('${anime.canonicalTitle}',
-                              style: TextStyle(fontSize: 14),
+                              style: TextStyle(fontSize: 14,color:firebaseStore.isDarkTheme
+                                  ? Colors.white
+                                  : Colors.black,),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2)),
                     ),

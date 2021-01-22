@@ -43,7 +43,7 @@ dependencies:
   provider: ^4.3.3
   sign_button: ^1.0.1
   encrypt: ^4.1.0
-
+  toast: ^0.1.5
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +67,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/avatars/
+    - assets/background/
   #  - images/a_dot_ham.jpeg
 
 
@@ -82,11 +84,46 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
+  fonts:
+    - family: RobotoBlack
+      fonts:
+        - asset: fonts/ROBOTO-BLACK.TTF
+        - asset: fonts/ROBOTO-BLACKITALIC.TTF
+          style: italic
+    - family: RobotoBold
+      fonts:
+        - asset: fonts/ROBOTO-BOLD.TTF
+        - asset: fonts/ROBOTO-BOLDITALIC.TTF
+          style: italic
+    - family: RobotoItalic
+      fonts:
+        - asset: fonts/ROBOTO-ITALIC.TTF
+          style: italic
+    - family: RobotoLight
+      fonts:
+        - asset: fonts/ROBOTO-LIGHT.TTF
+        - asset: fonts/ROBOTO-LIGHTITALIC.TTF
+          style: italic
+    - family: RobotoMedium
+      fonts:
+        - asset: fonts/ROBOTO-MEDIUM.TTF
+        - asset: fonts/ROBOTO-MEDIUMITALIC.TTF
+          style: italic
+    - family: RobotoRegular
+      fonts:
+        - asset: fonts/ROBOTO-REGULAR.TTF
+    - family: RobotoThin
+      fonts:
+        - asset: fonts/ROBOTO-THIN.TTF
+        - asset: fonts/ROBOTO-THINITALIC.TTF
+          style: italic
+    - family: RobotoCondensed
+      fonts:
+        - asset: fonts/ROBOTOCONDENSED-ITALIC.TTF
+          style: italic
+        - asset: fonts/ROBOTOCONDENSED-REGULAR.TTF
+         
+   
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

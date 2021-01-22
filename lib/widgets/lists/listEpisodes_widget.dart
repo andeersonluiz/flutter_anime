@@ -5,16 +5,18 @@ class ListEpisodes extends StatelessWidget {
   final scrollController;
   final episodes;
   final loadedAllList;
-  ListEpisodes({this.scrollController, this.episodes, this.loadedAllList});
+  final color;
+  ListEpisodes({this.scrollController, this.episodes, this.loadedAllList,this.color});
   @override
   Widget build(BuildContext context) {
+    
     return CustomScrollView(
       scrollDirection: Axis.vertical,
       controller: scrollController,
       slivers: <Widget>[
         SliverList(
           delegate: SliverChildBuilderDelegate(
-              (ctx, index) => EpisodeTile(episode: episodes[index]),
+              (ctx, index) => EpisodeTile(episode: episodes[index],color:color),
               childCount: episodes.length ?? 0),
         ),
         SliverList(
@@ -25,7 +27,7 @@ class ListEpisodes extends StatelessWidget {
                       child: loadedAllList
                           ? Container()
                           : CircularProgressIndicator(
-                              backgroundColor: Colors.green,
+                              backgroundColor: color,
                             ))),
               childCount: 1),
         ),

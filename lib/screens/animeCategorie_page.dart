@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:project1/stores/animeFilter_store.dart';
+import 'package:project1/stores/firebase_store.dart';
 import 'package:project1/widgets/errorLoading_widget.dart';
 import 'package:project1/widgets/lists/listAnimes_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:project1/widgets/loading_widget.dart';
 
 class AnimeCategoriePage extends StatefulWidget {
@@ -24,7 +26,10 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
 
   @override
   Widget build(BuildContext context) {
+    final firebaseStore = Provider.of<FirebaseStore>(context);
+
     return Scaffold(
+      backgroundColor: firebaseStore.isDarkTheme?Colors.black:Colors.white,
         appBar: AppBar(
           title: Text(widget.nameCategorie + " animes"),
         ),

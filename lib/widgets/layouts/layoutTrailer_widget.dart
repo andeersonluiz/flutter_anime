@@ -3,7 +3,8 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class LayoutTrailer extends StatelessWidget {
   final controllerYoutube;
-  LayoutTrailer({this.controllerYoutube});
+  final color;
+  LayoutTrailer({this.controllerYoutube,this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class LayoutTrailer extends StatelessWidget {
             const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 8.0),
         child: Text(
           "Trailer",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color:color),
         ),
       ),
       Padding(
