@@ -4,7 +4,8 @@ import 'package:project1/model/episode_model.dart';
 
 class EpisodeTile extends StatelessWidget {
   final Episode episode;
-  EpisodeTile({this.episode});
+  final color;
+  EpisodeTile({this.episode,this.color});
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -12,7 +13,7 @@ class EpisodeTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        decoration: BoxDecoration(color: Colors.white, boxShadow: [
+        decoration: BoxDecoration(color: color==Colors.white?Colors.black:Colors.white, boxShadow: [
           BoxShadow(
               color: Colors.grey.withOpacity(0.5),
               spreadRadius: 3,
@@ -43,7 +44,7 @@ class EpisodeTile extends StatelessWidget {
                     episode.number +
                     " : " +
                     episode.canonicalTitle,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold,color:color),
               )),
             ),
             GestureDetector(
@@ -59,7 +60,7 @@ class EpisodeTile extends StatelessWidget {
                     maxFontSize: 15,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontStyle: FontStyle.italic),
+                    style: TextStyle(fontStyle: FontStyle.italic,color:color),
                   )),
             ),
             Padding(
@@ -73,14 +74,14 @@ class EpisodeTile extends StatelessWidget {
                           width: width / 50,
                           height: height / 50,
                           child: Center(
-                              child: Text("Air Date: " + episode.airDate)))),
+                              child: Text("Air Date: " + episode.airDate, style: TextStyle(color:color),)))),
                   Expanded(
                       child: Container(
                           width: width / 50,
                           height: height / 50,
                           child: Center(
                               child:
-                                  Text("Length: " + episode.length + " min."))))
+                                  Text("Length: " + episode.length + " min.", style: TextStyle(color:color)))))
                 ],
               ),
             )

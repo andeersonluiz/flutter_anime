@@ -4,15 +4,17 @@ import 'package:project1/model/character_model.dart';
 
 class CharacterTile extends StatelessWidget {
   final Character character;
-  CharacterTile({this.character});
+  final color;
+  CharacterTile({this.character,this.color});
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-
     return Card(
-        elevation: 2,
+        color: color==Colors.white?Colors.black:Colors.white,
+        elevation: 3,
+        shadowColor: color,
         child: Column(
           children: [
             Expanded(
@@ -35,6 +37,7 @@ class CharacterTile extends StatelessWidget {
                     maxFontSize: 15,
                     minFontSize: 5,
                     textAlign: TextAlign.center,
+                    style: TextStyle(color:color),
                   ),
                 ),
               ),

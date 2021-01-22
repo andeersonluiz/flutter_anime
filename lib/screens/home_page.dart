@@ -4,12 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:project1/stores/anime_store.dart';
+import 'package:project1/stores/firebase_store.dart';
 import 'package:project1/support/global_variables.dart' as globals;
 import 'package:project1/widgets/drawerSideBar_widget.dart';
 import 'package:project1/widgets/errorLoading_widget.dart';
 import 'package:project1/widgets/lists/listAnimes_widget.dart';
 import 'package:project1/widgets/loading_widget.dart';
 import 'package:project1/widgets/search.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -52,6 +54,7 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final firebaseStore = Provider.of<FirebaseStore>(context);
 
     return Scaffold(
       drawer: DrawerSideBar(),
@@ -60,160 +63,187 @@ class _MyHomePageState extends State<MyHomePage>
           SizedBox(
               width: width * 0.76,
               height: height * 0.76,
-              child: Image.asset("assets/logo_black.png", fit: BoxFit.contain)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                    firebaseStore.isDarkTheme
+                        ? "assets/logo_white.png"
+                        : "assets/logo_black.png",
+                    fit: BoxFit.scaleDown),
+              )),
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () => {
-              showSearch(
+             showSearch(
                   context: context,
-                  delegate: Search(actualTab: globals.stringTabSearchAnimes))
+                  delegate: Search(actualTab: globals.stringTabSearchAnimes,color:firebaseStore.isDarkTheme?Colors.black:Colors.white),
+                  
+                  )
+              
             },
           ),
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            TabBar(
-                indicatorColor: Colors.black,
-                labelColor: Colors.black,
-                controller: _tabController,
-                isScrollable: true,
-                tabs: myTabs),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                dragStartBehavior: DragStartBehavior.start,
-                children: [
-                  RefreshIndicator(
-                    onRefresh: _refresh,
-                    child: Observer(
-                        name: globals.stringAnimesPopular,
-                        builder: (_) {
-                          storeAnimes.animesPopular ??
-                              storeAnimes
-                                  .getAnimes(globals.stringAnimesPopular);
-                          switch (storeAnimes.animesPopular.status) {
-                            case FutureStatus.pending:
-                              return Loading();
-                            case FutureStatus.rejected:
+        child: Observer(builder: (_) {
+          return Container(
+            color: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+            child: Column(
+              children: [
+                Observer(builder: (_) {
+                  return TabBar(
+                      indicatorColor: firebaseStore.isDarkTheme
+                          ? Colors.white
+                          : Colors.black,
+                      labelColor: firebaseStore.isDarkTheme
+                          ? Colors.white
+                          : Colors.black,
+                      controller: _tabController,
+                      isScrollable: true,
+                      tabs: myTabs);
+                }),
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    dragStartBehavior: DragStartBehavior.start,
+                    children: [
+                      RefreshIndicator(
+                        onRefresh: _refresh,
+                        child: Observer(
+                            name: globals.stringAnimesPopular,
+                            builder: (_) {
+                              storeAnimes.animesPopular ??
+                                  storeAnimes
+                                      .getAnimes(globals.stringAnimesPopular);
+                              switch (storeAnimes.animesPopular.status) {
+                                case FutureStatus.pending:
+                                  return Loading();
+                                case FutureStatus.rejected:
+                                  return ErrorLoading(
+                                    msg:
+                                        "Error to load page, verify your connection.",
+                                    refresh: _refresh,
+                                  );
+                                case FutureStatus.fulfilled:
+                                  return AnimeList(
+                                    keyName: globals.stringAnimesPopular,
+                                    animes: storeAnimes.getAnimesPopular.value,
+                                    loadedAllList:
+                                        storeAnimes.dataListPopular[0],
+                                    scrollController: _scrollController,
+                                  );
+                                default:
+                                  return ErrorLoading(
+                                      msg:
+                                          "Error to load page, try again later.",
+                                      refresh: _refresh);
+                              }
+                            }),
+                      ),
+                      RefreshIndicator(
+                        onRefresh: _refresh,
+                        child: Observer(
+                            name: globals.stringAnimesAiring,
+                            builder: (_) {
+                              storeAnimes.animesAiring ??
+                                  storeAnimes
+                                      .getAnimes(globals.stringAnimesAiring);
+                              switch (storeAnimes.animesAiring.status) {
+                                case FutureStatus.pending:
+                                  return Loading();
+                                case FutureStatus.rejected:
+                                  return ErrorLoading(
+                                      msg:
+                                          "Error to load page, verify your connection.",
+                                      refresh: _refresh);
+                                case FutureStatus.fulfilled:
+                                  return AnimeList(
+                                    keyName: globals.stringAnimesAiring,
+                                    animes: storeAnimes.getAnimesAiring.value,
+                                    loadedAllList:
+                                        storeAnimes.dataListAiring[0],
+                                    scrollController: _scrollController,
+                                  );
+                              }
                               return ErrorLoading(
-                                msg:
-                                    "Error to load page, verify your connection.",
+                                msg: "Error to load page, try again later.",
                                 refresh: _refresh,
                               );
-                            case FutureStatus.fulfilled:
-                              return AnimeList(
-                                keyName: globals.stringAnimesPopular,
-                                animes: storeAnimes.getAnimesPopular.value,
-                                loadedAllList: storeAnimes.dataListPopular[0],
-                                scrollController: _scrollController,
+                            }),
+                      ),
+                      RefreshIndicator(
+                        onRefresh: _refresh,
+                        child: Observer(
+                            name: globals.stringAnimesHighest,
+                            builder: (_) {
+                              storeAnimes.animesHighest ??
+                                  storeAnimes
+                                      .getAnimes(globals.stringAnimesHighest);
+                              switch (storeAnimes.animesHighest.status) {
+                                case FutureStatus.pending:
+                                  return Loading();
+                                case FutureStatus.rejected:
+                                  return ErrorLoading(
+                                      msg:
+                                          "Error to load page, verify your connection.",
+                                      refresh: _refresh);
+                                case FutureStatus.fulfilled:
+                                  return AnimeList(
+                                    keyName: globals.stringAnimesHighest,
+                                    animes: storeAnimes.getAnimesHighest.value,
+                                    loadedAllList:
+                                        storeAnimes.dataListHighest[0],
+                                    scrollController: _scrollController,
+                                  );
+                              }
+                              return ErrorLoading(
+                                msg: "Error to load page, try again later.",
+                                refresh: _refresh,
                               );
-                            default:
+                            }),
+                      ),
+                      RefreshIndicator(
+                        onRefresh: _refresh,
+                        child: Observer(
+                            name: globals.stringAnimesUpcoming,
+                            builder: (_) {
+                              storeAnimes.animesUpcoming ??
+                                  storeAnimes
+                                      .getAnimes(globals.stringAnimesUpcoming);
+                              switch (storeAnimes.animesUpcoming.status) {
+                                case FutureStatus.pending:
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+
+                                case FutureStatus.rejected:
+                                  return ErrorLoading(
+                                      msg:
+                                          "Error to load page, verify your connection.",
+                                      refresh: _refresh);
+                                case FutureStatus.fulfilled:
+                                  return AnimeList(
+                                    keyName: globals.stringAnimesUpcoming,
+                                    animes: storeAnimes.getAnimesUpcoming.value,
+                                    loadedAllList:
+                                        storeAnimes.dataListUpComing[0],
+                                    scrollController: _scrollController,
+                                  );
+                              }
                               return ErrorLoading(
                                   msg: "Error to load page, try again later.",
                                   refresh: _refresh);
-                          }
-                        }),
+                            }),
+                      ),
+                    ],
                   ),
-                  RefreshIndicator(
-                    onRefresh: _refresh,
-                    child: Observer(
-                        name: globals.stringAnimesAiring,
-                        builder: (_) {
-                          storeAnimes.animesAiring ??
-                              storeAnimes.getAnimes(globals.stringAnimesAiring);
-                          switch (storeAnimes.animesAiring.status) {
-                            case FutureStatus.pending:
-                              return Loading();
-                            case FutureStatus.rejected:
-                              return ErrorLoading(
-                                  msg:
-                                      "Error to load page, verify your connection.",
-                                  refresh: _refresh);
-                            case FutureStatus.fulfilled:
-                              return AnimeList(
-                                keyName: globals.stringAnimesAiring,
-                                animes: storeAnimes.getAnimesAiring.value,
-                                loadedAllList: storeAnimes.dataListAiring[0],
-                                scrollController: _scrollController,
-                              );
-                          }
-                          return ErrorLoading(
-                            msg: "Error to load page, try again later.",
-                            refresh: _refresh,
-                          );
-                        }),
-                  ),
-                  RefreshIndicator(
-                    onRefresh: _refresh,
-                    child: Observer(
-                        name: globals.stringAnimesHighest,
-                        builder: (_) {
-                          storeAnimes.animesHighest ??
-                              storeAnimes
-                                  .getAnimes(globals.stringAnimesHighest);
-                          switch (storeAnimes.animesHighest.status) {
-                            case FutureStatus.pending:
-                              return Loading();
-                            case FutureStatus.rejected:
-                              return ErrorLoading(
-                                  msg:
-                                      "Error to load page, verify your connection.",
-                                  refresh: _refresh);
-                            case FutureStatus.fulfilled:
-                              return AnimeList(
-                                keyName: globals.stringAnimesHighest,
-                                animes: storeAnimes.getAnimesHighest.value,
-                                loadedAllList: storeAnimes.dataListHighest[0],
-                                scrollController: _scrollController,
-                              );
-                          }
-                          return ErrorLoading(
-                            msg: "Error to load page, try again later.",
-                            refresh: _refresh,
-                          );
-                        }),
-                  ),
-                  RefreshIndicator(
-                    onRefresh: _refresh,
-                    child: Observer(
-                        name: globals.stringAnimesUpcoming,
-                        builder: (_) {
-                          storeAnimes.animesUpcoming ??
-                              storeAnimes
-                                  .getAnimes(globals.stringAnimesUpcoming);
-                          switch (storeAnimes.animesUpcoming.status) {
-                            case FutureStatus.pending:
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-
-                            case FutureStatus.rejected:
-                              return ErrorLoading(
-                                  msg:
-                                      "Error to load page, verify your connection.",
-                                  refresh: _refresh);
-                            case FutureStatus.fulfilled:
-                              return AnimeList(
-                                keyName: globals.stringAnimesUpcoming,
-                                animes: storeAnimes.getAnimesUpcoming.value,
-                                loadedAllList: storeAnimes.dataListUpComing[0],
-                                scrollController: _scrollController,
-                              );
-                          }
-                          return ErrorLoading(
-                              msg: "Error to load page, try again later.",
-                              refresh: _refresh);
-                        }),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        }),
       ),
     );
   }

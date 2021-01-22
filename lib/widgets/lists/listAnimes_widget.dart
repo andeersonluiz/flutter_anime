@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:project1/stores/firebase_store.dart';
 import 'package:project1/support/global_variables.dart' as globals;
 import 'package:project1/widgets/tiles/animeTile_widget.dart';
+import 'package:provider/provider.dart';
 
 class AnimeList extends StatelessWidget {
   final keyName;
@@ -12,6 +15,7 @@ class AnimeList extends StatelessWidget {
       {this.keyName, this.scrollController, this.animes, this.loadedAllList});
   @override
   Widget build(BuildContext context) {
+    final firebaseStore = Provider.of<FirebaseStore>(context);
     return CustomScrollView(
       scrollDirection: Axis.vertical,
       key: PageStorageKey(keyName),
@@ -34,9 +38,13 @@ class AnimeList extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: loadedAllList
                           ? Container()
-                          : CircularProgressIndicator(
-                              backgroundColor: Colors.green,
-                            ))),
+                          : Observer(builder: (_) {
+                              return CircularProgressIndicator(
+                                backgroundColor: firebaseStore.isDarkTheme
+                                    ? Colors.white
+                                    : Colors.black,
+                              );
+                            }))),
               childCount: 1),
         ),
       ],

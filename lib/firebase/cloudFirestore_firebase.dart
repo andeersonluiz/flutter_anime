@@ -14,9 +14,10 @@ class CloudFirestore {
     await instance.collection("Users").doc(user.email).set(user.toJson());
   }
 
-  void changeNickname(Person user, String newNickname) async {
+  Future<Person> changeNickname(Person user, String newNickname) async {
     user.nickname = newNickname;
     await instance.collection("Users").doc(user.email).update(user.toJson());
+    return user;
   }
 
   Future<Person> loadUser(String email) async {
@@ -31,5 +32,18 @@ class CloudFirestore {
     } else {
       return false;
     }
+  }
+
+  Future<Person> changeAvatar(Person user, String path) async {
+    user.avatar = path;
+    await instance.collection("Users").doc(user.email).update(user.toJson());
+    return user;
+  }
+
+  
+  Future<Person> changeBackground(Person user, String path) async {
+    user.background = path;
+    await instance.collection("Users").doc(user.email).update(user.toJson());
+    return user;
   }
 }

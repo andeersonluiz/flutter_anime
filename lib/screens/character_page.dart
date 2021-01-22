@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:project1/stores/character_store.dart';
+import 'package:project1/stores/firebase_store.dart';
 import 'package:project1/widgets/drawerSideBar_widget.dart';
 import 'package:project1/widgets/errorLoading_widget.dart';
 import 'package:project1/support/global_variables.dart' as globals;
 import 'package:project1/widgets/lists/listCharacters_widget.dart';
 import 'package:project1/widgets/loading_widget.dart';
 import 'package:project1/widgets/search.dart';
+import 'package:provider/provider.dart';
 
 class CharacterPage extends StatefulWidget {
   @override
@@ -25,23 +27,28 @@ class _CharacterPageState extends State<CharacterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final firebaseStore = Provider.of<FirebaseStore>(context);
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return Observer(builder:(_){return Scaffold(
+      backgroundColor: firebaseStore.isDarkTheme?Colors.black:Colors.white,
       drawer: DrawerSideBar(),
       appBar: AppBar(
         actions: [
           SizedBox(
               width: width * 0.76,
               height: height * 0.76,
-              child: Image.asset("assets/no-thumbnail.jpg", fit: BoxFit.fill)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(firebaseStore.isDarkTheme?"assets/logo_white.png":"assets/logo_black.png", fit: BoxFit.scaleDown),
+              )),
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () => {
               showSearch(
                   context: context,
                   delegate:
-                      Search(actualTab: globals.stringTabSearchCharacters))
+                      Search(actualTab: globals.stringTabSearchCharacters,color:firebaseStore.isDarkTheme?Colors.black:Colors.white))
             },
           ),
         ],
@@ -62,7 +69,9 @@ class _CharacterPageState extends State<CharacterPage> {
                   characters: storeCharacters.listCharacters.value,
                   scrollController: _scrollController,
                   loadedAllList: storeCharacters.loadedAllList,
-                  crossAxisCount: 4),
+                  crossAxisCount: 4,
+                  color: firebaseStore.isDarkTheme?Colors.white:Colors.black,
+                  ),
             );
           default:
             return ErrorLoading(
@@ -70,7 +79,7 @@ class _CharacterPageState extends State<CharacterPage> {
                 refresh: _refresh);
         }
       }),
-    );
+    );});
   }
 
   Future<void> _refresh() {
