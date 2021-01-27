@@ -10,9 +10,13 @@ class AnimeList extends StatelessWidget {
   final scrollController;
   final animes;
   final loadedAllList;
-
+  final actualBar;
   AnimeList(
-      {this.keyName, this.scrollController, this.animes, this.loadedAllList});
+      {this.keyName,
+      this.scrollController,
+      this.animes,
+      this.loadedAllList,
+      this.actualBar});
   @override
   Widget build(BuildContext context) {
     final firebaseStore = Provider.of<FirebaseStore>(context);
@@ -28,7 +32,8 @@ class AnimeList extends StatelessWidget {
               childAspectRatio: 0.6,
               crossAxisCount: globals.crossAxisCount),
           delegate: SliverChildBuilderDelegate(
-              (ctx, index) => AnimeTile(index: index, anime: animes[index]),
+              (ctx, index) => AnimeTile(
+                  index: index, anime: animes[index], actualBar: actualBar),
               childCount: animes.length ?? 0),
         ),
         SliverList(

@@ -1,19 +1,24 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:project1/model/anime_model.dart';
 import 'package:project1/stores/firebase_store.dart';
 import 'package:project1/support/circle_painter.dart';
 import 'package:project1/support/global_variables.dart' as globals;
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:project1/stores/anime_store.dart';
 
 class AnimeTile extends StatelessWidget {
-  final anime;
+  final Anime anime;
   final index;
-  AnimeTile({this.index, this.anime});
+  final actualBar;
+  AnimeTile({this.index, this.anime, this.actualBar});
   @override
   Widget build(BuildContext context) {
     final firebaseStore = Provider.of<FirebaseStore>(context);
+    final storeAnimes = Provider.of<AnimeStore>(context);
 
     final size = MediaQuery.of(context).size;
     final width = (size.width -
@@ -22,7 +27,8 @@ class AnimeTile extends StatelessWidget {
     final height = width / globals.childAspectRatio;
 
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/animeInfo', arguments: anime),
+      onTap: () =>
+          Navigator.pushNamed(context, '/animeInfo', arguments: [anime, index]),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Container(
@@ -52,10 +58,13 @@ class AnimeTile extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                         decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/loading.gif"),
+                              fit: BoxFit.fill),
                           border: Border.all(
                               color: firebaseStore.isDarkTheme
-                                  ? Colors.white
-                                  : Colors.black,
+                                  ? Colors.black
+                                  : Colors.white,
                               width: 2),
                         ));
                   }),
@@ -97,15 +106,125 @@ class AnimeTile extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
                           child: Text('${anime.canonicalTitle}',
-                              style: TextStyle(fontSize: 14,color:firebaseStore.isDarkTheme
-                                  ? Colors.white
-                                  : Colors.black,),
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: firebaseStore.isDarkTheme
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2)),
                     ),
                   ),
                 ),
-              )
+              ),
+              Observer(builder: (_) {
+                return Positioned(
+                  bottom: height * 0.77,
+                  left: width * 0.735,
+                  child: Container(
+                    width: width * 0.2,
+                    height: width * 0.2,
+                    decoration: BoxDecoration(
+                      color: firebaseStore.isDarkTheme
+                          ? Colors.black
+                          : Colors.white,
+                    ),
+                    child: actualBar == globals.stringAnimesPopular
+                        ? Center(
+                            child: IconButton(
+                            icon: Icon(
+                              storeAnimes.favoriteListPopular[index][1]
+                                  ? Icons.star
+                                  : Icons.star_border,
+                              color: Colors.yellow,
+                            ),
+                            onPressed: () {
+                              if (firebaseStore.isLogged) {
+                                firebaseStore.setFavorite(anime);
+                                storeAnimes.setfavoriteListPopular(index);
+                              } else {
+                                return Toast.show(
+                                    "You must be logged set favorites.",
+                                    context,
+                                    duration: Toast.LENGTH_LONG,
+                                    gravity: Toast.BOTTOM);
+                              }
+                            },
+                          ))
+                        : actualBar == globals.stringAnimesHighest
+                            ? Center(
+                                child: IconButton(
+                                icon: Icon(
+                                  storeAnimes.favoriteListHighest[index][1]
+                                      ? Icons.star
+                                      : Icons.star_border,
+                                  color: Colors.yellow,
+                                ),
+                                onPressed: () {
+                                  if (firebaseStore.isLogged) {
+                                    firebaseStore.setFavorite(anime);
+                                    storeAnimes.setfavoriteListHighest(index);
+                                  } else {
+                                    return Toast.show(
+                                        "You must be logged set favorites.",
+                                        context,
+                                        duration: Toast.LENGTH_LONG,
+                                        gravity: Toast.BOTTOM);
+                                  }
+                                },
+                              ))
+                            : actualBar == globals.stringAnimesAiring
+                                ? Center(
+                                    child: IconButton(
+                                      icon: Icon(
+                                        storeAnimes.favoriteListAiring[index][1]
+                                            ? Icons.star
+                                            : Icons.star_border,
+                                        color: Colors.yellow,
+                                      ),
+                                      onPressed: () {
+                                        if (firebaseStore.isLogged) {
+                                          firebaseStore.setFavorite(anime);
+                                          storeAnimes
+                                              .setfavoriteListAiring(index);
+                                        } else {
+                                          return Toast.show(
+                                              "You must be logged set favorites.",
+                                              context,
+                                              duration: Toast.LENGTH_LONG,
+                                              gravity: Toast.BOTTOM);
+                                        }
+                                      },
+                                    ),
+                                  )
+                                : Center(
+                                    child: IconButton(
+                                      icon: Icon(
+                                        storeAnimes.favoriteListUpComing[index]
+                                                [1]
+                                            ? Icons.star
+                                            : Icons.star_border,
+                                        color: Colors.yellow,
+                                      ),
+                                      onPressed: () {
+                                        if (firebaseStore.isLogged) {
+                                          firebaseStore.setFavorite(anime);
+                                          storeAnimes
+                                              .setfavoriteListUpComing(index);
+                                        } else {
+                                          return Toast.show(
+                                              "You must be logged set favorites.",
+                                              context,
+                                              duration: Toast.LENGTH_LONG,
+                                              gravity: Toast.BOTTOM);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                  ),
+                );
+              }),
             ],
           )),
         ),

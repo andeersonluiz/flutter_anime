@@ -27,19 +27,25 @@ class _MyHomePageState extends State<MyHomePage>
   ScrollController _scrollController;
   TabController _tabController;
   Map<ScrollController, double> positionInList;
-  final storeAnimes = AnimeStore();
   final List<Tab> myTabs = <Tab>[
     Tab(text: globals.stringAnimesPopular),
     Tab(text: globals.stringAnimesAiring),
     Tab(text: globals.stringAnimesHighest),
     Tab(text: globals.stringAnimesUpcoming),
   ];
+  AnimeStore storeAnimes;
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: myTabs.length);
     _tabController.addListener(_barListener);
     _scrollController = ScrollController()..addListener(_scrollListener);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    storeAnimes = Provider.of<AnimeStore>(context);
   }
 
   @override
@@ -55,7 +61,6 @@ class _MyHomePageState extends State<MyHomePage>
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final firebaseStore = Provider.of<FirebaseStore>(context);
-
     return Scaffold(
       drawer: DrawerSideBar(),
       appBar: AppBar(
@@ -74,12 +79,14 @@ class _MyHomePageState extends State<MyHomePage>
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () => {
-             showSearch(
-                  context: context,
-                  delegate: Search(actualTab: globals.stringTabSearchAnimes,color:firebaseStore.isDarkTheme?Colors.black:Colors.white),
-                  
-                  )
-              
+              showSearch(
+                context: context,
+                delegate: Search(
+                    actualTab: globals.stringTabSearchAnimes,
+                    color: firebaseStore.isDarkTheme
+                        ? Colors.black
+                        : Colors.white),
+              )
             },
           ),
         ],
@@ -90,18 +97,14 @@ class _MyHomePageState extends State<MyHomePage>
             color: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
             child: Column(
               children: [
-                Observer(builder: (_) {
-                  return TabBar(
-                      indicatorColor: firebaseStore.isDarkTheme
-                          ? Colors.white
-                          : Colors.black,
-                      labelColor: firebaseStore.isDarkTheme
-                          ? Colors.white
-                          : Colors.black,
-                      controller: _tabController,
-                      isScrollable: true,
-                      tabs: myTabs);
-                }),
+                TabBar(
+                    indicatorColor:
+                        firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+                    labelColor:
+                        firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+                    controller: _tabController,
+                    isScrollable: true,
+                    tabs: myTabs),
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
@@ -131,6 +134,7 @@ class _MyHomePageState extends State<MyHomePage>
                                     loadedAllList:
                                         storeAnimes.dataListPopular[0],
                                     scrollController: _scrollController,
+                                    actualBar: globals.stringAnimesPopular,
                                   );
                                 default:
                                   return ErrorLoading(
@@ -158,12 +162,12 @@ class _MyHomePageState extends State<MyHomePage>
                                       refresh: _refresh);
                                 case FutureStatus.fulfilled:
                                   return AnimeList(
-                                    keyName: globals.stringAnimesAiring,
-                                    animes: storeAnimes.getAnimesAiring.value,
-                                    loadedAllList:
-                                        storeAnimes.dataListAiring[0],
-                                    scrollController: _scrollController,
-                                  );
+                                      keyName: globals.stringAnimesAiring,
+                                      animes: storeAnimes.getAnimesAiring.value,
+                                      loadedAllList:
+                                          storeAnimes.dataListAiring[0],
+                                      scrollController: _scrollController,
+                                      actualBar: globals.stringAnimesAiring);
                               }
                               return ErrorLoading(
                                 msg: "Error to load page, try again later.",
@@ -189,12 +193,13 @@ class _MyHomePageState extends State<MyHomePage>
                                       refresh: _refresh);
                                 case FutureStatus.fulfilled:
                                   return AnimeList(
-                                    keyName: globals.stringAnimesHighest,
-                                    animes: storeAnimes.getAnimesHighest.value,
-                                    loadedAllList:
-                                        storeAnimes.dataListHighest[0],
-                                    scrollController: _scrollController,
-                                  );
+                                      keyName: globals.stringAnimesHighest,
+                                      animes:
+                                          storeAnimes.getAnimesHighest.value,
+                                      loadedAllList:
+                                          storeAnimes.dataListHighest[0],
+                                      scrollController: _scrollController,
+                                      actualBar: globals.stringAnimesHighest);
                               }
                               return ErrorLoading(
                                 msg: "Error to load page, try again later.",

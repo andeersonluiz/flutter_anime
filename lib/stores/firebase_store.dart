@@ -1,5 +1,6 @@
 import 'package:encrypt/encrypt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:mobx/mobx.dart';
 import 'package:project1/firebase/auth_firebase.dart';
 import 'package:project1/firebase/cloudFirestore_firebase.dart';
@@ -20,21 +21,25 @@ abstract class _FirebaseStoreBase with Store {
 
   @observable
   Person user;
-  
+
   @observable
-  bool isDarkTheme=false;
+  bool isDarkTheme = false;
+
+  @observable
+  Anime anime;
 
   Auth auth;
   CloudFirestore cloud;
   Encrypter encrypter;
-  final key = Key.fromUtf8("eu nao sei qual key escolher ent");
+  Key key;
+  String keyValue;
   final iv = IV.fromLength(16);
 
+  material.IconData iconFav = material.Icons.star_border;
 
   _FirebaseStoreBase() {
     auth = Auth();
     cloud = CloudFirestore();
-    encrypter = Encrypter(AES(key));
   }
 
   @computed
@@ -48,6 +53,7 @@ abstract class _FirebaseStoreBase with Store {
   @action
   registerWithEmailAndPassword(
       String email, String password, String nickname) async {
+    await _initEncrypt();
     String encryptedPassword = encrypter.encrypt(password, iv: iv).base64;
     String encryptedEmail = encrypter.encrypt(email, iv: iv).base64;
 
@@ -60,7 +66,7 @@ abstract class _FirebaseStoreBase with Store {
           email: encryptedEmail,
           password: encryptedPassword,
           nickname: nickname,
-          avatar:"assets/avatars/default.jpg",
+          avatar: "assets/avatars/default.jpg",
           background: "assets/no-thumbnail.jpg",
           favoritesAnimes: List<Anime>(),
           favoritesCategories: List<Categorie>());
@@ -75,6 +81,7 @@ abstract class _FirebaseStoreBase with Store {
   }
 
   registerWithCredentials(String name) async {
+    await _initEncrypt();
     String result;
     switch (name) {
       case "Google":
@@ -86,7 +93,7 @@ abstract class _FirebaseStoreBase with Store {
               email: encrypter.encrypt(currentUser.email, iv: iv).base64,
               password: "",
               nickname: "",
-              avatar:"assets/avatars/default.jpg",
+              avatar: "assets/avatars/default.jpg",
               background: "assets/no-thumbnail.jpg",
               favoritesAnimes: List<Anime>(),
               favoritesCategories: List<Categorie>());
@@ -108,7 +115,7 @@ abstract class _FirebaseStoreBase with Store {
               email: encrypter.encrypt(currentUser.email, iv: iv).base64,
               password: "",
               nickname: "",
-              avatar:"assets/avatars/default.jpg",
+              avatar: "assets/avatars/default.jpg",
               background: "assets/no-thumbnail.jpg",
               favoritesAnimes: List<Anime>(),
               favoritesCategories: List<Categorie>());
@@ -173,6 +180,7 @@ abstract class _FirebaseStoreBase with Store {
 
   @action
   Future<Person> loadUser() async {
+    await _initEncrypt();
     return await cloud
         .loadUser(encrypter.encrypt(auth.getUser().email, iv: iv).base64);
   }
@@ -188,7 +196,7 @@ abstract class _FirebaseStoreBase with Store {
 
   @action
   setAvatar(String path) async {
-    user.avatar="assets/loading.gif";
+    user.avatar = "assets/loading.gif";
     this.user = user;
     await Future.delayed(Duration(seconds: 1));
     user = await cloud.changeAvatar(this.user, path);
@@ -196,7 +204,7 @@ abstract class _FirebaseStoreBase with Store {
 
   @action
   setBackground(String path) async {
-    user.background="assets/loading.gif";
+    user.background = "assets/loading.gif";
     this.user = user;
     await Future.delayed(Duration(seconds: 1));
     user = await cloud.changeBackground(this.user, path);
@@ -207,5 +215,32 @@ abstract class _FirebaseStoreBase with Store {
     user = await cloud.changeNickname(this.user, nickname);
   }
 
+  _initEncrypt() async {
+    keyValue ??= await cloud.getHashKey();
+    key = Key.fromUtf8(keyValue);
+    encrypter = Encrypter(AES(key));
+  }
 
+  @action
+  setFavorite(Anime anime) {
+    this.anime = anime;
+    if (this.anime.isFavorite) {
+      removeFavorite(this.anime);
+    } else {
+      addFavorite(this.anime);
+    }
+  }
+
+  removeFavorite(Anime anime) {
+    anime.isFavorite = false;
+    user.favoritesAnimes.remove(anime);
+    cloud.updateListAnimes(user, anime, true);
+  }
+
+  addFavorite(Anime anime) {
+    anime = anime;
+    anime.isFavorite = true;
+    user.favoritesAnimes.add(anime);
+    cloud.updateListAnimes(user, anime, false);
+  }
 }

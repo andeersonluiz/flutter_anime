@@ -19,11 +19,9 @@ class DrawerSideBar extends StatelessWidget {
     final sharedPreferences = SharedPrefs();
 
     return Drawer(
-      
       child: SafeArea(
-      
         child: Container(
-          color:firebaseStore.isDarkTheme?Colors.black:Colors.white,
+          color: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
           child: Column(
             children: [
               Observer(builder: (_) {
@@ -45,7 +43,8 @@ class DrawerSideBar extends StatelessWidget {
                           onTap: () => firebaseStore.isLogged
                               ? _showChangeAvatar(context)
                               : Toast.show(
-                                  "You must be logged to change avatar.", context,
+                                  "You must be logged to change avatar.",
+                                  context,
                                   duration: Toast.LENGTH_LONG,
                                   gravity: Toast.BOTTOM),
                           child: CircleAvatar(
@@ -70,7 +69,8 @@ class DrawerSideBar extends StatelessWidget {
                               border: Border.all(
                                 color: Colors.white,
                               ),
-                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
                             ),
                             child: GestureDetector(
                               onTap: () => firebaseStore.isLogged
@@ -121,24 +121,75 @@ class DrawerSideBar extends StatelessWidget {
                 );
               }),
               ListTile(
-                title: Text('Animes',style: TextStyle(color:firebaseStore.isDarkTheme?Colors.white:Colors.black,),),
+                title: Text(
+                  'Animes',
+                  style: TextStyle(
+                    color:
+                        firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+                  ),
+                ),
                 onTap: () => Navigator.of(context).pushNamed("/"),
               ),
               ListTile(
-                  title: Text('Characters',style: TextStyle(color:firebaseStore.isDarkTheme?Colors.white:Colors.black,),),
-                  onTap: () => Navigator.of(context).pushNamed("/characterList")),
+                  title: Text(
+                    'Characters',
+                    style: TextStyle(
+                      color: firebaseStore.isDarkTheme
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                  ),
+                  onTap: () =>
+                      Navigator.of(context).pushNamed("/characterList")),
               ListTile(
-                  title: Text('Categories',style: TextStyle(color:firebaseStore.isDarkTheme?Colors.white:Colors.black,),),
-                  onTap: () => Navigator.of(context).pushNamed("/categorieList")),
-              ListTile(title: Text('My favorites',style: TextStyle(color:firebaseStore.isDarkTheme?Colors.white:Colors.black,),)),
-              Divider(color:firebaseStore.isDarkTheme?Colors.white:Colors.black,),
+                  title: Text(
+                    'Categories',
+                    style: TextStyle(
+                      color: firebaseStore.isDarkTheme
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                  ),
+                  onTap: () =>
+                      Navigator.of(context).pushNamed("/categorieList")),
+              ListTile(
+                title: Text(
+                  'My favorites',
+                  style: TextStyle(
+                    color:
+                        firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+                  ),
+                ),
+                onTap: () => firebaseStore.isLogged
+                    ? Navigator.of(context).pushNamed("/favorites")
+                    : Toast.show(
+                        "You must be logged to use favorites section.", context,
+                        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
+              ),
+              Divider(
+                color: firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+              ),
               Observer(builder: (_) {
                 return firebaseStore.isLogged
                     ? ListTile(
-                        title: Text('Logout',style: TextStyle(color:firebaseStore.isDarkTheme?Colors.white:Colors.black,),),
+                        title: Text(
+                          'Logout',
+                          style: TextStyle(
+                            color: firebaseStore.isDarkTheme
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
                         onTap: () => firebaseStore.signOut())
                     : ListTile(
-                        title: Text('Login',style: TextStyle(color:firebaseStore.isDarkTheme?Colors.white:Colors.black,),),
+                        title: Text(
+                          'Login',
+                          style: TextStyle(
+                            color: firebaseStore.isDarkTheme
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
                         onTap: () {
                           firebaseStore.errorMsg = "";
                           return _showDialogLogin(context);
@@ -148,7 +199,14 @@ class DrawerSideBar extends StatelessWidget {
                 return firebaseStore.isLogged
                     ? Container()
                     : ListTile(
-                        title: Text('Register',style: TextStyle(color:firebaseStore.isDarkTheme?Colors.white:Colors.black,),),
+                        title: Text(
+                          'Register',
+                          style: TextStyle(
+                            color: firebaseStore.isDarkTheme
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
                         onTap: () {
                           firebaseStore.errorMsg = "";
                           return _showDialogRegister(context);
@@ -160,12 +218,19 @@ class DrawerSideBar extends StatelessWidget {
                   child: Observer(builder: (_) {
                     return ListTile(
                         onTap: () {
-                          sharedPreferences.setPersistTheme(!firebaseStore.isDarkTheme);
+                          sharedPreferences
+                              .setPersistTheme(!firebaseStore.isDarkTheme);
                           firebaseStore.isDarkTheme =
-                            !firebaseStore.isDarkTheme;},
-                        title: Icon(firebaseStore.isDarkTheme
-                            ? Icons.wb_sunny
-                            : Icons.wb_sunny_outlined,color: firebaseStore.isDarkTheme?Colors.white:Colors.black,));
+                              !firebaseStore.isDarkTheme;
+                        },
+                        title: Icon(
+                          firebaseStore.isDarkTheme
+                              ? Icons.wb_sunny
+                              : Icons.wb_sunny_outlined,
+                          color: firebaseStore.isDarkTheme
+                              ? Colors.white
+                              : Colors.black,
+                        ));
                   }),
                 ),
               ),
@@ -189,7 +254,6 @@ class DrawerSideBar extends StatelessWidget {
 
   _selectBackground(BuildContext ctx) {
     return showDialog(
-      
         context: ctx,
         builder: (context) {
           return AlertDialog(
@@ -226,8 +290,7 @@ class DrawerSideBar extends StatelessWidget {
         context: ctx,
         builder: (context) {
           return AlertDialog(
-            content: Container(
-              child: LoginDialog()),
+            content: Container(child: LoginDialog()),
           );
         });
   }

@@ -117,6 +117,70 @@ mixin _$AnimeStore on _AnimeStore, Store {
     });
   }
 
+  final _$favoriteListPopularAtom =
+      Atom(name: '_AnimeStore.favoriteListPopular');
+
+  @override
+  ObservableList<dynamic> get favoriteListPopular {
+    _$favoriteListPopularAtom.reportRead();
+    return super.favoriteListPopular;
+  }
+
+  @override
+  set favoriteListPopular(ObservableList<dynamic> value) {
+    _$favoriteListPopularAtom.reportWrite(value, super.favoriteListPopular, () {
+      super.favoriteListPopular = value;
+    });
+  }
+
+  final _$favoriteListAiringAtom = Atom(name: '_AnimeStore.favoriteListAiring');
+
+  @override
+  ObservableList<dynamic> get favoriteListAiring {
+    _$favoriteListAiringAtom.reportRead();
+    return super.favoriteListAiring;
+  }
+
+  @override
+  set favoriteListAiring(ObservableList<dynamic> value) {
+    _$favoriteListAiringAtom.reportWrite(value, super.favoriteListAiring, () {
+      super.favoriteListAiring = value;
+    });
+  }
+
+  final _$favoriteListHighestAtom =
+      Atom(name: '_AnimeStore.favoriteListHighest');
+
+  @override
+  ObservableList<dynamic> get favoriteListHighest {
+    _$favoriteListHighestAtom.reportRead();
+    return super.favoriteListHighest;
+  }
+
+  @override
+  set favoriteListHighest(ObservableList<dynamic> value) {
+    _$favoriteListHighestAtom.reportWrite(value, super.favoriteListHighest, () {
+      super.favoriteListHighest = value;
+    });
+  }
+
+  final _$favoriteListUpComingAtom =
+      Atom(name: '_AnimeStore.favoriteListUpComing');
+
+  @override
+  ObservableList<dynamic> get favoriteListUpComing {
+    _$favoriteListUpComingAtom.reportRead();
+    return super.favoriteListUpComing;
+  }
+
+  @override
+  set favoriteListUpComing(ObservableList<dynamic> value) {
+    _$favoriteListUpComingAtom.reportWrite(value, super.favoriteListUpComing,
+        () {
+      super.favoriteListUpComing = value;
+    });
+  }
+
   final _$getAnimesAsyncAction = AsyncAction('_AnimeStore.getAnimes');
 
   @override
@@ -132,6 +196,52 @@ mixin _$AnimeStore on _AnimeStore, Store {
         .run(() => super.loadMoreAnimes(actualBar));
   }
 
+  final _$_AnimeStoreActionController = ActionController(name: '_AnimeStore');
+
+  @override
+  dynamic setfavoriteListPopular(int index) {
+    final _$actionInfo = _$_AnimeStoreActionController.startAction(
+        name: '_AnimeStore.setfavoriteListPopular');
+    try {
+      return super.setfavoriteListPopular(index);
+    } finally {
+      _$_AnimeStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setfavoriteListHighest(int index) {
+    final _$actionInfo = _$_AnimeStoreActionController.startAction(
+        name: '_AnimeStore.setfavoriteListHighest');
+    try {
+      return super.setfavoriteListHighest(index);
+    } finally {
+      _$_AnimeStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setfavoriteListAiring(int index) {
+    final _$actionInfo = _$_AnimeStoreActionController.startAction(
+        name: '_AnimeStore.setfavoriteListAiring');
+    try {
+      return super.setfavoriteListAiring(index);
+    } finally {
+      _$_AnimeStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic setfavoriteListUpComing(int index) {
+    final _$actionInfo = _$_AnimeStoreActionController.startAction(
+        name: '_AnimeStore.setfavoriteListUpComing');
+    try {
+      return super.setfavoriteListUpComing(index);
+    } finally {
+      _$_AnimeStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
@@ -140,6 +250,10 @@ animesHighest: ${animesHighest},
 animesUpcoming: ${animesUpcoming},
 animesAiring: ${animesAiring},
 actualBar: ${actualBar},
+favoriteListPopular: ${favoriteListPopular},
+favoriteListAiring: ${favoriteListAiring},
+favoriteListHighest: ${favoriteListHighest},
+favoriteListUpComing: ${favoriteListUpComing},
 getAnimesPopular: ${getAnimesPopular},
 getAnimesHighest: ${getAnimesHighest},
 getAnimesUpcoming: ${getAnimesUpcoming},

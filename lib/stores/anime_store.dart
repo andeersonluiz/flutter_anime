@@ -1,10 +1,11 @@
 import 'package:http/http.dart' as http;
 import 'package:mobx/mobx.dart';
+import 'package:project1/firebase/auth_firebase.dart';
+import 'package:project1/firebase/cloudFirestore_firebase.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:project1/model/anime_model.dart';
 import 'package:project1/support/global_variables.dart' as globals;
-
 part 'anime_store.g.dart';
 
 class AnimeStore = _AnimeStore with _$AnimeStore;
@@ -49,7 +50,25 @@ abstract class _AnimeStore with Store {
 
   List<dynamic> dataListUpComing = [false, ""];
 
-  _AnimeStore();
+  @observable
+  ObservableList<dynamic> favoriteListPopular =
+      ObservableList.of(List.filled(10, ["", false]));
+  @observable
+  ObservableList<dynamic> favoriteListAiring =
+      ObservableList.of(List.filled(10, ["", false]));
+  @observable
+  ObservableList<dynamic> favoriteListHighest =
+      ObservableList.of(List.filled(10, ["", false]));
+  @observable
+  ObservableList<dynamic> favoriteListUpComing =
+      ObservableList.of(List.filled(10, ["", false]));
+
+  CloudFirestore cloud;
+  Auth auth;
+  _AnimeStore() {
+    cloud = CloudFirestore();
+    auth = Auth();
+  }
 
   @action
   Future<void> getAnimes(String filter) async {
@@ -59,9 +78,13 @@ abstract class _AnimeStore with Store {
         animesPopular = ObservableFuture(_decode(
                 "https://kitsu.io/api/edge/anime?sort=-userCount,-favoritesCount&page[limit]=$qtdAnim&page[offset]=0",
                 filter))
-            .then((animesPopular) {
+            .then((animesPop) {
+          for (int i = 0; i < animesPop.length; i++) {
+            favoriteListPopular[i] = [animesPop[i].id, animesPop[i].isFavorite];
+          }
+
           print("getAnimes(animesPopular) executed in ${stopWatch.elapsed}");
-          return animesPopular;
+          return animesPop;
         });
 
         break;
@@ -71,6 +94,12 @@ abstract class _AnimeStore with Store {
                 filter))
             .then((animesHighest) {
           print("getAnimes(animesHighest) executed in ${stopWatch.elapsed}");
+          for (int i = 0; i < animesHighest.length; i++) {
+            favoriteListHighest[i] = [
+              animesHighest[i].id,
+              animesHighest[i].isFavorite
+            ];
+          }
           return animesHighest;
         });
 
@@ -81,6 +110,12 @@ abstract class _AnimeStore with Store {
                 filter))
             .then((animesUpcoming) {
           print("getAnimes(animesUpcoming) executed in ${stopWatch.elapsed}");
+          for (int i = 0; i < animesUpcoming.length; i++) {
+            favoriteListUpComing[i] = [
+              animesUpcoming[i].id,
+              animesUpcoming[i].isFavorite
+            ];
+          }
           return animesUpcoming;
         });
         break;
@@ -89,6 +124,12 @@ abstract class _AnimeStore with Store {
                 "https://kitsu.io/api/edge/anime?sort=-userCount,-favoritesCount&filter[status]=current&page[limit]=$qtdAnim&page[offset]=0",
                 filter))
             .then((animesAiring) {
+          for (int i = 0; i < animesAiring.length; i++) {
+            favoriteListAiring[i] = [
+              animesAiring[i].id,
+              animesAiring[i].isFavorite
+            ];
+          }
           print("getAnimes(animesAiring) executed in ${stopWatch.elapsed}");
           return animesAiring;
         });
@@ -110,6 +151,9 @@ abstract class _AnimeStore with Store {
                 .then((anime) {
           print(
               "loadMoreAnimes(animesPopular) executed in ${stopWatch.elapsed}");
+          for (int i = 0; i < anime.length; i++) {
+            favoriteListPopular.add([anime[i].id, anime[i].isFavorite]);
+          }
           return animesPopular.value + anime;
         })));
         break;
@@ -119,6 +163,10 @@ abstract class _AnimeStore with Store {
                 .then((anime) {
           print(
               "loadMoreAnimes(animesHighest) executed in ${stopWatch.elapsed}");
+          for (int i = 0; i < anime.length; i++) {
+            favoriteListHighest.add([anime[i].id, anime[i].isFavorite]);
+          }
+
           return animesHighest.value + anime;
         })));
         break;
@@ -128,6 +176,9 @@ abstract class _AnimeStore with Store {
                 .then((anime) {
           print(
               "loadMoreAnimes(animesUpcoming) executed in ${stopWatch.elapsed}");
+          for (int i = 0; i < anime.length; i++) {
+            favoriteListUpComing.add([anime[i].id, anime[i].isFavorite]);
+          }
           return animesUpcoming.value + anime;
         })));
         break;
@@ -137,6 +188,9 @@ abstract class _AnimeStore with Store {
                 .then((anime) {
           print(
               "loadMoreAnimes(animesAiring) executed in ${stopWatch.elapsed}");
+          for (int i = 0; i < anime.length; i++) {
+            favoriteListAiring.add([anime[i].id, anime[i].isFavorite]);
+          }
           return animesAiring.value + anime;
         })));
         break;
@@ -174,9 +228,132 @@ abstract class _AnimeStore with Store {
         }
         break;
     }
+    String email = auth?.getUser()?.email;
 
-    return decoded['data']
-        .map<Anime>((value) => Anime.fromJson(value))
-        .toList();
+    List<dynamic> favorites = await cloud.getFavoritesAnimesId(email);
+    return decoded['data'].map<Anime>((value) {
+      print(
+          "${favorites.contains(value['id'])} ${value['id']} ${favorites.contains("210")}");
+
+      if (favorites.contains(value['id'])) {
+        return Anime.fromJson(value, isFavorite: true);
+      } else {
+        return Anime.fromJson(value);
+      }
+    }).toList();
+  }
+
+  @action
+  setfavoriteListPopular(int index) {
+    this.favoriteListPopular[index] = [
+      favoriteListPopular[index][0],
+      !favoriteListPopular[index][1]
+    ];
+    attListHighestIfExists(favoriteListPopular[index]);
+    attListAiringIfExists(favoriteListPopular[index]);
+    attListUpComingIfExists(favoriteListPopular[index]);
+  }
+
+  @action
+  setfavoriteListHighest(int index) {
+    this.favoriteListHighest[index] = [
+      favoriteListHighest[index][0],
+      !favoriteListHighest[index][1]
+    ];
+    attListPopularIfExists(favoriteListHighest[index]);
+    attListAiringIfExists(favoriteListHighest[index]);
+    attListUpComingIfExists(favoriteListHighest[index]);
+  }
+
+  @action
+  setfavoriteListAiring(int index) {
+    this.favoriteListAiring[index] = [
+      favoriteListAiring[index][0],
+      !favoriteListAiring[index][1]
+    ];
+    attListPopularIfExists(favoriteListAiring[index]);
+    attListHighestIfExists(favoriteListAiring[index]);
+    attListUpComingIfExists(favoriteListAiring[index]);
+  }
+
+  @action
+  setfavoriteListUpComing(int index) {
+    this.favoriteListUpComing[index] = [
+      favoriteListUpComing[index][0],
+      !favoriteListUpComing[index][1]
+    ];
+    attListPopularIfExists(favoriteListUpComing[index]);
+    attListHighestIfExists(favoriteListUpComing[index]);
+    attListAiringIfExists(favoriteListUpComing[index]);
+  }
+
+  attListPopularIfExists(List<dynamic> object) {
+    for (int i = 0; i < favoriteListPopular.length; i++) {
+      if (object[0] == favoriteListPopular[i][0] &&
+          object[1] != favoriteListPopular[i][1]) {
+        this.favoriteListPopular[i] = [favoriteListPopular[i][0], object[1]];
+        return;
+      }
+    }
+  }
+
+  attListHighestIfExists(List<dynamic> object) {
+    for (int i = 0; i < favoriteListHighest.length; i++) {
+      if (object[0] == favoriteListHighest[i][0] &&
+          object[1] != favoriteListHighest[i][1]) {
+        this.favoriteListHighest[i] = [favoriteListHighest[i][0], object[1]];
+        return;
+      }
+    }
+  }
+
+  attListAiringIfExists(List<dynamic> object) {
+    for (int i = 0; i < favoriteListAiring.length; i++) {
+      if (object[0] == favoriteListAiring[i][0] &&
+          object[1] != favoriteListAiring[i][1]) {
+        this.favoriteListAiring[i] = [favoriteListAiring[i][0], object[1]];
+        return;
+      }
+    }
+  }
+
+  attListUpComingIfExists(List<dynamic> object) {
+    for (int i = 0; i < favoriteListUpComing.length; i++) {
+      if (object[0] == favoriteListUpComing[i][0] &&
+          object[1] != favoriteListUpComing[i][1]) {
+        this.favoriteListUpComing[i] = [favoriteListUpComing[i][0], object[1]];
+        return;
+      }
+    }
+  }
+
+  removeFavoriteByName(String id) {
+    for (int i = 0; i < favoriteListPopular.length; i++) {
+      if (id == favoriteListPopular[i][0]) {
+        this.favoriteListPopular[i] = [favoriteListPopular[i][0], false];
+        break;
+      }
+    }
+
+    for (int i = 0; i < favoriteListHighest.length; i++) {
+      if (id == favoriteListHighest[i][0]) {
+        this.favoriteListHighest[i] = [favoriteListHighest[i][0], false];
+        break;
+      }
+    }
+
+    for (int i = 0; i < favoriteListAiring.length; i++) {
+      if (id == favoriteListAiring[i][0]) {
+        this.favoriteListAiring[i] = [favoriteListAiring[i][0], false];
+        break;
+      }
+    }
+
+    for (int i = 0; i < favoriteListUpComing.length; i++) {
+      if (id == favoriteListUpComing[i][0]) {
+        this.favoriteListUpComing[i] = [favoriteListUpComing[i][0], false];
+        break;
+      }
+    }
   }
 }
