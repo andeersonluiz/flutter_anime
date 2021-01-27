@@ -14,6 +14,7 @@ class Anime {
   List<Episode> episodes;
   String linkEpisodeList;
   String linkCharacterList;
+  bool isFavorite;
   Anime({
     this.id,
     this.synopsis,
@@ -27,9 +28,10 @@ class Anime {
     this.status,
     this.linkEpisodeList,
     this.linkCharacterList,
+    this.isFavorite,
   });
 
-  factory Anime.fromJson(Map<String, dynamic> json) {
+  factory Anime.fromJson(Map<String, dynamic> json, {bool isFavorite = false}) {
     return Anime(
       id: json['id'].toString(),
       synopsis: json['attributes']['synopsis'] == ""
@@ -52,6 +54,25 @@ class Anime {
       linkEpisodeList: json['relationships']['episodes']['links']['related'],
       linkCharacterList: json['relationships']['characters']['links']
           ['related'],
+      isFavorite: isFavorite,
+    );
+  }
+
+  factory Anime.fromJsonFirebase(Map<String, dynamic> json) {
+    return Anime(
+      id: json['id'].toString(),
+      synopsis: json['synopsis'],
+      canonicalTitle: json['canonicalTitle'],
+      ageRatingGuide: json['ageRatingGuide'],
+      episodeCount: json['episodeCount'],
+      episodeLength: json['episodeLength'],
+      youtubeVideoId: json['youtubeVideoId'],
+      posterImage: json['posterImage'],
+      coverImage: json['coverImage'],
+      status: json['status'],
+      linkEpisodeList: json['linkEpisodeList'],
+      linkCharacterList: json['linkCharacterList'],
+      isFavorite: json['isFavorite'],
     );
   }
 
@@ -68,5 +89,6 @@ class Anime {
         'status': status,
         'linkEpisodeList': linkEpisodeList,
         'linkCharacterList': linkCharacterList,
+        'isFavorite': isFavorite
       };
 }

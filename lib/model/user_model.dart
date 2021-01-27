@@ -34,14 +34,16 @@ class Person {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'email': email,
-        'password': password,
-        'nickname': nickname,
-        'avatar':avatar,
-        'background': background,
-        'favoritesAnimes': favoritesAnimes,
-        'favoritesCategories': favoritesCategories,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'email': email,
+      'password': password,
+      'nickname': nickname,
+      'avatar': avatar,
+      'background': background,
+      'favoritesAnimes': favoritesAnimes,
+      'favoritesCategories': favoritesCategories,
+    };
+  }
 }

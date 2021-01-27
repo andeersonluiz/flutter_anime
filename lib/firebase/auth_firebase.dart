@@ -8,13 +8,14 @@ class Auth {
   static FirebaseAuth auth;
   CloudFirestore cloud;
 
-  final key = Key.fromUtf8("eu nao sei qual key escolher ent");
+  Key key;
+  String keyValue;
   final iv = IV.fromLength(16);
   Encrypter encrypter;
   Auth() {
     cloud = CloudFirestore();
     encrypter = Encrypter(AES(key));
-
+    cloud.getHashKey().then((value) => key = Key.fromUtf8(value));
     if (auth == null) {
       auth = FirebaseAuth.instance;
       //auth.signOut();
@@ -60,6 +61,7 @@ class Auth {
         idToken: googleAuth.idToken,
       );
       await auth.signInWithCredential(credential);
+      await _initEncrypt();
       bool userExists = await cloud.verifyIfUserExists(
           encrypter.encrypt(auth.currentUser.email, iv: iv).base64);
       if (!userExists) {
@@ -95,7 +97,7 @@ class Auth {
       final FacebookAuthCredential facebookAuthCredential =
           FacebookAuthProvider.credential(result.token);
       await auth.signInWithCredential(facebookAuthCredential);
-
+      await _initEncrypt();
       bool userExists = await cloud.verifyIfUserExists(
           encrypter.encrypt(auth.currentUser.email, iv: iv).base64);
       if (!userExists) {
@@ -218,5 +220,11 @@ class Auth {
 
   User getUser() {
     return auth.currentUser;
+  }
+
+  _initEncrypt() async {
+    keyValue ??= await cloud.getHashKey();
+    key = Key.fromUtf8(keyValue);
+    encrypter = Encrypter(AES(key));
   }
 }

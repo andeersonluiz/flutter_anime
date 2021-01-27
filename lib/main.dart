@@ -2,25 +2,36 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:project1/model/anime_model.dart';
 import 'package:project1/model/character_model.dart';
 import 'package:project1/screens/animeCategorie_page.dart';
 import 'package:project1/screens/animeInfo_page.dart';
 import 'package:project1/screens/categorie_page.dart';
 import 'package:project1/screens/characterInfo_page.dart';
 import 'package:project1/screens/character_page.dart';
+import 'package:project1/screens/favoriteAnimes_page.dart';
 import 'package:project1/screens/home_page.dart';
+import 'package:project1/stores/favoriteAnime_store.dart';
 import 'package:project1/stores/firebase_store.dart';
 import 'package:provider/provider.dart';
 import 'package:project1/support/shared_preferences.dart';
+import 'package:project1/stores/anime_store.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SharedPrefs sharedPreferences = SharedPrefs();
-  bool isDarkTheme=await sharedPreferences.getPersistTheme();
-  runApp(MultiProvider(providers: [
-    Provider<FirebaseStore>(create: (_) => FirebaseStore()),
-  ], child: MyApp(isDarkTheme: isDarkTheme,)));
+  bool isDarkTheme = await sharedPreferences.getPersistTheme();
+  runApp(MultiProvider(
+      providers: [
+        Provider<FirebaseStore>(create: (_) => FirebaseStore()),
+        Provider<AnimeStore>(create: (_) => AnimeStore()),
+        Provider<FavoriteAnimeStore>(
+          create: (_) => FavoriteAnimeStore(),
+        )
+      ],
+      child: MyApp(
+        isDarkTheme: isDarkTheme,
+      )));
 }
 
 class MyApp extends StatelessWidget {
@@ -37,8 +48,8 @@ class MyApp extends StatelessWidget {
       firebaseStore.loadUser().then((value) => firebaseStore.user = value);
       firebaseStore.setLogged = true;
     }
-    if(isDarkTheme!=null){
-      firebaseStore.isDarkTheme =isDarkTheme;
+    if (isDarkTheme != null) {
+      firebaseStore.isDarkTheme = isDarkTheme;
     }
     return Observer(builder: (_) {
       return MaterialApp(
@@ -49,8 +60,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'RobotoCondensed',
           primaryColor: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
-          
-          unselectedWidgetColor: firebaseStore.isDarkTheme?Colors.white:Colors.black,
+          unselectedWidgetColor:
+              firebaseStore.isDarkTheme ? Colors.white : Colors.black,
         ),
       );
     });
@@ -61,8 +72,9 @@ class MyApp extends StatelessWidget {
       case '/':
         return MaterialPageRoute(builder: (_) => MyHomePage());
       case '/animeInfo':
-        final anime = settings.arguments as Anime;
-        return MaterialPageRoute(builder: (_) => AnimeInfoPage(anime));
+        final args = settings.arguments as List;
+        return MaterialPageRoute(
+            builder: (_) => AnimeInfoPage(args[0], args[1]));
       case '/characterInfo':
         final character = settings.arguments as Character;
         return MaterialPageRoute(builder: (_) => CharacterInfoPage(character));
@@ -70,6 +82,8 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute(builder: (_) => CharacterPage());
       case '/categorieList':
         return MaterialPageRoute(builder: (_) => CategoriePage());
+      case '/favorites':
+        return MaterialPageRoute(builder: (_) => AnimeFavoritesPage());
       case '/animeListByCategorie':
         final nameCategorie = settings.arguments as String;
         return MaterialPageRoute(

@@ -69,6 +69,21 @@ mixin _$FirebaseStore on _FirebaseStoreBase, Store {
     });
   }
 
+  final _$animeAtom = Atom(name: '_FirebaseStoreBase.anime');
+
+  @override
+  Anime get anime {
+    _$animeAtom.reportRead();
+    return super.anime;
+  }
+
+  @override
+  set anime(Anime value) {
+    _$animeAtom.reportWrite(value, super.anime, () {
+      super.anime = value;
+    });
+  }
+
   final _$registerWithEmailAndPasswordAsyncAction =
       AsyncAction('_FirebaseStoreBase.registerWithEmailAndPassword');
 
@@ -144,12 +159,24 @@ mixin _$FirebaseStore on _FirebaseStoreBase, Store {
   }
 
   @override
+  dynamic setFavorite(Anime anime) {
+    final _$actionInfo = _$_FirebaseStoreBaseActionController.startAction(
+        name: '_FirebaseStoreBase.setFavorite');
+    try {
+      return super.setFavorite(anime);
+    } finally {
+      _$_FirebaseStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 isLogged: ${isLogged},
 errorMsg: ${errorMsg},
 user: ${user},
-isDarkTheme: ${isDarkTheme}
+isDarkTheme: ${isDarkTheme},
+anime: ${anime}
     ''';
   }
 }
