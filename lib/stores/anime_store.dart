@@ -232,9 +232,6 @@ abstract class _AnimeStore with Store {
 
     List<dynamic> favorites = await cloud.getFavoritesAnimesId(email);
     return decoded['data'].map<Anime>((value) {
-      print(
-          "${favorites.contains(value['id'])} ${value['id']} ${favorites.contains("210")}");
-
       if (favorites.contains(value['id'])) {
         return Anime.fromJson(value, isFavorite: true);
       } else {

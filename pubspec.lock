@@ -293,6 +293,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_device_locale:
+    dependency: transitive
+    description:
+      name: flutter_device_locale
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   flutter_facebook_auth:
     dependency: "direct main"
     description:
@@ -321,6 +328,11 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0+4"
+  flutter_localizations:
+    dependency: "direct main"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_mobx:
     dependency: "direct main"
     description:
@@ -333,6 +345,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_translate:
+    dependency: "direct main"
+    description:
+      name: flutter_translate
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.6.0"
   flutter_twitter_login:
     dependency: "direct main"
     description:
@@ -732,6 +751,13 @@ packages:
     dependency: "direct main"
     description:
       name: toast
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.5"
+  translator:
+    dependency: "direct main"
+    description:
+      name: translator
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.5"

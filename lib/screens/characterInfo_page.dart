@@ -4,6 +4,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:project1/model/character_model.dart';
 import 'package:project1/stores/firebase_store.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_translate/flutter_translate.dart';
+import 'package:project1/stores/translation_store.dart';
+import 'package:mobx/mobx.dart';
+import 'package:project1/widgets/loading_widget.dart';
 
 class CharacterInfoPage extends StatelessWidget {
   final Character character;
@@ -13,6 +17,7 @@ class CharacterInfoPage extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final firebaseStore = Provider.of<FirebaseStore>(context);
+    final storeTranslation = Provider.of<TranslateStore>(context);
 
     return Scaffold(
       body: CustomScrollView(
@@ -31,7 +36,7 @@ class CharacterInfoPage extends StatelessWidget {
           )),
           SliverFillRemaining(
               fillOverscroll: true,
-              child: Observer(builder:(_){return Column(
+              child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
@@ -70,7 +75,7 @@ class CharacterInfoPage extends StatelessWidget {
                                         itemBuilder: (ctx, index) {
                                           if (index == 0) {
                                             return Text(
-                                                "Other names: ${character.otherNames[index]}",
+                                                "${translate('character_info.other_names')} ${character.otherNames[index]}",
                                                 style: TextStyle(
                                                     fontStyle: FontStyle.italic,color:firebaseStore.isDarkTheme?Colors.white:Colors.white,));
                                           }
@@ -94,7 +99,7 @@ class CharacterInfoPage extends StatelessWidget {
                           child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Center(
-                                child: Text("Other names: -",
+                                child: Text("${translate('character_info.other_names')} -",
                                     style:
                                         TextStyle(fontStyle: FontStyle.italic,color:firebaseStore.isDarkTheme?Colors.white:Colors.black,)),
                               ),
@@ -105,7 +110,7 @@ class CharacterInfoPage extends StatelessWidget {
                         color: Colors.grey.withOpacity(0.5),
                         child: Center(
                             child: Text(
-                          "Description",
+                          translate('character_info.description'),
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ))),
@@ -116,13 +121,35 @@ class CharacterInfoPage extends StatelessWidget {
                           child: SingleChildScrollView(
                               child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(character.description == ""
-                            ? "No informations about ${character.name}"
-                            : _removeHtmlTags(character.description) , style: TextStyle(color:firebaseStore.isDarkTheme?Colors.white:Colors.black,
-)),
+                      child: Observer(builder:(_){
+                            if(character.description==""){
+                            return Text("${translate('character_info.no_informations')} ${character.name}", style: TextStyle(color:firebaseStore.isDarkTheme?
+                            Colors.white:Colors.black));
+                            }
+                        storeTranslation?.descriptionCharacter??storeTranslation.translateDescriptionCharacter(_removeHtmlTags(character.description),character.id);
+                        if(storeTranslation?.translationId!=character.id){
+                            storeTranslation.translateDescriptionCharacter(_removeHtmlTags(character.description),character.id);
+                          }
+                              switch(storeTranslation?.descriptionCharacter?.status){
+                                case FutureStatus.pending:
+                                  return Loading();
+                                case FutureStatus.rejected:
+                                  return null;
+                                case FutureStatus.fulfilled:
+                                  return Text(storeTranslation.descriptionCharacter.value, style: TextStyle(color:firebaseStore.isDarkTheme?
+                            Colors.white:Colors.black));
+                                
+                                default:
+                                  return Container();
+                              }
+                              }) 
+                      
+                      
+                      
+
                     )),
                         )),
-                  ]);}),),
+                  ]),),
         ],
       ),
     );

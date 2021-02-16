@@ -43,13 +43,12 @@ class AnimeList extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: loadedAllList
                           ? Container()
-                          : Observer(builder: (_) {
-                              return CircularProgressIndicator(
+                          : CircularProgressIndicator(
                                 backgroundColor: firebaseStore.isDarkTheme
                                     ? Colors.white
                                     : Colors.black,
-                              );
-                            }))),
+                              )
+                            )),
               childCount: 1),
         ),
       ],

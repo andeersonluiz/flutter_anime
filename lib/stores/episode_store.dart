@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:mobx/mobx.dart';
 import 'package:project1/model/episode_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:project1/stores/translation_store.dart';
 
 part 'episode_store.g.dart';
 
@@ -25,6 +26,7 @@ abstract class _EpisodeStoreBase with Store {
     var stopWatch = new Stopwatch()..start();
     listEpisodes = ObservableFuture(_decode(url)).then((listEpisodes) {
       print("getEpisodes executed in ${stopWatch.elapsed}");
+
       return listEpisodes;
     });
   }
@@ -53,9 +55,11 @@ abstract class _EpisodeStoreBase with Store {
     } else if (decoded['data'][0]['attributes']['length'] == null) {
       nullEps = true;
     } else {
-      return decoded['data']
+      TranslateStore translateStore = TranslateStore();
+      var list= await translateStore.translateEpisodes(decoded['data']
           .map<Episode>((json) => Episode.fromJson(json))
-          .toList();
+          .toList());
+      return list;
     }
   }
 }

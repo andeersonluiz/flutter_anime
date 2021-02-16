@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:project1/stores/anime_store.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 class AnimeTile extends StatelessWidget {
   final Anime anime;
@@ -48,8 +49,7 @@ class AnimeTile extends StatelessWidget {
               SizedBox(
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Observer(builder: (_) {
-                    return Container(
+                  child: Container(
                         height: height * 0.7,
                         width: width,
                         child: FadeInImage.memoryNetwork(
@@ -66,8 +66,8 @@ class AnimeTile extends StatelessWidget {
                                   ? Colors.black
                                   : Colors.white,
                               width: 2),
-                        ));
-                  }),
+                        )
+                  ),
                 ),
               ),
               Positioned(
@@ -145,7 +145,7 @@ class AnimeTile extends StatelessWidget {
                                 storeAnimes.setfavoriteListPopular(index);
                               } else {
                                 return Toast.show(
-                                    "You must be logged set favorites.",
+                                    translate('anime_info.error_favorite'),
                                     context,
                                     duration: Toast.LENGTH_LONG,
                                     gravity: Toast.BOTTOM);
@@ -167,7 +167,7 @@ class AnimeTile extends StatelessWidget {
                                     storeAnimes.setfavoriteListHighest(index);
                                   } else {
                                     return Toast.show(
-                                        "You must be logged set favorites.",
+                                        translate('anime_info.error_favorite'),
                                         context,
                                         duration: Toast.LENGTH_LONG,
                                         gravity: Toast.BOTTOM);
@@ -190,7 +190,7 @@ class AnimeTile extends StatelessWidget {
                                               .setfavoriteListAiring(index);
                                         } else {
                                           return Toast.show(
-                                              "You must be logged set favorites.",
+                                              translate('anime_info.error_favorite'),
                                               context,
                                               duration: Toast.LENGTH_LONG,
                                               gravity: Toast.BOTTOM);
@@ -214,7 +214,7 @@ class AnimeTile extends StatelessWidget {
                                               .setfavoriteListUpComing(index);
                                         } else {
                                           return Toast.show(
-                                              "You must be logged set favorites.",
+                                              translate('anime_info.error_favorite'),
                                               context,
                                               duration: Toast.LENGTH_LONG,
                                               gravity: Toast.BOTTOM);

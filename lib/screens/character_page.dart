@@ -10,6 +10,7 @@ import 'package:project1/widgets/lists/listCharacters_widget.dart';
 import 'package:project1/widgets/loading_widget.dart';
 import 'package:project1/widgets/search.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 class CharacterPage extends StatefulWidget {
   @override
@@ -30,7 +31,7 @@ class _CharacterPageState extends State<CharacterPage> {
     final firebaseStore = Provider.of<FirebaseStore>(context);
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Observer(builder:(_){return Scaffold(
+    return  Scaffold(
       backgroundColor: firebaseStore.isDarkTheme?Colors.black:Colors.white,
       drawer: DrawerSideBar(),
       appBar: AppBar(
@@ -60,7 +61,7 @@ class _CharacterPageState extends State<CharacterPage> {
             return Loading();
           case FutureStatus.rejected:
             return ErrorLoading(
-                msg: "Erro to load characters, verify your connection.",
+                msg: translate('errors.error_load_page_character'),
                 refresh: _refresh);
           case FutureStatus.fulfilled:
             return Padding(
@@ -75,11 +76,11 @@ class _CharacterPageState extends State<CharacterPage> {
             );
           default:
             return ErrorLoading(
-                msg: "Erro to load characters,try again later.",
+                msg: translate('errors.error_default'),
                 refresh: _refresh);
         }
       }),
-    );});
+    );
   }
 
   Future<void> _refresh() {

@@ -13,4 +13,14 @@ class SharedPrefs {
     prefs = await SharedPreferences.getInstance();
     return prefs.getBool("isThemeDark");
   }
+
+  persistLanguage(String code) async {
+    prefs = await SharedPreferences.getInstance();
+    await prefs.setString("language",code);
+  }
+
+  getPersistLanguage() async {
+    prefs = await SharedPreferences.getInstance();
+    return prefs.getString("language");
+  }
 }

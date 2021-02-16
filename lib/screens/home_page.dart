@@ -12,6 +12,7 @@ import 'package:project1/widgets/lists/listAnimes_widget.dart';
 import 'package:project1/widgets/loading_widget.dart';
 import 'package:project1/widgets/search.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -27,12 +28,12 @@ class _MyHomePageState extends State<MyHomePage>
   ScrollController _scrollController;
   TabController _tabController;
   Map<ScrollController, double> positionInList;
-  final List<Tab> myTabs = <Tab>[
+  final List<Tab> myTabs =<Tab>[
     Tab(text: globals.stringAnimesPopular),
     Tab(text: globals.stringAnimesAiring),
     Tab(text: globals.stringAnimesHighest),
     Tab(text: globals.stringAnimesUpcoming),
-  ];
+  ]; 
   AnimeStore storeAnimes;
   @override
   void initState() {
@@ -92,8 +93,7 @@ class _MyHomePageState extends State<MyHomePage>
         ],
       ),
       body: SafeArea(
-        child: Observer(builder: (_) {
-          return Container(
+        child: Container(
             color: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
             child: Column(
               children: [
@@ -104,7 +104,12 @@ class _MyHomePageState extends State<MyHomePage>
                         firebaseStore.isDarkTheme ? Colors.white : Colors.black,
                     controller: _tabController,
                     isScrollable: true,
-                    tabs: myTabs),
+                    tabs: <Tab>[
+    Tab(text: translate('tab_bar_home.animesPopular')),
+    Tab(text: translate('tab_bar_home.animesAiring')),
+    Tab(text: translate('tab_bar_home.animesHighest')),
+    Tab(text: translate('tab_bar_home.animesUpcoming')),
+  ]),
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
@@ -124,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage>
                                 case FutureStatus.rejected:
                                   return ErrorLoading(
                                     msg:
-                                        "Error to load page, verify your connection.",
+                                        translate('errors.error_load_page'),
                                     refresh: _refresh,
                                   );
                                 case FutureStatus.fulfilled:
@@ -139,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage>
                                 default:
                                   return ErrorLoading(
                                       msg:
-                                          "Error to load page, try again later.",
+                                           translate('errors.error_default'),
                                       refresh: _refresh);
                               }
                             }),
@@ -158,7 +163,7 @@ class _MyHomePageState extends State<MyHomePage>
                                 case FutureStatus.rejected:
                                   return ErrorLoading(
                                       msg:
-                                          "Error to load page, verify your connection.",
+                                          translate('errors.error_load_page'),
                                       refresh: _refresh);
                                 case FutureStatus.fulfilled:
                                   return AnimeList(
@@ -170,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       actualBar: globals.stringAnimesAiring);
                               }
                               return ErrorLoading(
-                                msg: "Error to load page, try again later.",
+                                msg:translate('errors.error_default'),
                                 refresh: _refresh,
                               );
                             }),
@@ -189,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage>
                                 case FutureStatus.rejected:
                                   return ErrorLoading(
                                       msg:
-                                          "Error to load page, verify your connection.",
+                                         translate('errors.error_load_page'),
                                       refresh: _refresh);
                                 case FutureStatus.fulfilled:
                                   return AnimeList(
@@ -202,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage>
                                       actualBar: globals.stringAnimesHighest);
                               }
                               return ErrorLoading(
-                                msg: "Error to load page, try again later.",
+                                msg: translate('errors.error_default'),
                                 refresh: _refresh,
                               );
                             }),
@@ -226,7 +231,7 @@ class _MyHomePageState extends State<MyHomePage>
                                 case FutureStatus.rejected:
                                   return ErrorLoading(
                                       msg:
-                                          "Error to load page, verify your connection.",
+                                         translate('errors.error_load_page'),
                                       refresh: _refresh);
                                 case FutureStatus.fulfilled:
                                   return AnimeList(
@@ -238,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage>
                                   );
                               }
                               return ErrorLoading(
-                                  msg: "Error to load page, try again later.",
+                                  msg: translate('errors.error_default'),
                                   refresh: _refresh);
                             }),
                       ),
@@ -247,8 +252,8 @@ class _MyHomePageState extends State<MyHomePage>
                 ),
               ],
             ),
-          );
-        }),
+          
+        ),
       ),
     );
   }

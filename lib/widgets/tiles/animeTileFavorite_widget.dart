@@ -48,8 +48,7 @@ class AnimeTileFavorite extends StatelessWidget {
               SizedBox(
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Observer(builder: (_) {
-                    return Container(
+                  child: Container(
                         height: height * 0.7,
                         width: width,
                         child: FadeInImage.memoryNetwork(
@@ -66,8 +65,8 @@ class AnimeTileFavorite extends StatelessWidget {
                                   ? Colors.black
                                   : Colors.white,
                               width: 2),
-                        ));
-                  }),
+                        )
+                  ),
                 ),
               ),
               Positioned(
@@ -118,19 +117,18 @@ class AnimeTileFavorite extends StatelessWidget {
                   ),
                 ),
               ),
-              Observer(builder: (_) {
-                return Positioned(
-                  bottom: height * 0.77,
-                  left: width * 0.735,
-                  child: Container(
-                      width: width * 0.2,
-                      height: width * 0.2,
-                      decoration: BoxDecoration(
-                        color: firebaseStore.isDarkTheme
-                            ? Colors.black
-                            : Colors.white,
-                      ),
-                      child: IconButton(
+              Positioned(
+                bottom: height * 0.77,
+                left: width * 0.735,
+                child: Container(
+                    width: width * 0.2,
+                    height: width * 0.2,
+                    decoration: BoxDecoration(
+                      color: firebaseStore.isDarkTheme
+                          ? Colors.black
+                          : Colors.white,
+                    ),
+                    child:  IconButton(
                         icon: Icon(
                           Icons.star,
                           color: Colors.yellow,
@@ -140,9 +138,9 @@ class AnimeTileFavorite extends StatelessWidget {
                           storeAnimesFavorites.removeItem(anime);
                           storeAnimes.removeFavoriteByName(anime.id);
                         },
-                      )),
-                );
-              }),
+                      
+                    )),
+              ),
             ],
           )),
         ),

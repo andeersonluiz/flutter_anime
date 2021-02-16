@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project1/stores/firebase_store.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 class SetUsername extends StatelessWidget {
   final _usernameController = TextEditingController();
@@ -18,7 +19,7 @@ class SetUsername extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("Write your username",style: TextStyle(fontSize: 20),),
+                    child: Text(translate('dialog_username.set_username'),style: TextStyle(fontSize: 20),),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -27,13 +28,13 @@ class SetUsername extends StatelessWidget {
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: "Username",
+                        labelText: translate('dialog_username.username'),
                         errorStyle: TextStyle(fontSize: 10)
                       ),
                       
                       validator: (value) => value.length >= 4 && value.length <= 15
                           ? null
-                          : "Username must be contains 4-15 characters",
+                          : translate('dialog_username.error_username'),
                     ),
                   ),
                   Padding(
@@ -46,7 +47,7 @@ class SetUsername extends StatelessWidget {
                           Navigator.of(context).pop();
                         }
                       },
-                      child: Text("Change username",),
+                      child: Text(translate('dialog_username.change_username'),),
                     ),
                   )
                 ],

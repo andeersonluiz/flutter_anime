@@ -7,10 +7,12 @@ import 'package:project1/widgets/errorLoading_widget.dart';
 import 'package:project1/widgets/lists/listAnimes_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:project1/widgets/loading_widget.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 class AnimeCategoriePage extends StatefulWidget {
   final String nameCategorie;
-  AnimeCategoriePage({this.nameCategorie});
+  final String codeCategorie;
+  AnimeCategoriePage({this.nameCategorie,this.codeCategorie});
   @override
   _AnimeCategoriePageState createState() => _AnimeCategoriePageState();
 }
@@ -35,13 +37,13 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
         ),
         body: Observer(builder: (_) {
           storeAnimesCategories.listAnimes ??
-              storeAnimesCategories.getAnimesByCategorie(widget.nameCategorie);
+              storeAnimesCategories.getAnimesByCategorie(widget.codeCategorie);
           switch (storeAnimesCategories.listAnimes.status) {
             case FutureStatus.pending:
               return Loading();
             case FutureStatus.rejected:
               return ErrorLoading(
-                  msg: "Error to load animes, verify your connection",
+                  msg: translate('errors.error_load_page_anime'),
                   refresh: _refresh);
             case FutureStatus.fulfilled:
               return AnimeList(
@@ -51,14 +53,14 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
                   scrollController: _scrollController);
             default:
               return ErrorLoading(
-                  msg: "Error to connect database, try again later",
+                  msg: translate('errors.error_default'),
                   refresh: _refresh);
           }
         }));
   }
 
   Future<void> _refresh() async {
-    return storeAnimesCategories.getAnimesByCategorie(widget.nameCategorie);
+    return storeAnimesCategories.getAnimesByCategorie(widget.codeCategorie);
   }
 
   _scrollListener() {

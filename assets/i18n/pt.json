@@ -1,0 +1,129 @@
+{
+    "drawer_options": {
+        "characters": "Personagens",
+        "categories": "Categorias",
+        "my_favorites": "Meus favoritos",
+        "login": "Entrar",
+        "register": "Registrar",
+        "logout": "Sair",
+        "settings": "Configurações",
+        "guest":"Convidado",
+        "error_avatar":"Você deve estar logado para mudar seu avatar.",
+        "error_username":"Você deve estar logado para mudar seu nome de usuário.",
+        "error_background":"Você deve estar logado para mudar seu tema de fundo."
+    },
+    "dialog_login": {
+        "login": "Entrar",
+        "email": "Email",
+        "password": "Senha",
+        "login_with": "Entrar com:",
+        "error_password":"Senha precisa de 8 ou mais caracteres",
+        "error_email":"Email inválido"
+    },
+
+    "dialog_register": {
+        "register": "Registrar",
+        "username": "Nome do usuário",
+        "email": "Email",
+        "password": "Senha",
+        "register_with": "Registrar com:",
+        "error_password":"Senha precisa de 8 ou mais caracteres",
+        "error_email":"Email inválido",
+        "error_username":"Usuário deve ter entre 4 e 15 caracteres"
+    },
+
+    "dialog_username":{
+        "set_username":"Escolha seu nome de usuário",
+        "username": "Nome do usuário",
+        "error_username":"Usuário deve ter entre 4 e 15 caracteres",
+        "change_username":"Confirmar"
+    },
+
+
+
+    "dialog_avatar":{
+        "set_avatar":"Selecione seu avatar",
+        "confirm":"Confirmar"
+    },
+    "dialog_background":{
+        "set_background":"Selecione seu tema de fundo",
+        "confirm":"Confirmar"
+    },
+
+    "dialog_settings":{
+        "language":"Idioma",
+        "english_item":"Inglês",
+        "portuguese_item":"Portugues",
+        "confirm":"Confirmar",
+        "select_language":"Selecione o idioma"
+    },
+
+    "tab_bar_home":{
+        "animesPopular":"Mais populares",
+        "animesAiring":"Melhores em exibição",
+        "animesHighest":"Maiores notas",
+        "animesUpcoming":"Lançamentos futuros"
+    },
+
+
+
+    "anime_info":{
+        "synopsis":"Sinopse",
+        "info":"Informações",
+        "characters":"Personagens",
+        "episodes":"Episódios",
+        "genres":"Genero",
+        "status":"Estado",
+        "size_ep":"Tempo de episódio.",
+        "trailer":"Trailer",
+        "no_trailer": "Não há trailer disponivel no momento.",
+        "error_favorite":"Você deve estar logado para salvar favoritos.",
+        "episode_error":"Episódios ainda não lançados.",
+        "movie_error":"Filme ainda não lançado."
+    },
+
+    "character_info":{
+        "description":"Descrição",
+        "other_names":"Outros nomes:",
+        "no_informations":"Não há informações sobre"
+    },
+    "categories":{
+        "show_all":"Mostrar todas as categorias"
+
+    },
+
+
+    "search":{
+        "search":"Pesquisar"
+    },
+
+    "episode_info":{
+        "air_date":"Data de lançamento: ",
+        "size_ep":"Tempo de episódio: "
+    },
+
+    "errors": {
+        "weak_password": "Senha muito fraca",
+        "email_already_in_use": "Email já em uso.",
+        "invalid_email": "Email inválido",
+        "default_email": "Problemas no banco de dados, tente novamente mais tarde",
+        "account_exists_with_different_credential": "Esta conta já existe.",
+        "invalid_credential": "Credenciais inválidas.",
+        "operation_not_allowed": "Método não habilidado.",
+        "user_disabled": "O usuário está desativado.",
+        "user_not_found": "Usuário não encontrado.",
+        "wrong_password": "Senha errada.",
+        "default_credential": "Erro para entrar através da redes sociais, tente novamente mais tarde",
+        "error_load_page":"Erro ao carregar a pagina, verifique sua conexão.",
+        "error_load_page_episodes":"Erro ao carregar episódios, verifique sua conexão.",
+        "error_load_page_character":"Erro ao carregar personagens, verifique sua conexão.",
+        "error_load_page_no_character":"Personagens não disponiveis até o momento.",
+        "error_load_page_anime":"Erro ao carregar animes, verifique sua conexão.",
+        "error_load_page_categorie":"Erro ao carregar categorias, verifique sua conexão.",
+        "error_load_page_favorite":"Erro ao carregar favoritos, verifique sua conexão.",
+        "error_load_page_synopsis":"Erro ao carregar sinopse, verifique sua conexão.",
+
+        "error_default":"Erro ao conectar ao banco de dados, tente novamente mais tarde",
+        "translate_error":"(Tradução não disponivel no momento)"
+    }
+}
