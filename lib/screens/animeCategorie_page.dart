@@ -12,7 +12,7 @@ import 'package:flutter_translate/flutter_translate.dart';
 class AnimeCategoriePage extends StatefulWidget {
   final String nameCategorie;
   final String codeCategorie;
-  AnimeCategoriePage({this.nameCategorie,this.codeCategorie});
+  AnimeCategoriePage({this.nameCategorie, this.codeCategorie});
   @override
   _AnimeCategoriePageState createState() => _AnimeCategoriePageState();
 }
@@ -27,11 +27,18 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final firebaseStore = Provider.of<FirebaseStore>(context);
 
     return Scaffold(
-      backgroundColor: firebaseStore.isDarkTheme?Colors.black:Colors.white,
+        backgroundColor:
+            firebaseStore.isDarkTheme ? Colors.black : Colors.white,
         appBar: AppBar(
           title: Text(widget.nameCategorie + " animes"),
         ),
@@ -53,8 +60,7 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
                   scrollController: _scrollController);
             default:
               return ErrorLoading(
-                  msg: translate('errors.error_default'),
-                  refresh: _refresh);
+                  msg: translate('errors.error_default'), refresh: _refresh);
           }
         }));
   }

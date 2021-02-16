@@ -18,6 +18,8 @@ import 'package:provider/provider.dart';
 import 'package:project1/support/shared_preferences.dart';
 import 'package:project1/stores/anime_store.dart';
 import 'package:project1/stores/translation_store.dart';
+import 'package:flutter/services.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -25,15 +27,20 @@ void main() async {
   bool isDarkTheme = await sharedPreferences.getPersistTheme();
   String code = await sharedPreferences.getPersistLanguage();
 
-  LocalizationDelegate delegate = await LocalizationDelegate.create(fallbackLocale:"en_US",supportedLocales:["en_US","pt"],);
-  
-  if(code!=null){
-    if(code.contains("_")){
-      var codeSplited =code.split("_");
-      delegate.changeLocale(Locale(codeSplited[0],codeSplited[1]));
-    }else{
-      delegate.changeLocale(Locale(code,''));
+  LocalizationDelegate delegate = await LocalizationDelegate.create(
+    fallbackLocale: "en_US",
+    supportedLocales: ["en_US", "pt"],
+  );
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
+  if (code != null) {
+    if (code.contains("_")) {
+      var codeSplited = code.split("_");
+      delegate.changeLocale(Locale(codeSplited[0], codeSplited[1]));
+    } else {
+      delegate.changeLocale(Locale(code, ''));
     }
   }
   runApp(MultiProvider(
@@ -43,7 +50,7 @@ void main() async {
         Provider<FavoriteAnimeStore>(
           create: (_) => FavoriteAnimeStore(),
         ),
-        Provider<TranslateStore>(create:(_)=>TranslateStore()),
+        Provider<TranslateStore>(create: (_) => TranslateStore()),
       ],
       child: LocalizedApp(
         delegate,
@@ -55,7 +62,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final isDarkTheme;
-  
+  final durationTransition = 500;
   MyApp({this.isDarkTheme});
   @override
   Widget build(BuildContext context) {
@@ -76,7 +83,6 @@ class MyApp extends StatelessWidget {
     return Observer(builder: (_) {
       return LocalizationProvider(
         state: LocalizationProvider.of(context).state,
-
         child: MaterialApp(
           title: 'AnimesAPI',
           localizationsDelegates: [
@@ -86,14 +92,13 @@ class MyApp extends StatelessWidget {
           ],
           supportedLocales: localizationDelegate.supportedLocales,
           locale: localizationDelegate.currentLocale,
-          
-        
           debugShowCheckedModeBanner: false,
           initialRoute: '/',
           onGenerateRoute: _generateRoute,
           theme: ThemeData(
             fontFamily: 'RobotoCondensed',
-            primaryColor: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+            primaryColor:
+                firebaseStore.isDarkTheme ? Colors.black : Colors.white,
             unselectedWidgetColor:
                 firebaseStore.isDarkTheme ? Colors.white : Colors.black,
           ),
@@ -102,33 +107,77 @@ class MyApp extends StatelessWidget {
     });
   }
 
-  static Route<dynamic> _generateRoute(RouteSettings settings) {
+  Route<dynamic> _generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (_) => MyHomePage());
+        return PageRouteBuilder(
+          settings: settings,
+          pageBuilder: (context, animation, anotherAnimation) => MyHomePage(),
+          transitionDuration: Duration(milliseconds: durationTransition),
+          transitionsBuilder: _animationDrawer,
+        );
       case '/animeInfo':
         final args = settings.arguments as List;
         return MaterialPageRoute(
-            builder: (_) => AnimeInfoPage(args[0], args[1]));
+            settings: settings,
+            builder: (_) =>
+                Hero(tag: args[0].id, child: AnimeInfoPage(args[0], args[1])));
       case '/characterInfo':
         final character = settings.arguments as Character;
-        return MaterialPageRoute(builder: (_) => CharacterInfoPage(character));
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (_) =>
+                Hero(tag: character.id, child: CharacterInfoPage(character)));
       case '/characterList':
-        return MaterialPageRoute(builder: (_) => CharacterPage());
+        return PageRouteBuilder(
+          settings: settings,
+          pageBuilder: (context, animation, anotherAnimation) =>
+              CharacterPage(),
+          transitionDuration: Duration(milliseconds: durationTransition),
+          transitionsBuilder: _animationDrawer,
+        );
       case '/categorieList':
-        return MaterialPageRoute(builder: (_) => CategoriePage());
+        return PageRouteBuilder(
+          settings: settings,
+          pageBuilder: (context, animation, anotherAnimation) =>
+              CategoriePage(),
+          transitionDuration: Duration(milliseconds: durationTransition),
+          transitionsBuilder: _animationDrawer,
+        );
       case '/favorites':
-        return MaterialPageRoute(builder: (_) => AnimeFavoritesPage());
+        return PageRouteBuilder(
+          settings: settings,
+          pageBuilder: (context, animation, anotherAnimation) =>
+              AnimeFavoritesPage(),
+          transitionDuration: Duration(milliseconds: durationTransition),
+          transitionsBuilder: _animationDrawer,
+        );
       case '/animeListByCategorie':
         final args = settings.arguments as List;
         return MaterialPageRoute(
+            settings: settings,
             builder: (_) => AnimeCategoriePage(
                   nameCategorie: args[0],
-                  codeCategorie:args[1],
+                  codeCategorie: args[1],
                 ));
 
       default:
-        return null;
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, anotherAnimation) => MyHomePage(),
+          transitionDuration: Duration(milliseconds: durationTransition),
+          transitionsBuilder: _animationDrawer,
+        );
     }
+  }
+
+  Widget _animationDrawer(BuildContext context, Animation<double> animation,
+      Animation<double> anotherAnimation, Widget child) {
+    animation = CurvedAnimation(curve: Curves.easeInBack, parent: animation);
+    //return SlideTransition(position:Tween(begin: Offset(-1.0,0.0),end: Offset(0.0,0.0)).animate(animation),child: child,  );
+    //return Align(child: SizeTransition(sizeFactor:animation,child:child,axisAlignment:0.0));
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
   }
 }

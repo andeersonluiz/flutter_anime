@@ -136,7 +136,18 @@ abstract class _AnimeStore with Store {
 
         break;
       default:
-        return null;
+        return animesPopular = ObservableFuture(_decode(
+                "https://kitsu.io/api/edge/anime?sort=-userCount,-favoritesCount&page[limit]=$qtdAnim&page[offset]=0",
+                filter))
+            .then((animesPop) {
+          for (int i = 0; i < animesPop.length; i++) {
+            favoriteListPopular[i] = [animesPop[i].id, animesPop[i].isFavorite];
+          }
+
+          print("getAnimes(animesPopular) executed in ${stopWatch.elapsed}");
+          return animesPop;
+        });
+        
     }
   }
 

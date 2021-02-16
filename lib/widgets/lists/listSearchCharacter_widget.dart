@@ -10,11 +10,12 @@ class ListSearchCharacter extends StatelessWidget {
   final query;
   final actualBar;
   final color;
-  ListSearchCharacter({this.storeSearch, this.query, this.actualBar,this.color});
+  ListSearchCharacter(
+      {this.storeSearch, this.query, this.actualBar, this.color});
   @override
   Widget build(BuildContext context) {
     return Container(
-      color:color,
+      color: color,
       child: Observer(builder: (_) {
         if (storeSearch.searchResultsCharacters != null) {
           switch (storeSearch.searchResultsCharacters.status) {
@@ -36,12 +37,13 @@ class ListSearchCharacter extends StatelessWidget {
                     return GestureDetector(
                       onTap: () {
                         Navigator.of(context).pushNamed("/characterInfo",
-                            arguments:
-                                storeSearch.searchResultsCharacters.value[index]);
+                            arguments: storeSearch
+                                .searchResultsCharacters.value[index]);
                       },
                       child: CharacterSearchTile(
                           character:
-                              storeSearch.searchResultsCharacters.value[index],color:color),
+                              storeSearch.searchResultsCharacters.value[index],
+                          color: color),
                     );
                   });
             default:

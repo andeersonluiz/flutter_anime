@@ -7,7 +7,8 @@ class ListCategories extends StatelessWidget {
   final ScrollController scrollController;
   final bool loadedAllList;
   final color;
-  ListCategories({this.categories, this.scrollController, this.loadedAllList,this.color});
+  ListCategories(
+      {this.categories, this.scrollController, this.loadedAllList, this.color});
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -19,10 +20,13 @@ class ListCategories extends StatelessWidget {
               (ctx, index) => int.parse(categories[index].totalMediaCount) > 0
                   ? GestureDetector(
                       onTap: () => Navigator.pushNamed(
-                          context, '/animeListByCategorie',
-                          arguments: [categories[index].name,categories[index].code]),
+                              context, '/animeListByCategorie', arguments: [
+                            categories[index].name,
+                            categories[index].code
+                          ]),
                       child: CategorieTile(
-                        categorie: categories[index],color:color,
+                        categorie: categories[index],
+                        color: color,
                       ))
                   : Container(),
               childCount: categories.length ?? 0),

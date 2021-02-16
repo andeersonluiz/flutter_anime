@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:flutter_translate/localized_app.dart';
 import 'package:project1/stores/firebase_store.dart';
 import 'package:project1/widgets/dialog/registerDialog_widget.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +20,6 @@ class DrawerSideBar extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final sharedPreferences = SharedPrefs();
-    final localizationDelegate =LocalizedApp.of(context).delegate;
     return Drawer(
       child: SafeArea(
         child: Container(
@@ -80,7 +78,8 @@ class DrawerSideBar extends StatelessWidget {
                               onTap: () => firebaseStore.isLogged
                                   ? _showSetUsername(context)
                                   : Toast.show(
-                                      translate("drawer_options.error_username"),
+                                      translate(
+                                          "drawer_options.error_username"),
                                       context,
                                       duration: Toast.LENGTH_LONG,
                                       gravity: Toast.BOTTOM),
@@ -116,7 +115,8 @@ class DrawerSideBar extends StatelessWidget {
                               onPressed: () => firebaseStore.isLogged
                                   ? _selectBackground(context)
                                   : Toast.show(
-                                      translate("drawer_options.error_background"),
+                                      translate(
+                                          "drawer_options.error_background"),
                                       context,
                                       duration: Toast.LENGTH_LONG,
                                       gravity: Toast.BOTTOM),
@@ -125,15 +125,20 @@ class DrawerSideBar extends StatelessWidget {
                 );
               }),
               ListTile(
-                title: Text(
-                  'Animes',
-                  style: TextStyle(
-                    color:
-                        firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+                  title: Text(
+                    'Animes',
+                    style: TextStyle(
+                      color: firebaseStore.isDarkTheme
+                          ? Colors.white
+                          : Colors.black,
+                    ),
                   ),
-                ),
-                onTap: () => Navigator.of(context).pushNamed("/"),
-              ),
+                  onTap: () async {
+                    if (ModalRoute.of(context).settings.name != "/") {
+                      return await Navigator.of(context).pushNamed("/");
+                    }
+                    Navigator.of(context).pop();
+                  }),
               ListTile(
                   title: Text(
                     translate('drawer_options.characters'),
@@ -143,33 +148,54 @@ class DrawerSideBar extends StatelessWidget {
                           : Colors.black,
                     ),
                   ),
-                  onTap: () =>
-                      Navigator.of(context).pushNamed("/characterList")),
+                  onTap: () async {
+                    if (ModalRoute.of(context).settings.name !=
+                        "/characterList") {
+                      return await Navigator.of(context)
+                          .pushNamed("/characterList");
+                    }
+                    Navigator.of(context).pop();
+                  }),
+              ListTile(
+                title: Text(
+                  translate('drawer_options.categories'),
+                  style: TextStyle(
+                    color:
+                        firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+                  ),
+                ),
+                onTap: () async {
+                  if (ModalRoute.of(context).settings.name !=
+                      "/categorieList") {
+                    return await Navigator.of(context)
+                        .pushNamed("/categorieList");
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
               ListTile(
                   title: Text(
-                    translate('drawer_options.categories'),
+                    translate('drawer_options.my_favorites'),
                     style: TextStyle(
                       color: firebaseStore.isDarkTheme
                           ? Colors.white
                           : Colors.black,
                     ),
                   ),
-                  onTap: () =>
-                      Navigator.of(context).pushNamed("/categorieList")),
-              ListTile(
-                title: Text(
-                  translate('drawer_options.my_favorites'),
-                  style: TextStyle(
-                    color:
-                        firebaseStore.isDarkTheme ? Colors.white : Colors.black,
-                  ),
-                ),
-                onTap: () => firebaseStore.isLogged
-                    ? Navigator.of(context).pushNamed("/favorites")
-                    : Toast.show(
-                        "You must be logged to use favorites section.", context,
-                        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM),
-              ),
+                  onTap: () async {
+                    if (firebaseStore.isLogged) {
+                      if (ModalRoute.of(context).settings.name !=
+                          "/favorites") {
+                        return await Navigator.of(context)
+                            .pushNamed("/favorites");
+                      }
+                      Navigator.of(context).pop();
+                    } else {
+                      return Toast.show(
+                          translate("errors.toast_favorite_error"), context,
+                          duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+                    }
+                  }),
               Divider(
                 color: firebaseStore.isDarkTheme ? Colors.white : Colors.black,
               ),
@@ -184,7 +210,7 @@ class DrawerSideBar extends StatelessWidget {
                                 : Colors.black,
                           ),
                         ),
-                        onTap: () => firebaseStore.signOut())
+                        onTap: () async => await firebaseStore.signOut())
                     : ListTile(
                         title: Text(
                           translate('drawer_options.login'),
@@ -216,20 +242,19 @@ class DrawerSideBar extends StatelessWidget {
                           return _showDialogRegister(context);
                         });
               }),
-                ListTile(
-                        title: Text(
-                          translate('drawer_options.settings'),
-                          style: TextStyle(
-                            color: firebaseStore.isDarkTheme
-                                ? Colors.white
-                                : Colors.black,
-                          ),
-                        ),
-                        onTap: () {
-                          firebaseStore.errorMsg = "";
-                          return _showDialogSettings(context);  
-              }),
-
+              ListTile(
+                  title: Text(
+                    translate('drawer_options.settings'),
+                    style: TextStyle(
+                      color: firebaseStore.isDarkTheme
+                          ? Colors.white
+                          : Colors.black,
+                    ),
+                  ),
+                  onTap: () {
+                    firebaseStore.errorMsg = "";
+                    return _showDialogSettings(context);
+                  }),
               Expanded(
                 child: Align(
                   alignment: FractionalOffset.bottomLeft,
@@ -258,6 +283,7 @@ class DrawerSideBar extends StatelessWidget {
       ),
     );
   }
+
   _showDialogSettings(BuildContext ctx) {
     return showDialog(
         context: ctx,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class LayoutInfoText extends StatelessWidget {
   final text;
   final color;
-  LayoutInfoText({this.text,this.color});
+  LayoutInfoText({this.text, this.color});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -15,11 +15,14 @@ class LayoutInfoText extends StatelessWidget {
               right: MediaQuery.of(context).size.width / 50,
               bottom: 0,
               top: 0),
-          decoration: BoxDecoration(border: Border.all(color:color==Colors.black?Colors.black:Colors.white)),
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: color == Colors.black ? Colors.black : Colors.white)),
           child: Center(
             child: Text(
               text,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color:color),
+              style: TextStyle(
+                  fontSize: 15, fontWeight: FontWeight.bold, color: color),
             ),
           )),
     );

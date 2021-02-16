@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:project1/stores/firebase_store.dart';
 import 'package:project1/support/global_variables.dart' as globals;
 import 'package:project1/widgets/tiles/animeTile_widget.dart';
@@ -44,11 +43,10 @@ class AnimeList extends StatelessWidget {
                       child: loadedAllList
                           ? Container()
                           : CircularProgressIndicator(
-                                backgroundColor: firebaseStore.isDarkTheme
-                                    ? Colors.white
-                                    : Colors.black,
-                              )
-                            )),
+                              backgroundColor: firebaseStore.isDarkTheme
+                                  ? Colors.white
+                                  : Colors.black,
+                            ))),
               childCount: 1),
         ),
       ],

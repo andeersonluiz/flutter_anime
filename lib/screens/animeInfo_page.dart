@@ -11,7 +11,7 @@ import 'package:project1/stores/firebase_store.dart';
 import 'package:project1/widgets/errorLoading_widget.dart';
 import 'package:project1/widgets/layouts/layoutInfos_widget.dart';
 import 'package:project1/widgets/layouts/layoutTrailer_widget.dart';
-import 'package:project1/widgets/lists/listCharacters_widget.dart';
+import 'package:project1/widgets/lists/listCharactersAnimeInfo_widget.dart';
 import 'package:project1/widgets/lists/listEpisodes_widget.dart';
 import 'package:project1/widgets/loading_widget.dart';
 import 'package:project1/widgets/tiles/movieTile_widget.dart';
@@ -44,8 +44,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController()
-      ..addListener(_scrollListener);
+    _scrollController = ScrollController()..addListener(_scrollListener);
     _scrollControllerCharacters = ScrollController()
       ..addListener(_scrollListenerCharacter);
     _controllerYoutube = YoutubePlayerController(
@@ -62,6 +61,12 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     storeTranslation = Provider.of<TranslateStore>(context);
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+    _scrollControllerCharacters.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,6 +111,8 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
               actions: [
                 Observer(builder: (_) {
                   return IconButton(
+                                                    splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
                     icon: Icon(
                       storeAnimes.favoriteListPopular[widget.index][1]
                           ? Icons.star
@@ -135,7 +142,6 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                 onPressed: () {
                   _controllerYoutube ?? _controllerYoutube.close();
                   Navigator.of(context).pop();
-                  //storeTranslation.descriptionEpisodeTranslated=null;
                 },
               ),
               expandedHeight: height * 0.2,
@@ -173,17 +179,23 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Observer(builder: (_) {
+                        storeTranslation?.synopsisTranslated ??
+                            storeTranslation.translateSynopsis(
+                                widget.anime.synopsis, widget.anime.id);
+                        if (storeTranslation?.translationId !=
+                            widget.anime.id) {
+                          storeTranslation.translateSynopsis(
+                              widget.anime.synopsis, widget.anime.id);
+                        }
 
-                        storeTranslation?.synopsisTranslated??storeTranslation.translateSynopsis(widget.anime.synopsis,widget.anime.id);
-                        if(storeTranslation?.translationId!=widget.anime.id){
-                            storeTranslation.translateSynopsis(widget.anime.synopsis,widget.anime.id);
-                          }
-                        
-                        switch(storeTranslation?.synopsisTranslated?.status){
+                        switch (storeTranslation?.synopsisTranslated?.status) {
                           case FutureStatus.pending:
                             return Loading();
                           case FutureStatus.rejected:
-                            return ErrorLoading(msg:translate('errors.error_load_page_synopsis') ,refresh: _refreshSynopsis,);
+                            return ErrorLoading(
+                              msg: translate('errors.error_load_page_synopsis'),
+                              refresh: _refreshSynopsis,
+                            );
                           case FutureStatus.fulfilled:
                             return AutoSizeText(
                               storeTranslation.synopsisTranslated.value,
@@ -195,13 +207,13 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                               maxLines: 40,
                               maxFontSize: 15,
                               minFontSize: 12,
-                          
-                        );
-                        default:
-
-                            return ErrorLoading(msg:translate('errors.error_default') ,refresh: _refreshSynopsis,);
+                            );
+                          default:
+                            return ErrorLoading(
+                              msg: translate('errors.error_default'),
+                              refresh: _refreshSynopsis,
+                            );
                         }
-                        
                       }),
                     ),
                     Column(
@@ -309,7 +321,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                                       'errors.error_load_page_no_character'),
                                   refresh: _refreshCharacter);
                             }
-                            return ListCharacter(
+                            return ListCharacterAnimeInfo(
                                 characters:
                                     storeCharacters.listCharacters.value,
                                 loadedAllList: storeCharacters.loadedAllList,
@@ -335,8 +347,9 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     );
   }
 
-  Future<void> _refreshSynopsis(){
-    return storeTranslation.translateSynopsis(widget.anime.synopsis,widget.anime.id);
+  Future<void> _refreshSynopsis() {
+    return storeTranslation.translateSynopsis(
+        widget.anime.synopsis, widget.anime.id);
   }
 
   Future<void> _refreshCharacter() {

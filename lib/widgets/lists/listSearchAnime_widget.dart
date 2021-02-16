@@ -11,7 +11,7 @@ class ListSearchAnime extends StatelessWidget {
   final query;
   final actualBar;
   final color;
-  ListSearchAnime({this.storeSearch, this.query, this.actualBar,this.color});
+  ListSearchAnime({this.storeSearch, this.query, this.actualBar, this.color});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +39,8 @@ class ListSearchAnime extends StatelessWidget {
                                 storeSearch.searchResultsAnimes.value[index]);
                       },
                       child: AnimeSearchTile(
-                          anime: storeSearch.searchResultsAnimes.value[index],color:color),
+                          anime: storeSearch.searchResultsAnimes.value[index],
+                          color: color),
                     );
                   });
             default:

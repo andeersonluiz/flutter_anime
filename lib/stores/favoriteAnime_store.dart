@@ -30,7 +30,6 @@ abstract class _FavoriteAnimeStoreBase with Store {
   _decode() async {
     String email = auth?.getUser()?.email;
     List<dynamic> favorites = await cloud.getFavoritesAnimes(email);
-
     return favorites.map((json) => Anime.fromJsonFirebase(json)).toList();
   }
 

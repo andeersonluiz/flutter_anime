@@ -4,15 +4,15 @@ import 'package:project1/model/character_model.dart';
 class CharacterSearchTile extends StatelessWidget {
   final Character character;
   final color;
-  CharacterSearchTile({this.character,this.color});
+  CharacterSearchTile({this.character, this.color});
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
 
     return Card(
-      color:color,
+      color: color,
       elevation: 5,
-      shadowColor: color==Colors.black?Colors.white:Colors.black,
+      shadowColor: color == Colors.black ? Colors.white : Colors.black,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -31,7 +31,11 @@ class CharacterSearchTile extends StatelessWidget {
                 Center(
                     child: Text(
                   character.name,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color:color==Colors.black?Colors.white:Colors.black),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color:
+                          color == Colors.black ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
                 )),
               ],

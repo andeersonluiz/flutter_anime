@@ -28,13 +28,14 @@ class _MyHomePageState extends State<MyHomePage>
   ScrollController _scrollController;
   TabController _tabController;
   Map<ScrollController, double> positionInList;
-  final List<Tab> myTabs =<Tab>[
+  final List<Tab> myTabs = <Tab>[
     Tab(text: globals.stringAnimesPopular),
     Tab(text: globals.stringAnimesAiring),
     Tab(text: globals.stringAnimesHighest),
     Tab(text: globals.stringAnimesUpcoming),
-  ]; 
+  ];
   AnimeStore storeAnimes;
+
   @override
   void initState() {
     super.initState();
@@ -63,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage>
     final width = MediaQuery.of(context).size.width;
     final firebaseStore = Provider.of<FirebaseStore>(context);
     return Scaffold(
+      backgroundColor: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
       drawer: DrawerSideBar(),
       appBar: AppBar(
         actions: [
@@ -92,168 +94,148 @@ class _MyHomePageState extends State<MyHomePage>
           ),
         ],
       ),
-      body: SafeArea(
-        child: Container(
-            color: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
-            child: Column(
+      body: Column(
+        children: [
+          TabBar(
+              indicatorColor:
+                  firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+              labelColor:
+                  firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+              controller: _tabController,
+              isScrollable: true,
+              tabs: <Tab>[
+                Tab(text: translate('tab_bar_home.animesPopular')),
+                Tab(text: translate('tab_bar_home.animesAiring')),
+                Tab(text: translate('tab_bar_home.animesHighest')),
+                Tab(text: translate('tab_bar_home.animesUpcoming')),
+              ]),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              dragStartBehavior: DragStartBehavior.start,
               children: [
-                TabBar(
-                    indicatorColor:
-                        firebaseStore.isDarkTheme ? Colors.white : Colors.black,
-                    labelColor:
-                        firebaseStore.isDarkTheme ? Colors.white : Colors.black,
-                    controller: _tabController,
-                    isScrollable: true,
-                    tabs: <Tab>[
-    Tab(text: translate('tab_bar_home.animesPopular')),
-    Tab(text: translate('tab_bar_home.animesAiring')),
-    Tab(text: translate('tab_bar_home.animesHighest')),
-    Tab(text: translate('tab_bar_home.animesUpcoming')),
-  ]),
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    dragStartBehavior: DragStartBehavior.start,
-                    children: [
-                      RefreshIndicator(
-                        onRefresh: _refresh,
-                        child: Observer(
-                            name: globals.stringAnimesPopular,
-                            builder: (_) {
-                              storeAnimes.animesPopular ??
-                                  storeAnimes
-                                      .getAnimes(globals.stringAnimesPopular);
-                              switch (storeAnimes.animesPopular.status) {
-                                case FutureStatus.pending:
-                                  return Loading();
-                                case FutureStatus.rejected:
-                                  return ErrorLoading(
-                                    msg:
-                                        translate('errors.error_load_page'),
-                                    refresh: _refresh,
-                                  );
-                                case FutureStatus.fulfilled:
-                                  return AnimeList(
-                                    keyName: globals.stringAnimesPopular,
-                                    animes: storeAnimes.getAnimesPopular.value,
-                                    loadedAllList:
-                                        storeAnimes.dataListPopular[0],
-                                    scrollController: _scrollController,
-                                    actualBar: globals.stringAnimesPopular,
-                                  );
-                                default:
-                                  return ErrorLoading(
-                                      msg:
-                                           translate('errors.error_default'),
-                                      refresh: _refresh);
-                              }
-                            }),
-                      ),
-                      RefreshIndicator(
-                        onRefresh: _refresh,
-                        child: Observer(
-                            name: globals.stringAnimesAiring,
-                            builder: (_) {
-                              storeAnimes.animesAiring ??
-                                  storeAnimes
-                                      .getAnimes(globals.stringAnimesAiring);
-                              switch (storeAnimes.animesAiring.status) {
-                                case FutureStatus.pending:
-                                  return Loading();
-                                case FutureStatus.rejected:
-                                  return ErrorLoading(
-                                      msg:
-                                          translate('errors.error_load_page'),
-                                      refresh: _refresh);
-                                case FutureStatus.fulfilled:
-                                  return AnimeList(
-                                      keyName: globals.stringAnimesAiring,
-                                      animes: storeAnimes.getAnimesAiring.value,
-                                      loadedAllList:
-                                          storeAnimes.dataListAiring[0],
-                                      scrollController: _scrollController,
-                                      actualBar: globals.stringAnimesAiring);
-                              }
-                              return ErrorLoading(
-                                msg:translate('errors.error_default'),
-                                refresh: _refresh,
-                              );
-                            }),
-                      ),
-                      RefreshIndicator(
-                        onRefresh: _refresh,
-                        child: Observer(
-                            name: globals.stringAnimesHighest,
-                            builder: (_) {
-                              storeAnimes.animesHighest ??
-                                  storeAnimes
-                                      .getAnimes(globals.stringAnimesHighest);
-                              switch (storeAnimes.animesHighest.status) {
-                                case FutureStatus.pending:
-                                  return Loading();
-                                case FutureStatus.rejected:
-                                  return ErrorLoading(
-                                      msg:
-                                         translate('errors.error_load_page'),
-                                      refresh: _refresh);
-                                case FutureStatus.fulfilled:
-                                  return AnimeList(
-                                      keyName: globals.stringAnimesHighest,
-                                      animes:
-                                          storeAnimes.getAnimesHighest.value,
-                                      loadedAllList:
-                                          storeAnimes.dataListHighest[0],
-                                      scrollController: _scrollController,
-                                      actualBar: globals.stringAnimesHighest);
-                              }
-                              return ErrorLoading(
+                RefreshIndicator(
+                  onRefresh: _refresh,
+                  child: Observer(
+                      name: globals.stringAnimesPopular,
+                      builder: (_) {
+                        storeAnimes.animesPopular ??
+                            storeAnimes.getAnimes(globals.stringAnimesPopular);
+                        switch (storeAnimes.animesPopular.status) {
+                          case FutureStatus.pending:
+                            return Loading();
+                          case FutureStatus.rejected:
+                            return ErrorLoading(
+                              msg: translate('errors.error_load_page'),
+                              refresh: _refresh,
+                            );
+                          case FutureStatus.fulfilled:
+                            return AnimeList(
+                              keyName: globals.stringAnimesPopular,
+                              animes: storeAnimes.getAnimesPopular.value,
+                              loadedAllList: storeAnimes.dataListPopular[0],
+                              scrollController: _scrollController,
+                              actualBar: globals.stringAnimesPopular,
+                            );
+                          default:
+                            return ErrorLoading(
                                 msg: translate('errors.error_default'),
-                                refresh: _refresh,
-                              );
-                            }),
-                      ),
-                      RefreshIndicator(
-                        onRefresh: _refresh,
-                        child: Observer(
-                            name: globals.stringAnimesUpcoming,
-                            builder: (_) {
-                              storeAnimes.animesUpcoming ??
-                                  storeAnimes
-                                      .getAnimes(globals.stringAnimesUpcoming);
-                              switch (storeAnimes.animesUpcoming.status) {
-                                case FutureStatus.pending:
-                                  return Center(
-                                    child: CircularProgressIndicator(
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
+                                refresh: _refresh);
+                        }
+                      }),
+                ),
+                RefreshIndicator(
+                  onRefresh: _refresh,
+                  child: Observer(
+                      name: globals.stringAnimesAiring,
+                      builder: (_) {
+                        storeAnimes.animesAiring ??
+                            storeAnimes.getAnimes(globals.stringAnimesAiring);
+                        switch (storeAnimes.animesAiring.status) {
+                          case FutureStatus.pending:
+                            return Loading();
+                          case FutureStatus.rejected:
+                            return ErrorLoading(
+                                msg: translate('errors.error_load_page'),
+                                refresh: _refresh);
+                          case FutureStatus.fulfilled:
+                            return AnimeList(
+                                keyName: globals.stringAnimesAiring,
+                                animes: storeAnimes.getAnimesAiring.value,
+                                loadedAllList: storeAnimes.dataListAiring[0],
+                                scrollController: _scrollController,
+                                actualBar: globals.stringAnimesAiring);
+                        }
+                        return ErrorLoading(
+                          msg: translate('errors.error_default'),
+                          refresh: _refresh,
+                        );
+                      }),
+                ),
+                RefreshIndicator(
+                  onRefresh: _refresh,
+                  child: Observer(
+                      name: globals.stringAnimesHighest,
+                      builder: (_) {
+                        storeAnimes.animesHighest ??
+                            storeAnimes.getAnimes(globals.stringAnimesHighest);
+                        switch (storeAnimes.animesHighest.status) {
+                          case FutureStatus.pending:
+                            return Loading();
+                          case FutureStatus.rejected:
+                            return ErrorLoading(
+                                msg: translate('errors.error_load_page'),
+                                refresh: _refresh);
+                          case FutureStatus.fulfilled:
+                            return AnimeList(
+                                keyName: globals.stringAnimesHighest,
+                                animes: storeAnimes.getAnimesHighest.value,
+                                loadedAllList: storeAnimes.dataListHighest[0],
+                                scrollController: _scrollController,
+                                actualBar: globals.stringAnimesHighest);
+                        }
+                        return ErrorLoading(
+                          msg: translate('errors.error_default'),
+                          refresh: _refresh,
+                        );
+                      }),
+                ),
+                RefreshIndicator(
+                  onRefresh: _refresh,
+                  child: Observer(
+                      name: globals.stringAnimesUpcoming,
+                      builder: (_) {
+                        storeAnimes.animesUpcoming ??
+                            storeAnimes.getAnimes(globals.stringAnimesUpcoming);
+                        switch (storeAnimes.animesUpcoming.status) {
+                          case FutureStatus.pending:
+                            return Center(
+                              child: CircularProgressIndicator(
+                                backgroundColor: Colors.red,
+                              ),
+                            );
 
-                                case FutureStatus.rejected:
-                                  return ErrorLoading(
-                                      msg:
-                                         translate('errors.error_load_page'),
-                                      refresh: _refresh);
-                                case FutureStatus.fulfilled:
-                                  return AnimeList(
-                                    keyName: globals.stringAnimesUpcoming,
-                                    animes: storeAnimes.getAnimesUpcoming.value,
-                                    loadedAllList:
-                                        storeAnimes.dataListUpComing[0],
-                                    scrollController: _scrollController,
-                                  );
-                              }
-                              return ErrorLoading(
-                                  msg: translate('errors.error_default'),
-                                  refresh: _refresh);
-                            }),
-                      ),
-                    ],
-                  ),
+                          case FutureStatus.rejected:
+                            return ErrorLoading(
+                                msg: translate('errors.error_load_page'),
+                                refresh: _refresh);
+                          case FutureStatus.fulfilled:
+                            return AnimeList(
+                              keyName: globals.stringAnimesUpcoming,
+                              animes: storeAnimes.getAnimesUpcoming.value,
+                              loadedAllList: storeAnimes.dataListUpComing[0],
+                              scrollController: _scrollController,
+                            );
+                        }
+                        return ErrorLoading(
+                            msg: translate('errors.error_default'),
+                            refresh: _refresh);
+                      }),
                 ),
               ],
             ),
-          
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -296,7 +278,7 @@ class _MyHomePageState extends State<MyHomePage>
         return storeAnimes.dataListUpComing[0];
         break;
       default:
-        return null;
+        return storeAnimes.dataListHighest[0];
     }
   }
 }

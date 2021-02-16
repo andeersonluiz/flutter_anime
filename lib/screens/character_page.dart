@@ -27,12 +27,18 @@ class _CharacterPageState extends State<CharacterPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final firebaseStore = Provider.of<FirebaseStore>(context);
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return  Scaffold(
-      backgroundColor: firebaseStore.isDarkTheme?Colors.black:Colors.white,
+    return Scaffold(
+      backgroundColor: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
       drawer: DrawerSideBar(),
       appBar: AppBar(
         actions: [
@@ -41,15 +47,22 @@ class _CharacterPageState extends State<CharacterPage> {
               height: height * 0.76,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.asset(firebaseStore.isDarkTheme?"assets/logo_white.png":"assets/logo_black.png", fit: BoxFit.scaleDown),
+                child: Image.asset(
+                    firebaseStore.isDarkTheme
+                        ? "assets/logo_white.png"
+                        : "assets/logo_black.png",
+                    fit: BoxFit.scaleDown),
               )),
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () => {
               showSearch(
                   context: context,
-                  delegate:
-                      Search(actualTab: globals.stringTabSearchCharacters,color:firebaseStore.isDarkTheme?Colors.black:Colors.white))
+                  delegate: Search(
+                      actualTab: globals.stringTabSearchCharacters,
+                      color: firebaseStore.isDarkTheme
+                          ? Colors.black
+                          : Colors.white))
             },
           ),
         ],
@@ -67,17 +80,16 @@ class _CharacterPageState extends State<CharacterPage> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListCharacter(
-                  characters: storeCharacters.listCharacters.value,
-                  scrollController: _scrollController,
-                  loadedAllList: storeCharacters.loadedAllList,
-                  crossAxisCount: 4,
-                  color: firebaseStore.isDarkTheme?Colors.white:Colors.black,
-                  ),
+                characters: storeCharacters.listCharacters.value,
+                scrollController: _scrollController,
+                loadedAllList: storeCharacters.loadedAllList,
+                crossAxisCount: 4,
+                color: firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+              ),
             );
           default:
             return ErrorLoading(
-                msg: translate('errors.error_default'),
-                refresh: _refresh);
+                msg: translate('errors.error_default'), refresh: _refresh);
         }
       }),
     );

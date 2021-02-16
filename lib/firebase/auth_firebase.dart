@@ -18,9 +18,7 @@ class Auth {
     cloud.getHashKey().then((value) => key = Key.fromUtf8(value));
     if (auth == null) {
       auth = FirebaseAuth.instance;
-      //auth.signOut();
     }
-    auth.authStateChanges().listen(_listener);
   }
 
   registerWithEmailAndPassword(String email, String password, String id) async {
@@ -206,13 +204,6 @@ class Auth {
     }
   }
 
-  _listener(User user) {
-    if (user == null) {
-      print("not logged");
-    } else {
-      print("logged");
-    }
-  }
 
   Future<void> signOut() {
     return auth.signOut();

@@ -4,15 +4,15 @@ import 'package:project1/model/anime_model.dart';
 class AnimeSearchTile extends StatelessWidget {
   final Anime anime;
   final color;
-  AnimeSearchTile({this.anime,this.color});
+  AnimeSearchTile({this.anime, this.color});
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-  
+
     return Card(
-      color:color,
+      color: color,
       elevation: 5,
-      shadowColor: color==Colors.black?Colors.white:Colors.black,
+      shadowColor: color == Colors.black ? Colors.white : Colors.black,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -31,7 +31,11 @@ class AnimeSearchTile extends StatelessWidget {
                 Center(
                     child: Text(
                   anime.canonicalTitle,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color:color==Colors.black?Colors.white:Colors.black),
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color:
+                          color == Colors.black ? Colors.white : Colors.black),
                   textAlign: TextAlign.center,
                 )),
               ],

@@ -114,13 +114,16 @@
         "error_load_page":"Error to load page, verify your connection.",
         "error_load_page_episodes":"Error to load episodes, verify your connection.",
         "error_load_page_character": "Error to load characters, verify your connection.",
+        "error_load_page_character_info": "Error to load character, verify your connection.",
         "error_load_page_no_character":"Characters not currently avaliable.",
         "error_load_page_anime":"Error to load animes, verify your connection.",
         "error_load_page_categorie":"Error to load categories, verify your connection.",
         "error_load_page_favorite":"Error to load favorites, verify your connection.",
         "error_load_page_synopsis":"Error to load synopsis, verify your connection.",
-
         "error_default":"Error to connect database, try again later",
-        "translate_error":"(Translate unavailable at moment)"
+        "translate_error":"(Translate unavailable at moment)",
+        "toast_favorite_error":"You must be logged to use favorites section."
+
+
     }
 }

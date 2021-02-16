@@ -117,13 +117,16 @@
         "error_load_page":"Erro ao carregar a pagina, verifique sua conexão.",
         "error_load_page_episodes":"Erro ao carregar episódios, verifique sua conexão.",
         "error_load_page_character":"Erro ao carregar personagens, verifique sua conexão.",
+        "error_load_page_character_info": "Erro ao carregar personagem, verifique sua conexão.",
+
         "error_load_page_no_character":"Personagens não disponiveis até o momento.",
         "error_load_page_anime":"Erro ao carregar animes, verifique sua conexão.",
         "error_load_page_categorie":"Erro ao carregar categorias, verifique sua conexão.",
         "error_load_page_favorite":"Erro ao carregar favoritos, verifique sua conexão.",
         "error_load_page_synopsis":"Erro ao carregar sinopse, verifique sua conexão.",
-
         "error_default":"Erro ao conectar ao banco de dados, tente novamente mais tarde",
-        "translate_error":"(Tradução não disponivel no momento)"
+        "translate_error":"(Tradução não disponivel no momento)",
+        "toast_favorite_error":"Você deve estar logado para acessar a seção de favoritos."
+
     }
 }
