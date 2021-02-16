@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_translate/flutter_translate.dart';
+import 'package:flutter_translate/localized_app.dart';
 import 'package:project1/stores/firebase_store.dart';
 import 'package:project1/widgets/dialog/registerDialog_widget.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +12,8 @@ import 'dialog/selectAvatarDialog_widget.dart';
 import 'dialog/selectBackground_widget.dart';
 import 'package:project1/support/shared_preferences.dart';
 
+import 'dialog/settings_widget.dart';
+
 class DrawerSideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,7 @@ class DrawerSideBar extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final sharedPreferences = SharedPrefs();
-
+    final localizationDelegate =LocalizedApp.of(context).delegate;
     return Drawer(
       child: SafeArea(
         child: Container(
@@ -43,7 +47,7 @@ class DrawerSideBar extends StatelessWidget {
                           onTap: () => firebaseStore.isLogged
                               ? _showChangeAvatar(context)
                               : Toast.show(
-                                  "You must be logged to change avatar.",
+                                  translate("drawer_options.error_avatar"),
                                   context,
                                   duration: Toast.LENGTH_LONG,
                                   gravity: Toast.BOTTOM),
@@ -76,7 +80,7 @@ class DrawerSideBar extends StatelessWidget {
                               onTap: () => firebaseStore.isLogged
                                   ? _showSetUsername(context)
                                   : Toast.show(
-                                      "You must be logged to change nickname.",
+                                      translate("drawer_options.error_username"),
                                       context,
                                       duration: Toast.LENGTH_LONG,
                                       gravity: Toast.BOTTOM),
@@ -88,7 +92,7 @@ class DrawerSideBar extends StatelessWidget {
                                             fontSize: 15,
                                             fontFamily: 'RobotoBold',
                                           ))
-                                      : Text("Guest",
+                                      : Text(translate('drawer_options.guest'),
                                           style: TextStyle(
                                             fontSize: 15,
                                             fontFamily: 'RobotoBold',
@@ -112,7 +116,7 @@ class DrawerSideBar extends StatelessWidget {
                               onPressed: () => firebaseStore.isLogged
                                   ? _selectBackground(context)
                                   : Toast.show(
-                                      "You must be logged to change background.",
+                                      translate("drawer_options.error_background"),
                                       context,
                                       duration: Toast.LENGTH_LONG,
                                       gravity: Toast.BOTTOM),
@@ -132,7 +136,7 @@ class DrawerSideBar extends StatelessWidget {
               ),
               ListTile(
                   title: Text(
-                    'Characters',
+                    translate('drawer_options.characters'),
                     style: TextStyle(
                       color: firebaseStore.isDarkTheme
                           ? Colors.white
@@ -143,7 +147,7 @@ class DrawerSideBar extends StatelessWidget {
                       Navigator.of(context).pushNamed("/characterList")),
               ListTile(
                   title: Text(
-                    'Categories',
+                    translate('drawer_options.categories'),
                     style: TextStyle(
                       color: firebaseStore.isDarkTheme
                           ? Colors.white
@@ -154,7 +158,7 @@ class DrawerSideBar extends StatelessWidget {
                       Navigator.of(context).pushNamed("/categorieList")),
               ListTile(
                 title: Text(
-                  'My favorites',
+                  translate('drawer_options.my_favorites'),
                   style: TextStyle(
                     color:
                         firebaseStore.isDarkTheme ? Colors.white : Colors.black,
@@ -173,7 +177,7 @@ class DrawerSideBar extends StatelessWidget {
                 return firebaseStore.isLogged
                     ? ListTile(
                         title: Text(
-                          'Logout',
+                          translate('drawer_options.logout'),
                           style: TextStyle(
                             color: firebaseStore.isDarkTheme
                                 ? Colors.white
@@ -183,7 +187,7 @@ class DrawerSideBar extends StatelessWidget {
                         onTap: () => firebaseStore.signOut())
                     : ListTile(
                         title: Text(
-                          'Login',
+                          translate('drawer_options.login'),
                           style: TextStyle(
                             color: firebaseStore.isDarkTheme
                                 ? Colors.white
@@ -200,7 +204,7 @@ class DrawerSideBar extends StatelessWidget {
                     ? Container()
                     : ListTile(
                         title: Text(
-                          'Register',
+                          translate('drawer_options.register'),
                           style: TextStyle(
                             color: firebaseStore.isDarkTheme
                                 ? Colors.white
@@ -212,6 +216,20 @@ class DrawerSideBar extends StatelessWidget {
                           return _showDialogRegister(context);
                         });
               }),
+                ListTile(
+                        title: Text(
+                          translate('drawer_options.settings'),
+                          style: TextStyle(
+                            color: firebaseStore.isDarkTheme
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
+                        onTap: () {
+                          firebaseStore.errorMsg = "";
+                          return _showDialogSettings(context);  
+              }),
+
               Expanded(
                 child: Align(
                   alignment: FractionalOffset.bottomLeft,
@@ -239,6 +257,15 @@ class DrawerSideBar extends StatelessWidget {
         ),
       ),
     );
+  }
+  _showDialogSettings(BuildContext ctx) {
+    return showDialog(
+        context: ctx,
+        builder: (context) {
+          return AlertDialog(
+            content: Settings(),
+          );
+        });
   }
 
   _showSetUsername(BuildContext ctx) {

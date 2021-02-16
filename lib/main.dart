@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_translate/flutter_translate.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:project1/model/character_model.dart';
 import 'package:project1/screens/animeCategorie_page.dart';
 import 'package:project1/screens/animeInfo_page.dart';
@@ -15,27 +17,45 @@ import 'package:project1/stores/firebase_store.dart';
 import 'package:provider/provider.dart';
 import 'package:project1/support/shared_preferences.dart';
 import 'package:project1/stores/anime_store.dart';
-
+import 'package:project1/stores/translation_store.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SharedPrefs sharedPreferences = SharedPrefs();
   bool isDarkTheme = await sharedPreferences.getPersistTheme();
+  String code = await sharedPreferences.getPersistLanguage();
+
+  LocalizationDelegate delegate = await LocalizationDelegate.create(fallbackLocale:"en_US",supportedLocales:["en_US","pt"],);
+  
+  if(code!=null){
+    if(code.contains("_")){
+      var codeSplited =code.split("_");
+      delegate.changeLocale(Locale(codeSplited[0],codeSplited[1]));
+    }else{
+      delegate.changeLocale(Locale(code,''));
+
+    }
+  }
   runApp(MultiProvider(
       providers: [
         Provider<FirebaseStore>(create: (_) => FirebaseStore()),
         Provider<AnimeStore>(create: (_) => AnimeStore()),
         Provider<FavoriteAnimeStore>(
           create: (_) => FavoriteAnimeStore(),
-        )
+        ),
+        Provider<TranslateStore>(create:(_)=>TranslateStore()),
       ],
-      child: MyApp(
-        isDarkTheme: isDarkTheme,
+      child: LocalizedApp(
+        delegate,
+        MyApp(
+          isDarkTheme: isDarkTheme,
+        ),
       )));
 }
 
 class MyApp extends StatelessWidget {
   final isDarkTheme;
+  
   MyApp({this.isDarkTheme});
   @override
   Widget build(BuildContext context) {
@@ -43,6 +63,7 @@ class MyApp extends StatelessWidget {
   }
 
   init(BuildContext context) {
+    var localizationDelegate = LocalizedApp.of(context).delegate;
     FirebaseStore firebaseStore = Provider.of<FirebaseStore>(context);
     if (firebaseStore.getUser() != null) {
       firebaseStore.loadUser().then((value) => firebaseStore.user = value);
@@ -51,17 +72,31 @@ class MyApp extends StatelessWidget {
     if (isDarkTheme != null) {
       firebaseStore.isDarkTheme = isDarkTheme;
     }
+
     return Observer(builder: (_) {
-      return MaterialApp(
-        title: 'AnimesAPI',
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/',
-        onGenerateRoute: _generateRoute,
-        theme: ThemeData(
-          fontFamily: 'RobotoCondensed',
-          primaryColor: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
-          unselectedWidgetColor:
-              firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+      return LocalizationProvider(
+        state: LocalizationProvider.of(context).state,
+
+        child: MaterialApp(
+          title: 'AnimesAPI',
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            localizationDelegate,
+          ],
+          supportedLocales: localizationDelegate.supportedLocales,
+          locale: localizationDelegate.currentLocale,
+          
+        
+          debugShowCheckedModeBanner: false,
+          initialRoute: '/',
+          onGenerateRoute: _generateRoute,
+          theme: ThemeData(
+            fontFamily: 'RobotoCondensed',
+            primaryColor: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+            unselectedWidgetColor:
+                firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+          ),
         ),
       );
     });
@@ -85,10 +120,11 @@ class MyApp extends StatelessWidget {
       case '/favorites':
         return MaterialPageRoute(builder: (_) => AnimeFavoritesPage());
       case '/animeListByCategorie':
-        final nameCategorie = settings.arguments as String;
+        final args = settings.arguments as List;
         return MaterialPageRoute(
             builder: (_) => AnimeCategoriePage(
-                  nameCategorie: nameCategorie,
+                  nameCategorie: args[0],
+                  codeCategorie:args[1],
                 ));
 
       default:

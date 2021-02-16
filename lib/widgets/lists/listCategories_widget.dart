@@ -20,7 +20,7 @@ class ListCategories extends StatelessWidget {
                   ? GestureDetector(
                       onTap: () => Navigator.pushNamed(
                           context, '/animeListByCategorie',
-                          arguments: categories[index].name),
+                          arguments: [categories[index].name,categories[index].code]),
                       child: CategorieTile(
                         categorie: categories[index],color:color,
                       ))

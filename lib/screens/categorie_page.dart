@@ -10,6 +10,8 @@ import 'package:project1/widgets/loading_widget.dart';
 import 'package:project1/widgets/search.dart';
 import 'package:project1/support/global_variables.dart' as globals;
 import 'package:provider/provider.dart';
+import 'package:flutter_translate/flutter_translate.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class CategoriePage extends StatefulWidget {
   @override
@@ -55,21 +57,20 @@ class _CategoriePageState extends State<CategoriePage> {
       ),
       body: Column(
         children: [
-          Observer(builder: (_) {
-            return Expanded(
+          Expanded(
                 flex: 7,
                 child: Container(
                   color:firebaseStore.isDarkTheme?Colors.black:Colors.white,
                   child: Center(
                     child: Align(
                       alignment: Alignment.center,
-                      child: CheckboxListTile(
+                      child: Observer(builder: (_) {return CheckboxListTile(
                         activeColor: firebaseStore.isDarkTheme?Colors.white:Colors.black,
                         checkColor: firebaseStore.isDarkTheme?Colors.black:Colors.white,
 
                         contentPadding: EdgeInsets.only(
                             left: width * 0.25, right: width * 0.25),
-                        title: Text("Show all categories", style:TextStyle(color:firebaseStore.isDarkTheme?Colors.white:Colors.black,)),
+                        title: AutoSizeText(translate('categories.show_all'),maxLines: 1, style:TextStyle(color:firebaseStore.isDarkTheme?Colors.white:Colors.black,)),
                         controlAffinity: ListTileControlAffinity.trailing,
                         onChanged: (checked) {
                           if (checked) {
@@ -81,11 +82,11 @@ class _CategoriePageState extends State<CategoriePage> {
                           }
                         },
                         value: storeCategories.checkedBox,
-                      ),
+                      );}),
                     ),
                   ),
-                ));
-          }),
+                )
+          ),
           Expanded(
             flex: 93,
             child: Container(
@@ -99,7 +100,7 @@ class _CategoriePageState extends State<CategoriePage> {
                     return Loading();
                   case FutureStatus.rejected:
                     return ErrorLoading(
-                        msg: "Error to load categories", refresh: _refresh);
+                        msg: translate('errors.error_load_page_categorie'), refresh: _refresh);
                   case FutureStatus.fulfilled:
                     return ListCategories(
                         categories: storeCategories.listCategories.value,
@@ -111,7 +112,7 @@ class _CategoriePageState extends State<CategoriePage> {
 
                   default:
                     return ErrorLoading(
-                        msg: "Error to connect database, try again later",
+                        msg: translate('errors.error_default'),
                         refresh: _refresh);
                 }
               }),

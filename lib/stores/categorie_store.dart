@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:project1/stores/translation_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:project1/model/categorie_model.dart';
 import 'package:http/http.dart' as http;
@@ -50,8 +50,10 @@ abstract class _CategorieStoreBase with Store {
     List<Categorie> list = decoded['data']
         .map<Categorie>((json) => Categorie.fromJson(json))
         .toList();
-
+    TranslateStore translateStore = TranslateStore();
     list.sort((a, b) => a.name.compareTo(b.name));
+    list= await translateStore.translateCategories(list);
+    await Future.delayed(Duration(seconds: 2));    
     return list;
   }
 }

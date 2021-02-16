@@ -4,6 +4,7 @@ import 'package:project1/stores/firebase_store.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_button/sign_button.dart';
 import 'package:project1/widgets/dialog/setUsernameDialog_widget.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 class RegisterDialog extends StatelessWidget {
   final _usernameController = TextEditingController();
@@ -12,15 +13,15 @@ class RegisterDialog extends StatelessWidget {
   final Function(String) usernameValidator = (String str) {
     return str.length >= 4 && str.length <= 15
         ? null
-        : "Username need 4-15 or more characters";
+        : translate('dialog_register.error_username');
   };
 
   final Function(String) emailValidator = (String str) {
-    return str.contains('@') ? null : "Email invalid";
+    return str.contains('@') ? null : translate('dialog_register.error_email');
   };
 
   final Function(String) passwordValidator = (String str) {
-    return str.length >= 8 ? null : "Password need 8 or more characters";
+    return str.length >= 8 ? null : translate('dialog_register.error_password');
   };
   @override
   Widget build(BuildContext context) {
@@ -34,14 +35,14 @@ class RegisterDialog extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "Register",
+                translate('dialog_register.register'),
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: _formFieldModel(_usernameController, TextInputType.name,
-                    "Username", usernameValidator)),
+                    translate('dialog_register.username'), usernameValidator)),
             Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: _formFieldModel(_emailController,
@@ -49,7 +50,7 @@ class RegisterDialog extends StatelessWidget {
             Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: _formFieldModel(_passwordController,
-                    TextInputType.visiblePassword, "Password", passwordValidator,
+                    TextInputType.visiblePassword, translate('dialog_register.password'), passwordValidator,
                     autocorrect: false,
                     enableSuggestions: false,
                     obscureText: true)),
@@ -62,7 +63,7 @@ class RegisterDialog extends StatelessWidget {
                   : Container();
             }),
             Center(
-                  child: Text("Sign in with:",
+                  child: Text(translate('dialog_register.register_with'),
                       style: TextStyle(
                         fontSize: 13,
                       ))),
@@ -112,7 +113,7 @@ class RegisterDialog extends StatelessWidget {
                     }
                   }
                 },
-                child: Text("Register"),
+                child: Text(translate('dialog_register.register')),
               ),
             )
           ]),

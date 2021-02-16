@@ -18,6 +18,8 @@ import 'package:project1/widgets/tiles/movieTile_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:flutter_translate/flutter_translate.dart';
+import 'package:project1/stores/translation_store.dart';
 
 class AnimeInfoPage extends StatefulWidget {
   static const routeName = '/animeInfo';
@@ -37,13 +39,13 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
   YoutubePlayerController _controllerYoutube;
   ScrollController _scrollController;
   ScrollController _scrollControllerCharacters;
+  TranslateStore storeTranslation;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController()
-      ..addListener(_scrollListener)
-      ..addListener(_scrollListenerCharacter);
+      ..addListener(_scrollListener);
     _scrollControllerCharacters = ScrollController()
       ..addListener(_scrollListenerCharacter);
     _controllerYoutube = YoutubePlayerController(
@@ -55,6 +57,13 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    storeTranslation = Provider.of<TranslateStore>(context);
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     final storeAnimes = Provider.of<AnimeStore>(context);
     final height = MediaQuery.of(context).size.height;
@@ -64,21 +73,24 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
       Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
-          "Synopsis",
+          translate('anime_info.synopsis'),
           style: TextStyle(fontSize: 16),
         ),
       ),
       Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Text("Infos", style: TextStyle(fontSize: 16)),
+        child:
+            Text(translate('anime_info.info'), style: TextStyle(fontSize: 16)),
       ),
       Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Text("Episodes", style: TextStyle(fontSize: 16)),
+        child: Text(translate('anime_info.episodes'),
+            style: TextStyle(fontSize: 16)),
       ),
       Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Text("Characters", style: TextStyle(fontSize: 16)),
+        child: Text(translate('anime_info.characters'),
+            style: TextStyle(fontSize: 16)),
       ),
     ];
 
@@ -107,7 +119,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                         storeAnimes.setfavoriteListPopular(widget.index);
                       } else {
                         return Toast.show(
-                            "You must be logged set favorites.", context,
+                            translate('anime_info.error_favorite'), context,
                             duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
                       }
                     },
@@ -123,6 +135,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                 onPressed: () {
                   _controllerYoutube ?? _controllerYoutube.close();
                   Navigator.of(context).pop();
+                  //storeTranslation.descriptionEpisodeTranslated=null;
                 },
               ),
               expandedHeight: height * 0.2,
@@ -142,175 +155,188 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
             ),
             SliverFillRemaining(
               fillOverscroll: true,
-              child: Observer(
-                builder: (_) {
-                  return Scaffold(
-                    backgroundColor:
-                        firebaseStore.isDarkTheme ? Colors.black : Colors.white,
-                    appBar: TabBar(
-                      isScrollable: true,
-                      indicatorPadding: EdgeInsets.all(8.0),
-                      tabs: myTabs,
-                      indicatorColor: firebaseStore.isDarkTheme
-                          ? Colors.white
-                          : Colors.black,
-                      labelColor: firebaseStore.isDarkTheme
-                          ? Colors.white
-                          : Colors.black,
-                      indicatorSize: TabBarIndicatorSize.tab,
+              child: Scaffold(
+                backgroundColor:
+                    firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+                appBar: TabBar(
+                  isScrollable: true,
+                  indicatorPadding: EdgeInsets.all(8.0),
+                  tabs: myTabs,
+                  indicatorColor:
+                      firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+                  labelColor:
+                      firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                ),
+                body: TabBarView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Observer(builder: (_) {
+
+                        storeTranslation?.synopsisTranslated??storeTranslation.translateSynopsis(widget.anime.synopsis,widget.anime.id);
+                        if(storeTranslation?.translationId!=widget.anime.id){
+                            storeTranslation.translateSynopsis(widget.anime.synopsis,widget.anime.id);
+                          }
+                        
+                        switch(storeTranslation?.synopsisTranslated?.status){
+                          case FutureStatus.pending:
+                            return Loading();
+                          case FutureStatus.rejected:
+                            return ErrorLoading(msg:translate('errors.error_load_page_synopsis') ,refresh: _refreshSynopsis,);
+                          case FutureStatus.fulfilled:
+                            return AutoSizeText(
+                              storeTranslation.synopsisTranslated.value,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: firebaseStore.isDarkTheme
+                                      ? Colors.white
+                                      : Colors.black),
+                              maxLines: 40,
+                              maxFontSize: 15,
+                              minFontSize: 12,
+                          
+                        );
+                        default:
+
+                            return ErrorLoading(msg:translate('errors.error_default') ,refresh: _refreshSynopsis,);
+                        }
+                        
+                      }),
                     ),
-                    body: TabBarView(
+                    Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: AutoSizeText(
-                            widget.anime.synopsis,
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: firebaseStore.isDarkTheme
-                                    ? Colors.white
-                                    : Colors.black),
-                            maxLines: 40,
-                            maxFontSize: 15,
-                            minFontSize: 12,
-                          ),
+                        LayoutInfo(
+                          layoutInfoText: translate('anime_info.episodes'),
+                          layoutInfoResult: widget.anime.episodeCount == 0
+                              ? "-"
+                              : widget.anime.episodeCount.toString(),
                         ),
-                        Column(
-                          children: [
-                            LayoutInfo(
-                              layoutInfoText: "Episodes",
-                              layoutInfoResult: widget.anime.episodeCount == 0
-                                  ? "-"
-                                  : widget.anime.episodeCount.toString(),
-                            ),
-                            LayoutInfo(
-                              layoutInfoText: "Genres",
-                              layoutInfoResult:
-                                  widget.anime.ageRatingGuide.toString(),
-                            ),
-                            LayoutInfo(
-                                layoutInfoText: "Status",
-                                layoutInfoResult: widget.anime.status),
-                            LayoutInfo(
-                                layoutInfoText: "Size ep",
-                                layoutInfoResult: _durationString(
-                                        widget.anime.episodeLength) +
+                        LayoutInfo(
+                          layoutInfoText: translate('anime_info.genres'),
+                          layoutInfoResult:
+                              widget.anime.ageRatingGuide.toString(),
+                        ),
+                        LayoutInfo(
+                            layoutInfoText: translate('anime_info.status'),
+                            layoutInfoResult: widget.anime.status),
+                        LayoutInfo(
+                            layoutInfoText: translate('anime_info.size_ep'),
+                            layoutInfoResult:
+                                _durationString(widget.anime.episodeLength) +
                                     " min."),
-                            widget.anime.youtubeVideoId != ""
-                                ? LayoutTrailer(
-                                    controllerYoutube: _controllerYoutube,
-                                    color: firebaseStore.isDarkTheme
-                                        ? Colors.white
-                                        : Colors.black)
-                                : Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "There is no trailer at the moment.",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: firebaseStore.isDarkTheme
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                    ),
-                                  )
-                          ],
-                        ),
-                        Observer(builder: (_) {
-                          storeEpisodes.listEpisodes ??
-                              storeEpisodes
-                                  .getEpisodes(widget.anime.linkEpisodeList);
-                          if (widget.anime.episodeLength > 0 &&
-                              storeEpisodes.isMovie == true) {
-                            return MovieTile(anime: widget.anime);
-                          } else if (storeEpisodes.isMovie == true) {
-                            return ErrorLoading(
-                                msg: "Movie not released yet.",
-                                refresh: _refresh);
-                          }
-                          if (storeEpisodes.nullEps == true) {
-                            return ErrorLoading(
-                                msg: "Episodes not released yet.",
-                                refresh: _refresh);
-                          }
-                          switch (storeEpisodes.listEpisodes.status) {
-                            case FutureStatus.pending:
-                              return Loading();
-
-                            case FutureStatus.rejected:
-                              return ErrorLoading(
-                                  msg:
-                                      "Error to load episodes, verify your connection.",
-                                  refresh: _refresh);
-                            case FutureStatus.fulfilled:
-                              return ListEpisodes(
-                                episodes: storeEpisodes.listEpisodes.value,
-                                loadedAllList: storeEpisodes.loadedAllList,
-                                scrollController: _scrollController,
+                        widget.anime.youtubeVideoId != ""
+                            ? LayoutTrailer(
+                                controllerYoutube: _controllerYoutube,
                                 color: firebaseStore.isDarkTheme
                                     ? Colors.white
-                                    : Colors.black,
-                              );
-                            default:
-                              return ErrorLoading(
-                                msg: "Error to load page, try again later.",
-                                refresh: _refresh,
-                              );
-                          }
-                        }),
-                        Observer(
-                          builder: (_) {
-                            storeCharacters.listCharacters ??
-                                storeCharacters.getCharacters(
-                                    widget.anime.linkCharacterList);
-
-                            switch (storeCharacters.listCharacters.status) {
-                              case FutureStatus.pending:
-                                return Loading();
-                              case FutureStatus.rejected:
-                                return ErrorLoading(
-                                    msg:
-                                        "Error to load Characters, verify your connection.",
-                                    refresh: _refreshCharacter);
-                              case FutureStatus.fulfilled:
-                                if (storeCharacters
-                                        .listCharacters.value.length ==
-                                    0) {
-                                  return ErrorLoading(
-                                      msg:
-                                          "Characters not currently avaliable.",
-                                      refresh: _refreshCharacter);
-                                }
-                                return ListCharacter(
-                                    characters:
-                                        storeCharacters.listCharacters.value,
-                                    loadedAllList:
-                                        storeCharacters.loadedAllList,
-                                    scrollController:
-                                        _scrollControllerCharacters,
-                                    crossAxisCount: 3,
+                                    : Colors.black)
+                            : Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  translate('anime_info.no_trailer'),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
                                     color: firebaseStore.isDarkTheme
                                         ? Colors.white
-                                        : Colors.black);
-                              default:
-                                return ErrorLoading(
-                                    msg:
-                                        "Error to load Characters, try again later.",
-                                    refresh: _refreshCharacter);
-                            }
-                          },
-                        )
+                                        : Colors.black,
+                                  ),
+                                ),
+                              )
                       ],
                     ),
-                  );
-                },
+                    Observer(builder: (_) {
+                      storeEpisodes.listEpisodes ??
+                          storeEpisodes
+                              .getEpisodes(widget.anime.linkEpisodeList);
+                      if (widget.anime.episodeLength > 0 &&
+                          storeEpisodes.isMovie == true) {
+                        return MovieTile(anime: widget.anime);
+                      } else if (storeEpisodes.isMovie == true) {
+                        return ErrorLoading(
+                            msg: translate('anime_info.movie_error'),
+                            refresh: _refresh);
+                      }
+                      if (storeEpisodes.nullEps == true) {
+                        return ErrorLoading(
+                            msg: translate('anime_info.episode_error'),
+                            refresh: _refresh);
+                      }
+                      switch (storeEpisodes.listEpisodes.status) {
+                        case FutureStatus.pending:
+                          return Loading();
+
+                        case FutureStatus.rejected:
+                          return ErrorLoading(
+                              msg: translate('errors.error_load_page_episodes'),
+                              refresh: _refresh);
+                        case FutureStatus.fulfilled:
+                          return ListEpisodes(
+                            episodes: storeEpisodes.listEpisodes.value,
+                            loadedAllList: storeEpisodes.loadedAllList,
+                            scrollController: _scrollController,
+                            color: firebaseStore.isDarkTheme
+                                ? Colors.white
+                                : Colors.black,
+                          );
+                        default:
+                          return ErrorLoading(
+                            msg: translate('errors.error_default'),
+                            refresh: _refresh,
+                          );
+                      }
+                    }),
+                    Observer(
+                      builder: (_) {
+                        storeCharacters.listCharacters ??
+                            storeCharacters
+                                .getCharacters(widget.anime.linkCharacterList);
+
+                        switch (storeCharacters.listCharacters.status) {
+                          case FutureStatus.pending:
+                            return Loading();
+                          case FutureStatus.rejected:
+                            return ErrorLoading(
+                                msg: translate(
+                                    'errors.error_load_page_character'),
+                                refresh: _refreshCharacter);
+                          case FutureStatus.fulfilled:
+                            if (storeCharacters.listCharacters.value.length ==
+                                0) {
+                              return ErrorLoading(
+                                  msg: translate(
+                                      'errors.error_load_page_no_character'),
+                                  refresh: _refreshCharacter);
+                            }
+                            return ListCharacter(
+                                characters:
+                                    storeCharacters.listCharacters.value,
+                                loadedAllList: storeCharacters.loadedAllList,
+                                scrollController: _scrollControllerCharacters,
+                                crossAxisCount: 3,
+                                color: firebaseStore.isDarkTheme
+                                    ? Colors.white
+                                    : Colors.black);
+                          default:
+                            return ErrorLoading(
+                                msg: translate('errors.error_default'),
+                                refresh: _refreshCharacter);
+                        }
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _refreshSynopsis(){
+    return storeTranslation.translateSynopsis(widget.anime.synopsis,widget.anime.id);
   }
 
   Future<void> _refreshCharacter() {

@@ -1,0 +1,126 @@
+{
+    "drawer_options": {
+        "characters": "Characters",
+        "categories": "Categories",
+        "my_favorites": "My Favorites",
+        "login": "Login",
+        "register": "Register",
+        "logout": "Logout",
+        "settings": "Settings",
+        "guest":"Guest",
+        "error_avatar":"You must be logged to change avatar.",
+        "error_username":"You must be logged to change your username.",
+        "error_background":"You must be logged to change your background."
+    },
+    "dialog_login": {
+        "login": "Login",
+        "email": "Email",
+        "password": "Password",
+        "login_with": "Login with:",
+        "error_password":"Password need 8 or more characters",
+        "error_email":"Email invalid"
+    },
+
+    "dialog_register": {
+        "register": "Register",
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "register_with": "Register with:",
+        "error_password":"Password need 8 or more characters",
+        "error_email":"Email invalid",
+        "error_username":"Username need 4-15 or more characters"
+    },
+
+    "dialog_username":{
+        "set_username":"Write your username",
+        "username": "Username",
+        "error_username":"Username need 4-15 or more characters",
+        "change_username":"Confirm"
+    },
+
+    "dialog_avatar":{
+        "set_avatar":"Select avatar"
+    },
+    "dialog_background":{
+        "set_background":"Select Background"
+    },
+
+
+    "dialog_settings":{
+        "language":"Language",
+        "english_item":"English",
+        "portuguese_item":"Portuguese",
+        "confirm":"Confirm",
+        "select_language":"Select language"
+    },
+
+    "tab_bar_home":{
+        "animesPopular":"Most Popular",
+        "animesAiring":"Top Airing",
+        "animesHighest":"Top Highest",
+        "animesUpcoming":"Top Upcoming"
+    },
+
+    
+
+    "anime_info":{
+        "synopsis":"Synopsis",
+        "info":"Infos",
+        "characters":"Characters",
+        "episodes":"Episodes",
+        "genres":"Genre",
+        "status":"Status",
+        "size_ep":"Size episode.",
+        "trailer":"Trailer",
+        "no_trailer": "There is no trailer at the moment.",
+        "error_favorite":"You must be logged set favorites.",
+        "episode_error":"Episodes not released yet.",
+        "movie_error":"Movie not released yet."
+    },
+
+    "character_info":{
+        "description":"Description",
+        "other_names":"Other names:",
+        "no_informations":"No informations about"
+    },
+    "categories":{
+        "show_all":"Show all categories"
+
+    },
+
+
+    "search":{
+        "search":"Search"
+    },
+
+    "episode_info":{
+        "air_date":"Air date: ",
+        "size_ep":"Length episode: "
+    },
+
+    "errors": {
+        "weak_password": "Password too weak",
+        "email_already_in_use": "Email already in use.",
+        "invalid_email": "Email invalid",
+        "default_email": "Problems in database, try again.",
+        "account_exists_with_different_credential": "The account already exists.",
+        "invalid_credential": "Credential invalid.",
+        "operation_not_allowed": "Method not enabled.",
+        "user_disabled": "The user is disabled.",
+        "user_not_found": "User not found.",
+        "wrong_password": "Wrong password.",
+        "default_credential": "Error to login with social network, try again later",
+        "error_load_page":"Error to load page, verify your connection.",
+        "error_load_page_episodes":"Error to load episodes, verify your connection.",
+        "error_load_page_character": "Error to load characters, verify your connection.",
+        "error_load_page_no_character":"Characters not currently avaliable.",
+        "error_load_page_anime":"Error to load animes, verify your connection.",
+        "error_load_page_categorie":"Error to load categories, verify your connection.",
+        "error_load_page_favorite":"Error to load favorites, verify your connection.",
+        "error_load_page_synopsis":"Error to load synopsis, verify your connection.",
+
+        "error_default":"Error to connect database, try again later",
+        "translate_error":"(Translate unavailable at moment)"
+    }
+}

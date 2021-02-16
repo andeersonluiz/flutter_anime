@@ -8,6 +8,7 @@ import 'package:project1/widgets/errorLoading_widget.dart';
 import 'package:project1/widgets/lists/listAnimeFavorite_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:project1/widgets/loading_widget.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 class AnimeFavoritesPage extends StatefulWidget {
   @override
@@ -55,7 +56,7 @@ class _AnimeFavoritesPageState extends State<AnimeFavoritesPage> {
               return Loading();
             case FutureStatus.rejected:
               return ErrorLoading(
-                  msg: "Error to load animes, verify your connection",
+                  msg: translate('errors.error_load_page_favorite'),
                   refresh: _refresh(storeAnimesFavorites));
             case FutureStatus.fulfilled:
               return AnimeListFavorite(
@@ -63,7 +64,7 @@ class _AnimeFavoritesPageState extends State<AnimeFavoritesPage> {
               );
             default:
               return ErrorLoading(
-                  msg: "Error to connect database, try again later",
+                  msg: translate('errors.error_default'),
                   refresh: _refresh(storeAnimesFavorites));
           }
         }));

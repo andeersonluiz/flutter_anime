@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project1/stores/firebase_store.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 class SelectAvatar extends StatelessWidget {
   final List<String> avatars = [
@@ -59,7 +60,7 @@ class SelectAvatar extends StatelessWidget {
       width:width / 2,
       height: height / 3,
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Expanded(flex:10,child: Text("Select Avatar",style: TextStyle(fontStyle: FontStyle.italic,fontSize: 20),)),
+        Expanded(flex:10,child: Text(translate('dialog_avatar.set_avatar'),style: TextStyle(fontStyle: FontStyle.italic,fontSize: 20),)),
         Expanded(
           flex:90,
           child: ScrollConfiguration(

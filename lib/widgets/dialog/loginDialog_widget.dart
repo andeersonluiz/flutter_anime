@@ -3,17 +3,18 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:project1/stores/firebase_store.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_button/sign_button.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 class LoginDialog extends StatelessWidget {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   final Function(String) emailValidator = (String str) {
-    return str.contains('@') ? null : "Email invalid";
+    return str.contains('@') ? null : translate('dialog_login.error_email');
   };
 
   final Function(String) passwordValidator = (String str) {
-    return str.length >= 8 ? null : "Password need 8 or more characters";
+    return str.length >= 8 ? null : translate('dialog_login.error_password');
   };
   
   @override
@@ -27,7 +28,7 @@ class LoginDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Login",
+              translate('dialog_login.login'),
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
@@ -39,7 +40,7 @@ class LoginDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: _formFieldModel(_passwordController,
-                    TextInputType.visiblePassword, "Password", passwordValidator,
+                    TextInputType.visiblePassword, translate('dialog_login.password'), passwordValidator,
                     autocorrect: false,
                     enableSuggestions: false,
                     obscureText: true),
@@ -49,7 +50,7 @@ class LoginDialog extends StatelessWidget {
                 ? Center(child: Text(firebaseStore.errorMsg,maxLines: 1,style: TextStyle(color: Colors.red,fontSize: 13)))
                 : Container();
           }),
-          Center(child: Text("Login with:",style: TextStyle(
+          Center(child: Text(translate('dialog_login.login_with'),style: TextStyle(
                         fontSize: 13,
                       ))),
           Row(
@@ -92,7 +93,7 @@ class LoginDialog extends StatelessWidget {
                 }
               }
             },
-            child: Text("Login"),
+            child: Text(translate('dialog_login.login')),
           )
         ]),
       
