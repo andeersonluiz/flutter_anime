@@ -10,115 +10,109 @@ part 'translation_store.g.dart';
 class TranslateStore = _TranslateStoreBase with _$TranslateStore;
 
 abstract class _TranslateStoreBase with Store {
-
   @observable
   ObservableFuture<String> synopsisTranslated;
 
-  @observable 
+  @observable
   ObservableFuture<String> descriptionCharacter;
 
-  @observable 
+  @observable
   ObservableFuture<String> descriptionCategorie;
 
-  @observable 
+  @observable
   ObservableFuture<List<String>> categories;
 
-   String translationId="";
+  String translationId = "";
 
   SharedPrefs sharedPreferences;
   GoogleTranslator translator;
-   _TranslateStoreBase(){
-     translator = GoogleTranslator();
-     sharedPreferences = SharedPrefs();
-    }
+  _TranslateStoreBase() {
+    translator = GoogleTranslator();
+    sharedPreferences = SharedPrefs();
+  }
   @action
-  translateSynopsis(String text,String id) async{
-    print("kkk");
+  translateSynopsis(String text, String id) async {
     String code = await sharedPreferences.getPersistLanguage();
-    translationId =id;
-    if(code==null){
-      code="en_US";
+    translationId = id;
+    if (code == null) {
+      code = "en_US";
     }
-    if(code!="en_US"){
-      try{
+    if (code != "en_US") {
+      try {
         synopsisTranslated.catchError(null);
-        synopsisTranslated = ObservableFuture(translator.translate(text,to:code)).then((value) => value.text);
-      }catch(e){
-        synopsisTranslated=ObservableFuture.value(text+"\n${translate("errors.translate_error")}");
+        synopsisTranslated =
+            ObservableFuture(translator.translate(text, to: code))
+                .then((value) => value.text);
+      } catch (e) {
+        synopsisTranslated = ObservableFuture.value(
+            text + "\n${translate("errors.translate_error")}");
       }
-    }else{
-      synopsisTranslated=ObservableFuture.value(text);
+    } else {
+      synopsisTranslated = ObservableFuture.value(text);
     }
-
   }
 
   translateEpisodes(List<Episode> episodes) async {
-      String code = await sharedPreferences.getPersistLanguage();
+    String code = await sharedPreferences.getPersistLanguage();
 
-     await Future.wait( episodes.map((episode)async {
-        if(code!="en_US"){
+    await Future.wait(episodes.map((episode) async {
+      if (code != "en_US") {
         try {
-          episode.description = await ObservableFuture(translator.translate(episode.description,to:code)).then((value) => value.text);
-          episode.canonicalTitle = await  ObservableFuture(translator.translate(episode.canonicalTitle,to:code)).then((value) => value.text);
+          episode.description = await ObservableFuture(
+                  translator.translate(episode.description, to: code))
+              .then((value) => value.text);
+          episode.canonicalTitle = await ObservableFuture(
+                  translator.translate(episode.canonicalTitle, to: code))
+              .then((value) => value.text);
         } catch (e) {
-          episode.description = episode.description + "\n${translate("errors.translate_error")}";
-          episode.canonicalTitle = episode.canonicalTitle + "\n${translate("errors.translate_error")}";
+          episode.description =
+              episode.description + "\n${translate("errors.translate_error")}";
+          episode.canonicalTitle = episode.canonicalTitle +
+              "\n${translate("errors.translate_error")}";
         }
       }
-
-      }));
+    }));
 
     return episodes;
   }
+
   @action
-  translateDescriptionCharacter(String text,String id) async{
+  translateDescriptionCharacter(String text, String id) async {
     String code = await sharedPreferences.getPersistLanguage();
-    translationId=id;
-    if(code!="en_US"){
+    translationId = id;
+    if (code != "en_US") {
       try {
         descriptionCharacter.catchError(null);
-        descriptionCharacter = ObservableFuture(translator.translate(text,to:code)).then((value) => value.text);
+        descriptionCharacter =
+            ObservableFuture(translator.translate(text, to: code))
+                .then((value) => value.text);
       } catch (e) {
-        descriptionCharacter=ObservableFuture.value(text+"\n${translate("errors.translate_error")}");
+        descriptionCharacter = ObservableFuture.value(
+            text + "\n${translate("errors.translate_error")}");
       }
-    }else{
-      descriptionCharacter=ObservableFuture.value(text);
+    } else {
+      descriptionCharacter = ObservableFuture.value(text);
     }
   }
 
-  translateCategories(List<Categorie> categories) async{
+  translateCategories(List<Categorie> categories) async {
     String code = await sharedPreferences.getPersistLanguage();
-    print("code $code");
     await Future.wait(categories.map((categorie) async {
-        if(code!="en_US"){
+      if (code != "en_US") {
         try {
-        
-          categorie.name = await  ObservableFuture(translator.translate(categorie.name,to:code)).then((value) => value.text);
-          categorie.description = await ObservableFuture(translator.translate(categorie.description,to:code)).then((value) => value.text);
+          categorie.name = await ObservableFuture(
+                  translator.translate(categorie.name, to: code))
+              .then((value) => value.text);
+          categorie.description = await ObservableFuture(
+                  translator.translate(categorie.description, to: code))
+              .then((value) => value.text);
         } catch (e) {
-          String description = categorie.description??"";
-          categorie.description = description +translate("errors.translate_error");
-
+          String description = categorie.description ?? "";
+          categorie.description =
+              description + translate("errors.translate_error");
         }
       }
-
-     }
-     ));
-    print("foi ${categories[0].name}");
-     return categories;
+    }));
+    return categories;
   }
-
-    @action
-  translateListCategories(String text) async{
-    String code = await sharedPreferences.getPersistLanguage();
-    if(code!="en_US"){
-try{      synopsisTranslated = ObservableFuture(translator.translate(text,to:code)).then((value) => value.text);
-}catch(e){}    }else{
-      synopsisTranslated=ObservableFuture.value(text);
-    }
-  }
-_errorTranslate(String text){
-  print("error translate");
-}
-
 }

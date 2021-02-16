@@ -19,7 +19,6 @@ abstract class _CategorieStoreBase with Store {
 
   @action
   getCategoriesTrends() {
-    print("getCategories trends...");
     listCategories = ObservableFuture(_decode(
             "https://kitsu.io/api/edge/categories?sort=-totalMediaCount&page[limit]=40"))
         .then((value) => value);
@@ -52,8 +51,8 @@ abstract class _CategorieStoreBase with Store {
         .toList();
     TranslateStore translateStore = TranslateStore();
     list.sort((a, b) => a.name.compareTo(b.name));
-    list= await translateStore.translateCategories(list);
-    await Future.delayed(Duration(seconds: 2));    
+    list = await translateStore.translateCategories(list);
+    await Future.delayed(Duration(seconds: 2));
     return list;
   }
 }

@@ -4,13 +4,13 @@ import 'package:project1/model/categorie_model.dart';
 class CategorieSearchTile extends StatelessWidget {
   final Categorie categorie;
   final color;
-  CategorieSearchTile({this.categorie,this.color});
+  CategorieSearchTile({this.categorie, this.color});
   @override
   Widget build(BuildContext context) {
     return Card(
-      color:color,
+      color: color,
       elevation: 5,
-      shadowColor: color==Colors.black?Colors.white:Colors.black,
+      shadowColor: color == Colors.black ? Colors.white : Colors.black,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -24,7 +24,12 @@ class CategorieSearchTile extends StatelessWidget {
                   child: Center(
                       child: Text(
                     categorie.name,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color:color==Colors.black?Colors.white:Colors.black),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: color == Colors.black
+                            ? Colors.white
+                            : Colors.black),
                     textAlign: TextAlign.center,
                   )),
                 ),
@@ -33,7 +38,12 @@ class CategorieSearchTile extends StatelessWidget {
                   child: Center(
                       child: Text(
                     "Total anime count: " + categorie.totalMediaCount,
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: color==Colors.black?Colors.white:Colors.black),
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: color == Colors.black
+                            ? Colors.white
+                            : Colors.black),
                     textAlign: TextAlign.center,
                   )),
                 ),

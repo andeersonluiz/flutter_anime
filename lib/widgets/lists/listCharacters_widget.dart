@@ -18,11 +18,10 @@ class ListCharacter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color:color==Colors.white?Colors.black:Colors.white,
+      color: color == Colors.white ? Colors.black : Colors.white,
       child: CustomScrollView(
         scrollDirection: Axis.vertical,
         controller: scrollController,
-        
         slivers: <Widget>[
           SliverGrid(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -35,7 +34,8 @@ class ListCharacter extends StatelessWidget {
                     onTap: () => Navigator.pushNamed(context, '/characterInfo',
                         arguments: characters[index]),
                     child: CharacterTile(
-                      character: characters[index],color:color,
+                      character: characters[index],
+                      color: color,
                     )),
                 childCount: characters.length ?? 0),
           ),

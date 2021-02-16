@@ -18,7 +18,6 @@ abstract class _AnimeCharacterStoreBase with Store {
 
   @action
   getCharacters(String url) {
-    print("get characters...");
     var stopWatch = new Stopwatch()..start();
 
     listCharacters = ObservableFuture(_decode(url + "?page[limit]=15"))
@@ -30,8 +29,10 @@ abstract class _AnimeCharacterStoreBase with Store {
 
   @action
   loadMoreCharacters() {
+    var stopWatch = new Stopwatch()..start();
     listCharacters = listCharacters
         .replace(ObservableFuture(_decode(nextPage)).then((value) {
+      print("loadMoreCharacters executed in ${stopWatch.elapsed}");
       lockLoad = false;
       return listCharacters.value + value;
     }));

@@ -22,7 +22,6 @@ abstract class _EpisodeStoreBase with Store {
 
   @action
   getEpisodes(String url) {
-    print("get episodes...");
     var stopWatch = new Stopwatch()..start();
     listEpisodes = ObservableFuture(_decode(url)).then((listEpisodes) {
       print("getEpisodes executed in ${stopWatch.elapsed}");
@@ -33,9 +32,10 @@ abstract class _EpisodeStoreBase with Store {
 
   @action
   loadMoreEpisodes() {
-    print("loading more episodes");
+    var stopWatch = new Stopwatch()..start();
     listEpisodes = listEpisodes
         .replace(ObservableFuture(_decode(nextPage)).then((episodes) {
+      print("loadMoreEpisodes executed in ${stopWatch.elapsed}");
       lockLoad = false;
       return (listEpisodes.value + episodes);
     }));
@@ -56,7 +56,7 @@ abstract class _EpisodeStoreBase with Store {
       nullEps = true;
     } else {
       TranslateStore translateStore = TranslateStore();
-      var list= await translateStore.translateEpisodes(decoded['data']
+      var list = await translateStore.translateEpisodes(decoded['data']
           .map<Episode>((json) => Episode.fromJson(json))
           .toList());
       return list;

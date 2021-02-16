@@ -27,136 +27,121 @@ class AnimeTile extends StatelessWidget {
         globals.crossAxisCount;
     final height = width / globals.childAspectRatio;
 
-    return GestureDetector(
-      onTap: () =>
-          Navigator.pushNamed(context, '/animeInfo', arguments: [anime, index]),
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Container(
-          decoration: BoxDecoration(
-              color: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 3,
-                  blurRadius: 3,
-                  offset: Offset(0, 3),
-                )
-              ]),
-          child: Center(
-              child: Stack(
-            children: [
-              SizedBox(
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Container(
-                        height: height * 0.7,
-                        width: width,
-                        child: FadeInImage.memoryNetwork(
-                          image: anime.posterImage,
-                          placeholder: kTransparentImage,
-                          fit: BoxFit.cover,
-                        ),
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage("assets/loading.gif"),
-                              fit: BoxFit.fill),
-                          border: Border.all(
-                              color: firebaseStore.isDarkTheme
-                                  ? Colors.black
-                                  : Colors.white,
-                              width: 2),
-                        )
-                  ),
-                ),
-              ),
-              Positioned(
-                  child: Center(
-                      child: Circle(
-                          center: {"x": width / 2.12, "y": height / 1.4},
-                          radius: 20))),
-              Positioned(
-                bottom: 48,
-                right: 0,
-                left: 0,
-                child: Container(
-                  decoration: BoxDecoration(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                        child: AutoSizeText('${index + 1}º',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1)),
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                left: 0,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Container(
-                    width: width,
-                    height: height * 0.135,
-                    decoration: BoxDecoration(),
+    return Hero(
+      tag: anime.id,
+      child: Scaffold(
+        backgroundColor:
+            firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+        body: GestureDetector(
+          onTap: () => Navigator.pushNamed(context, '/animeInfo',
+              arguments: [anime, index]),
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  color:
+                      firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 3,
+                      blurRadius: 3,
+                      offset: Offset(0, 3),
+                    )
+                  ]),
+              child: Center(
+                  child: Stack(
+                children: [
+                  SizedBox(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                          child: Text('${anime.canonicalTitle}',
-                              style: TextStyle(
-                                fontSize: 14,
+                      padding: const EdgeInsets.all(4.0),
+                      child: Container(
+                          height: height * 0.7,
+                          width: width,
+                          child: FadeInImage.memoryNetwork(
+                            image: anime.posterImage,
+                            placeholder: kTransparentImage,
+                            fit: BoxFit.cover,
+                          ),
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: firebaseStore.isDarkTheme?AssetImage("assets/loading_white.gif",):AssetImage("assets/loading_black.gif",),
+                                fit: BoxFit.contain),
+                            border: Border.all(
                                 color: firebaseStore.isDarkTheme
-                                    ? Colors.white
-                                    : Colors.black,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2)),
+                                    ? Colors.black
+                                    : Colors.white,
+                                width: 2),
+                          )),
                     ),
                   ),
-                ),
-              ),
-              Observer(builder: (_) {
-                return Positioned(
-                  bottom: height * 0.77,
-                  left: width * 0.735,
-                  child: Container(
-                    width: width * 0.2,
-                    height: width * 0.2,
-                    decoration: BoxDecoration(
-                      color: firebaseStore.isDarkTheme
-                          ? Colors.black
-                          : Colors.white,
+                  Positioned(
+                      child: Center(
+                          child: Circle(
+                              center: {"x": width / 2.12, "y": height / 1.4},
+                              radius: 20))),
+                  Positioned(
+                    bottom: 48,
+                    right: 0,
+                    left: 0,
+                    child: Container(
+                      decoration: BoxDecoration(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Center(
+                            child: AutoSizeText('${index + 1}º',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1)),
+                      ),
                     ),
-                    child: actualBar == globals.stringAnimesPopular
-                        ? Center(
-                            child: IconButton(
-                            icon: Icon(
-                              storeAnimes.favoriteListPopular[index][1]
-                                  ? Icons.star
-                                  : Icons.star_border,
-                              color: Colors.yellow,
-                            ),
-                            onPressed: () {
-                              if (firebaseStore.isLogged) {
-                                firebaseStore.setFavorite(anime);
-                                storeAnimes.setfavoriteListPopular(index);
-                              } else {
-                                return Toast.show(
-                                    translate('anime_info.error_favorite'),
-                                    context,
-                                    duration: Toast.LENGTH_LONG,
-                                    gravity: Toast.BOTTOM);
-                              }
-                            },
-                          ))
-                        : actualBar == globals.stringAnimesHighest
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    left: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Container(
+                        width: width,
+                        height: height * 0.135,
+                        decoration: BoxDecoration(),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                              child: Text('${anime.canonicalTitle}',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: firebaseStore.isDarkTheme
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Observer(builder: (_) {
+                    return Positioned(
+                      bottom: height * 0.78,
+                      left: width * 0.75,
+                      child: Container(
+                        width: width * 0.2,
+                        height: width * 0.2,
+                        decoration: BoxDecoration(
+                          color: firebaseStore.isDarkTheme
+                              ? Colors.black
+                              : Colors.white,
+                        ),
+                        child: actualBar == globals.stringAnimesPopular
                             ? Center(
                                 child: IconButton(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
                                 icon: Icon(
-                                  storeAnimes.favoriteListHighest[index][1]
+                                  storeAnimes.favoriteListPopular[index][1]
                                       ? Icons.star
                                       : Icons.star_border,
                                   color: Colors.yellow,
@@ -164,7 +149,7 @@ class AnimeTile extends StatelessWidget {
                                 onPressed: () {
                                   if (firebaseStore.isLogged) {
                                     firebaseStore.setFavorite(anime);
-                                    storeAnimes.setfavoriteListHighest(index);
+                                    storeAnimes.setfavoriteListPopular(index);
                                   } else {
                                     return Toast.show(
                                         translate('anime_info.error_favorite'),
@@ -174,59 +159,89 @@ class AnimeTile extends StatelessWidget {
                                   }
                                 },
                               ))
-                            : actualBar == globals.stringAnimesAiring
+                            : actualBar == globals.stringAnimesHighest
                                 ? Center(
                                     child: IconButton(
-                                      icon: Icon(
-                                        storeAnimes.favoriteListAiring[index][1]
-                                            ? Icons.star
-                                            : Icons.star_border,
-                                        color: Colors.yellow,
-                                      ),
-                                      onPressed: () {
-                                        if (firebaseStore.isLogged) {
-                                          firebaseStore.setFavorite(anime);
-                                          storeAnimes
-                                              .setfavoriteListAiring(index);
-                                        } else {
-                                          return Toast.show(
-                                              translate('anime_info.error_favorite'),
-                                              context,
-                                              duration: Toast.LENGTH_LONG,
-                                              gravity: Toast.BOTTOM);
-                                        }
-                                      },
+                                    icon: Icon(
+                                      storeAnimes.favoriteListHighest[index][1]
+                                          ? Icons.star
+                                          : Icons.star_border,
+                                      color: Colors.yellow,
                                     ),
-                                  )
-                                : Center(
-                                    child: IconButton(
-                                      icon: Icon(
-                                        storeAnimes.favoriteListUpComing[index]
-                                                [1]
-                                            ? Icons.star
-                                            : Icons.star_border,
-                                        color: Colors.yellow,
+                                    onPressed: () {
+                                      if (firebaseStore.isLogged) {
+                                        firebaseStore.setFavorite(anime);
+                                        storeAnimes
+                                            .setfavoriteListHighest(index);
+                                      } else {
+                                        return Toast.show(
+                                            translate(
+                                                'anime_info.error_favorite'),
+                                            context,
+                                            duration: Toast.LENGTH_LONG,
+                                            gravity: Toast.BOTTOM);
+                                      }
+                                    },
+                                  ))
+                                : actualBar == globals.stringAnimesAiring
+                                    ? Center(
+                                        child: IconButton(
+                                          icon: Icon(
+                                            storeAnimes.favoriteListAiring[
+                                                    index][1]
+                                                ? Icons.star
+                                                : Icons.star_border,
+                                            color: Colors.yellow,
+                                          ),
+                                          onPressed: () {
+                                            if (firebaseStore.isLogged) {
+                                              firebaseStore.setFavorite(anime);
+                                              storeAnimes
+                                                  .setfavoriteListAiring(index);
+                                            } else {
+                                              return Toast.show(
+                                                  translate(
+                                                      'anime_info.error_favorite'),
+                                                  context,
+                                                  duration: Toast.LENGTH_LONG,
+                                                  gravity: Toast.BOTTOM);
+                                            }
+                                          },
+                                        ),
+                                      )
+                                    : Center(
+                                        child: IconButton(
+                                          icon: Icon(
+                                            storeAnimes.favoriteListUpComing[
+                                                    index][1]
+                                                ? Icons.star
+                                                : Icons.star_border,
+                                            color: Colors.yellow,
+                                          ),
+                                          onPressed: () {
+                                            if (firebaseStore.isLogged) {
+                                              firebaseStore.setFavorite(anime);
+                                              storeAnimes
+                                                  .setfavoriteListUpComing(
+                                                      index);
+                                            } else {
+                                              return Toast.show(
+                                                  translate(
+                                                      'anime_info.error_favorite'),
+                                                  context,
+                                                  duration: Toast.LENGTH_LONG,
+                                                  gravity: Toast.BOTTOM);
+                                            }
+                                          },
+                                        ),
                                       ),
-                                      onPressed: () {
-                                        if (firebaseStore.isLogged) {
-                                          firebaseStore.setFavorite(anime);
-                                          storeAnimes
-                                              .setfavoriteListUpComing(index);
-                                        } else {
-                                          return Toast.show(
-                                              translate('anime_info.error_favorite'),
-                                              context,
-                                              duration: Toast.LENGTH_LONG,
-                                              gravity: Toast.BOTTOM);
-                                        }
-                                      },
-                                    ),
-                                  ),
-                  ),
-                );
-              }),
-            ],
-          )),
+                      ),
+                    );
+                  }),
+                ],
+              )),
+            ),
+          ),
         ),
       ),
     );

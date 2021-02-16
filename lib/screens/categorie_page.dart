@@ -42,15 +42,22 @@ class _CategoriePageState extends State<CategoriePage> {
               height: height * 0.76,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.asset(firebaseStore.isDarkTheme?"assets/logo_white.png":"assets/logo_black.png", fit: BoxFit.scaleDown),
+                child: Image.asset(
+                    firebaseStore.isDarkTheme
+                        ? "assets/logo_white.png"
+                        : "assets/logo_black.png",
+                    fit: BoxFit.scaleDown),
               )),
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () => {
               showSearch(
                   context: context,
-                  delegate:
-                      Search(actualTab: globals.stringTabSearchCategories,color:firebaseStore.isDarkTheme?Colors.black:Colors.white))
+                  delegate: Search(
+                      actualTab: globals.stringTabSearchCategories,
+                      color: firebaseStore.isDarkTheme
+                          ? Colors.black
+                          : Colors.white))
             },
           ),
         ],
@@ -58,19 +65,29 @@ class _CategoriePageState extends State<CategoriePage> {
       body: Column(
         children: [
           Expanded(
-                flex: 7,
-                child: Container(
-                  color:firebaseStore.isDarkTheme?Colors.black:Colors.white,
-                  child: Center(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Observer(builder: (_) {return CheckboxListTile(
-                        activeColor: firebaseStore.isDarkTheme?Colors.white:Colors.black,
-                        checkColor: firebaseStore.isDarkTheme?Colors.black:Colors.white,
-
+              flex: 7,
+              child: Container(
+                color: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+                child: Center(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Observer(builder: (_) {
+                      return CheckboxListTile(
+                        activeColor: firebaseStore.isDarkTheme
+                            ? Colors.white
+                            : Colors.black,
+                        checkColor: firebaseStore.isDarkTheme
+                            ? Colors.black
+                            : Colors.white,
                         contentPadding: EdgeInsets.only(
                             left: width * 0.25, right: width * 0.25),
-                        title: AutoSizeText(translate('categories.show_all'),maxLines: 1, style:TextStyle(color:firebaseStore.isDarkTheme?Colors.white:Colors.black,)),
+                        title: AutoSizeText(translate('categories.show_all'),
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: firebaseStore.isDarkTheme
+                                  ? Colors.white
+                                  : Colors.black,
+                            )),
                         controlAffinity: ListTileControlAffinity.trailing,
                         onChanged: (checked) {
                           if (checked) {
@@ -82,15 +99,15 @@ class _CategoriePageState extends State<CategoriePage> {
                           }
                         },
                         value: storeCategories.checkedBox,
-                      );}),
-                    ),
+                      );
+                    }),
                   ),
-                )
-          ),
+                ),
+              )),
           Expanded(
             flex: 93,
             child: Container(
-              color: firebaseStore.isDarkTheme?Colors.black:Colors.white,
+              color: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
               child: Observer(builder: (_) {
                 storeCategories.listCategories ??
                     storeCategories.getCategoriesTrends();
@@ -100,15 +117,19 @@ class _CategoriePageState extends State<CategoriePage> {
                     return Loading();
                   case FutureStatus.rejected:
                     return ErrorLoading(
-                        msg: translate('errors.error_load_page_categorie'), refresh: _refresh);
+                        msg: translate('errors.error_load_page_categorie'),
+                        refresh: _refresh);
                   case FutureStatus.fulfilled:
                     return ListCategories(
-                        categories: storeCategories.listCategories.value,
-                        scrollController: _scrollController,
-                        loadedAllList: storeCategories.checkedBox
-                            ? storeCategories.loadedAllList
-                            : true,
-                            color: firebaseStore.isDarkTheme?Colors.white:Colors.black,);
+                      categories: storeCategories.listCategories.value,
+                      scrollController: _scrollController,
+                      loadedAllList: storeCategories.checkedBox
+                          ? storeCategories.loadedAllList
+                          : true,
+                      color: firebaseStore.isDarkTheme
+                          ? Colors.white
+                          : Colors.black,
+                    );
 
                   default:
                     return ErrorLoading(

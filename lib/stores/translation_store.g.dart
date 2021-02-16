@@ -92,15 +92,6 @@ mixin _$TranslateStore on _TranslateStoreBase, Store {
         .run(() => super.translateDescriptionCharacter(text, id));
   }
 
-  final _$translateListCategoriesAsyncAction =
-      AsyncAction('_TranslateStoreBase.translateListCategories');
-
-  @override
-  Future translateListCategories(String text) {
-    return _$translateListCategoriesAsyncAction
-        .run(() => super.translateListCategories(text));
-  }
-
   @override
   String toString() {
     return '''

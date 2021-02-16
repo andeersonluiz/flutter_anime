@@ -17,14 +17,12 @@ abstract class _AnimeFilterStoreBase with Store {
 
   @action
   getAnimesByCategorie(String categorie) {
-    print("getting animes by categorie: " + categorie);
     listAnimes = ObservableFuture(_decode(
             "https://kitsu.io/api/edge/anime?sort=-userCount,-favoritesCount&filter[categories]=$categorie"))
         .then((value) => value);
   }
 
   loadMoreAnimes() {
-    print("Load more animes...");
     listAnimes =
         listAnimes.replace(ObservableFuture(_decode(nextPage)).then((value) {
       lockLoad = false;

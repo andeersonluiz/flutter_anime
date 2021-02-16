@@ -99,6 +99,7 @@ class CloudFirestore {
     var favorites = query.docs.map((value) {
       return value.data();
     }).toList();
+
     return favorites;
   }
 

@@ -10,7 +10,8 @@ class ListSearchCategorie extends StatelessWidget {
   final query;
   final actualBar;
   final color;
-  ListSearchCategorie({this.storeSearch, this.query, this.actualBar,this.color});
+  ListSearchCategorie(
+      {this.storeSearch, this.query, this.actualBar, this.color});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,7 +42,8 @@ class ListSearchCategorie extends StatelessWidget {
                       },
                       child: CategorieSearchTile(
                           categorie:
-                              storeSearch.searchResultsCategories.value[index],color:color),
+                              storeSearch.searchResultsCategories.value[index],
+                          color: color),
                     );
                   });
             default:

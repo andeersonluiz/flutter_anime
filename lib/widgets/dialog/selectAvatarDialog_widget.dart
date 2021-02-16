@@ -54,32 +54,34 @@ class SelectAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final firebaseStore = Provider.of<FirebaseStore>(context);
-    final width =MediaQuery.of(context).size.width;
+    final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Container(
-      width:width / 2,
+      width: width / 2,
       height: height / 3,
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Expanded(flex:10,child: Text(translate('dialog_avatar.set_avatar'),style: TextStyle(fontStyle: FontStyle.italic,fontSize: 20),)),
         Expanded(
-          flex:90,
+            flex: 10,
+            child: Text(
+              translate('dialog_avatar.set_avatar'),
+              style: TextStyle(fontStyle: FontStyle.italic, fontSize: 20),
+            )),
+        Expanded(
+          flex: 90,
           child: ScrollConfiguration(
-            behavior: ScrollBehavior()..buildViewportChrome(context, null, AxisDirection.down),
+            behavior: ScrollBehavior()
+              ..buildViewportChrome(context, null, AxisDirection.down),
             child: CustomScrollView(
               scrollDirection: Axis.vertical,
               slivers: [
                 SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     mainAxisSpacing: 10.0,
-
                     crossAxisSpacing: 10.0,
-                    crossAxisCount: 3
-                  ,
+                    crossAxisCount: 3,
                   ),
                   delegate: SliverChildBuilderDelegate(
-                    
-                    (ctx, index) =>
-                     GestureDetector(
+                    (ctx, index) => GestureDetector(
                       child: CircleAvatar(
                         backgroundColor: Colors.black,
                         child: CircleAvatar(
@@ -88,11 +90,13 @@ class SelectAvatar extends StatelessWidget {
                               AssetImage("assets/avatars/${avatars[index]}"),
                         ),
                       ),
-                      onTap: (){
+                      onTap: () {
                         firebaseStore
-                          .setAvatar("assets/avatars/${avatars[index]}");
-                          Navigator.of(context).pop(); },
-                    ),childCount:avatars.length,
+                            .setAvatar("assets/avatars/${avatars[index]}");
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    childCount: avatars.length,
                   ),
                 ),
               ],

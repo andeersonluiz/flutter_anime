@@ -9,6 +9,7 @@ import 'package:project1/widgets/lists/listAnimeFavorite_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:project1/widgets/loading_widget.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'dart:async';
 
 class AnimeFavoritesPage extends StatefulWidget {
   @override
@@ -17,16 +18,28 @@ class AnimeFavoritesPage extends StatefulWidget {
 
 class _AnimeFavoritesPageState extends State<AnimeFavoritesPage> {
   FavoriteAnimeStore storeAnimesFavorites;
+  bool updatePage;
+  @override
+  void initState() {
+    super.initState();
+
+  }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     super.didChangeDependencies();
     storeAnimesFavorites = Provider.of<FavoriteAnimeStore>(context);
-    storeAnimesFavorites.getFavoriteAnimes();
+     Timer.run((){
+       if(storeAnimesFavorites.favoriteAnimes !=null){
+         storeAnimesFavorites.getFavoriteAnimes();
+       }
+    });
+  
   }
 
   @override
   Widget build(BuildContext context) {
+    
     final firebaseStore = Provider.of<FirebaseStore>(context);
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -49,8 +62,7 @@ class _AnimeFavoritesPageState extends State<AnimeFavoritesPage> {
               )),
         ),
         body: Observer(builder: (_) {
-          storeAnimesFavorites.favoriteAnimes ??
-              storeAnimesFavorites.getFavoriteAnimes();
+          storeAnimesFavorites.favoriteAnimes ??storeAnimesFavorites.getFavoriteAnimes();
           switch (storeAnimesFavorites.favoriteAnimes.status) {
             case FutureStatus.pending:
               return Loading();

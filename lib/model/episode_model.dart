@@ -28,7 +28,6 @@ class Episode {
   });
 
   factory Episode.fromJson(Map<String, dynamic> json) {
-    //print("id:${json['id']}, createdAt:${json['attributes']['createdAt']}, updateAt:${json['attributes']['updatedAt']},synopsis:${json['attributes']['synopsis'].split('a')[0]}, description:${json['attributes']['description'].split('a')[0]}, canonicalTitleid:${json['attributes']['canonicalTitle']}, seasonNumber:${json['attributes']['seasonNumber']}, number:${json['attributes']['number']}, relativeNumber:${json['attributes']['relativeNumber']},airDate:${json['attributes']['airdate']}, length:${json['attributes']['length']}, thumbnail:${json['attributes']['thumbnail']['original']}");
     return Episode(
       id: json['id'],
       createdAt: json['attributes']['createdAt'] ?? "-",
