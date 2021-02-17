@@ -10,6 +10,13 @@ abstract class _FavoriteAnimeStoreBase with Store {
   @observable
   ObservableFuture<List<Anime>> favoriteAnimes;
 
+  @observable
+  ObservableList<dynamic> favoriteList;
+
+  int lastIndex;
+
+  @observable
+  bool localFavorite;
   CloudFirestore cloud;
   Auth auth;
 
@@ -22,7 +29,12 @@ abstract class _FavoriteAnimeStoreBase with Store {
 
   @action
   getFavoriteAnimes() async {
-    this.favoriteAnimes = ObservableFuture(_decode()).then((value) {
+    this.favoriteAnimes = ObservableFuture(_decode()).then((value) async {
+      favoriteList = ObservableList.of(List.filled(0, ["", false]));
+      for (int i = 0; i < value.length; i++) {
+        favoriteList.add([value[i].id, true]);
+      }
+
       return value;
     });
   }
@@ -35,7 +47,29 @@ abstract class _FavoriteAnimeStoreBase with Store {
 
   removeItem(Anime anime) {
     List<Anime> listAnime = favoriteAnimes.value;
+    lastIndex = listAnime.indexOf(anime);
     listAnime.remove(anime);
     this.favoriteAnimes = ObservableFuture.value(listAnime);
+  }
+
+  addItem(Anime anime) {
+    List<Anime> listAnime = favoriteAnimes.value;
+    listAnime.insert(lastIndex, anime);
+    favoriteList.insert(lastIndex, [anime.id, true]);
+    this.favoriteAnimes = ObservableFuture.value(listAnime);
+  }
+
+  @action
+  changeFavorite(int index, Anime anime) {
+    this.favoriteList[index] = [
+      favoriteList[index][0],
+      !favoriteList[index][1]
+    ];
+
+    if (favoriteList[index][1]) {
+      addItem(anime);
+    } else {
+      removeItem(anime);
+    }
   }
 }

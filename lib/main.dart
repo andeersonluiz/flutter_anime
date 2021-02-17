@@ -7,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:project1/model/character_model.dart';
 import 'package:project1/screens/animeCategorie_page.dart';
 import 'package:project1/screens/animeInfo_page.dart';
+import 'package:project1/screens/animeInfoFavorite_page.dart';
 import 'package:project1/screens/categorie_page.dart';
 import 'package:project1/screens/characterInfo_page.dart';
 import 'package:project1/screens/character_page.dart';
@@ -121,7 +122,14 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute(
             settings: settings,
             builder: (_) =>
-                Hero(tag: args[0].id, child: AnimeInfoPage(args[0], args[1])));
+                Hero(tag: args[0].id, child: AnimeInfoPage(args[0], args[1], args[2])));
+      case '/animeInfoFavorite':
+        final args = settings.arguments as List;
+        return MaterialPageRoute(
+            settings: settings,
+            builder: (_) =>
+                Hero(tag: args[0].id, child: AnimeInfoPageFavorite(args[0], args[1])));
+
       case '/characterInfo':
         final character = settings.arguments as Character;
         return MaterialPageRoute(

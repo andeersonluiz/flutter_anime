@@ -15,7 +15,7 @@ class AnimeListFavorite extends StatelessWidget {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   mainAxisSpacing: globals.mainAxisSpacing,
                   crossAxisSpacing: globals.crossAxisSpacing,
-                  childAspectRatio: 0.6,
+                  childAspectRatio: 0.57,
                   crossAxisCount: globals.crossAxisCount),
               delegate: SliverChildBuilderDelegate(
                 (ctx, index) => AnimeTileFavorite(

@@ -62,7 +62,7 @@ abstract class _AnimeStore with Store {
   @observable
   ObservableList<dynamic> favoriteListUpComing =
       ObservableList.of(List.filled(10, ["", false]));
-
+  
   CloudFirestore cloud;
   Auth auth;
   _AnimeStore() {
@@ -364,4 +364,35 @@ abstract class _AnimeStore with Store {
       }
     }
   }
+
+  addFavoriteByName(String id) {
+    for (int i = 0; i < favoriteListPopular.length; i++) {
+      if (id == favoriteListPopular[i][0]) {
+        this.favoriteListPopular[i] = [favoriteListPopular[i][0], true];
+        break;
+      }
+    }
+
+    for (int i = 0; i < favoriteListHighest.length; i++) {
+      if (id == favoriteListHighest[i][0]) {
+        this.favoriteListHighest[i] = [favoriteListHighest[i][0], true];
+        break;
+      }
+    }
+
+    for (int i = 0; i < favoriteListAiring.length; i++) {
+      if (id == favoriteListAiring[i][0]) {
+        this.favoriteListAiring[i] = [favoriteListAiring[i][0], true];
+        break;
+      }
+    }
+
+    for (int i = 0; i < favoriteListUpComing.length; i++) {
+      if (id == favoriteListUpComing[i][0]) {
+        this.favoriteListUpComing[i] = [favoriteListUpComing[i][0], true];
+        break;
+      }
+    }
+  }
+
 }

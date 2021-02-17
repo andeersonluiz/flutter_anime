@@ -159,11 +159,11 @@ mixin _$FirebaseStore on _FirebaseStoreBase, Store {
   }
 
   @override
-  dynamic setFavorite(Anime anime) {
+  dynamic setFavorite(Anime anime, bool isFavorite) {
     final _$actionInfo = _$_FirebaseStoreBaseActionController.startAction(
         name: '_FirebaseStoreBase.setFavorite');
     try {
-      return super.setFavorite(anime);
+      return super.setFavorite(anime, isFavorite);
     } finally {
       _$_FirebaseStoreBaseActionController.endAction(_$actionInfo);
     }
