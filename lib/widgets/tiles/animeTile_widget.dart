@@ -26,7 +26,6 @@ class AnimeTile extends StatelessWidget {
             ((globals.crossAxisCount - 1) * globals.crossAxisSpacing)) /
         globals.crossAxisCount;
     final height = width / globals.childAspectRatio;
-
     return Hero(
       tag: anime.id,
       child: Scaffold(
@@ -34,7 +33,7 @@ class AnimeTile extends StatelessWidget {
             firebaseStore.isDarkTheme ? Colors.black : Colors.white,
         body: GestureDetector(
           onTap: () => Navigator.pushNamed(context, '/animeInfo',
-              arguments: [anime, index]),
+              arguments: [anime, index, actualBar]),
           child: Padding(
             padding: const EdgeInsets.all(4.0),
             child: Container(
@@ -146,9 +145,9 @@ class AnimeTile extends StatelessWidget {
                                       : Icons.star_border,
                                   color: Colors.yellow,
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   if (firebaseStore.isLogged) {
-                                    firebaseStore.setFavorite(anime);
+                                    await firebaseStore.setFavorite(anime,storeAnimes.favoriteListPopular[index][1]);
                                     storeAnimes.setfavoriteListPopular(index);
                                   } else {
                                     return Toast.show(
@@ -170,7 +169,7 @@ class AnimeTile extends StatelessWidget {
                                     ),
                                     onPressed: () {
                                       if (firebaseStore.isLogged) {
-                                        firebaseStore.setFavorite(anime);
+                                        firebaseStore.setFavorite(anime,storeAnimes.favoriteListHighest[index][1]);
                                         storeAnimes
                                             .setfavoriteListHighest(index);
                                       } else {
@@ -195,7 +194,8 @@ class AnimeTile extends StatelessWidget {
                                           ),
                                           onPressed: () {
                                             if (firebaseStore.isLogged) {
-                                              firebaseStore.setFavorite(anime);
+                                              firebaseStore.setFavorite(anime,storeAnimes.favoriteListAiring[
+                                                    index][1]);
                                               storeAnimes
                                                   .setfavoriteListAiring(index);
                                             } else {
@@ -220,7 +220,8 @@ class AnimeTile extends StatelessWidget {
                                           ),
                                           onPressed: () {
                                             if (firebaseStore.isLogged) {
-                                              firebaseStore.setFavorite(anime);
+                                              firebaseStore.setFavorite(anime,storeAnimes.favoriteListUpComing[
+                                                    index][1]);
                                               storeAnimes
                                                   .setfavoriteListUpComing(
                                                       index);

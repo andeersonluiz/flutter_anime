@@ -31,7 +31,7 @@ class AnimeTileFavorite extends StatelessWidget {
         backgroundColor:
             firebaseStore.isDarkTheme ? Colors.black : Colors.white,
         body: GestureDetector(
-          onTap: () => Navigator.pushNamed(context, '/animeInfo',
+          onTap: () => Navigator.pushNamed(context, '/animeInfoFavorite',
               arguments: [anime, index]),
           child: Padding(
             padding: const EdgeInsets.all(4.0),
@@ -70,7 +70,7 @@ class AnimeTileFavorite extends StatelessWidget {
                                     : AssetImage(
                                         "assets/loading_black.gif",
                                       ),
-                                fit: BoxFit.fill),
+                                fit: BoxFit.contain),
                             border: Border.all(
                                 color: firebaseStore.isDarkTheme
                                     ? Colors.black
@@ -85,7 +85,7 @@ class AnimeTileFavorite extends StatelessWidget {
                               center: {"x": width / 2.12, "y": height / 1.4},
                               radius: 20))),
                   Positioned(
-                    bottom: height * 0.1,
+                    bottom: height * 0.14,
                     right: 0,
                     left: 8,
                     child: Container(
@@ -128,8 +128,8 @@ class AnimeTileFavorite extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    bottom: height * 0.745,
-                    left: width * 0.7,
+                    bottom: height * 0.785,
+                    left: width * 0.71,
                     child: Container(
                         width: width * 0.2,
                         height: width * 0.2,
@@ -146,7 +146,7 @@ class AnimeTileFavorite extends StatelessWidget {
                             color: Colors.yellow,
                           ),
                           onPressed: () {
-                            firebaseStore.setFavorite(anime);
+                            firebaseStore.setFavorite(anime,true);
                             storeAnimesFavorites.removeItem(anime);
                             storeAnimes.removeFavoriteByName(anime.id);
                           },

@@ -36,6 +36,6 @@ abstract class _AnimeFilterStoreBase with Store {
     decoded['links']['next'] == null
         ? loadedAllList = true
         : nextPage = decoded['links']['next'];
-    return decoded['data'].map<Anime>((json) => Anime.fromJson(json)).toList();
+    return decoded['data' ].map<Anime>((json) => Anime.fromJson(json)).toList();
   }
 }

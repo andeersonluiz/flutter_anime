@@ -39,7 +39,6 @@ class _AnimeFavoritesPageState extends State<AnimeFavoritesPage> {
 
   @override
   Widget build(BuildContext context) {
-    
     final firebaseStore = Provider.of<FirebaseStore>(context);
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -69,7 +68,7 @@ class _AnimeFavoritesPageState extends State<AnimeFavoritesPage> {
             case FutureStatus.rejected:
               return ErrorLoading(
                   msg: translate('errors.error_load_page_favorite'),
-                  refresh: _refresh(storeAnimesFavorites));
+                  refresh: ()=>_refresh(storeAnimesFavorites));
             case FutureStatus.fulfilled:
               return AnimeListFavorite(
                 animes: storeAnimesFavorites.favoriteAnimes.value,

@@ -222,24 +222,26 @@ abstract class _FirebaseStoreBase with Store {
   }
 
   @action
-  setFavorite(Anime anime) {
+  setFavorite(Anime anime, bool isFavorite) {
     this.anime = anime;
-    if (this.anime.isFavorite) {
-      removeFavorite(this.anime);
-    } else {
-      addFavorite(this.anime);
-    }
+      if (isFavorite) {
+        removeFavorite(this.anime);
+      } else {
+        addFavorite(this.anime);
+      }
   }
 
-  removeFavorite(Anime anime) {
+  removeFavorite(Anime anime)async {
     anime.isFavorite = false;
+    user = await loadUser();
     user.favoritesAnimes.remove(anime);
     cloud.updateListAnimes(user, anime, true);
   }
 
-  addFavorite(Anime anime) {
+  addFavorite(Anime anime) async {
     anime = anime;
     anime.isFavorite = true;
+    user = await loadUser();
     user.favoritesAnimes.add(anime);
     cloud.updateListAnimes(user, anime, false);
   }
