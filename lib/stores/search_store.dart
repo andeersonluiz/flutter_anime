@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:easy_debounce/easy_debounce.dart';
+import 'package:http/http.dart' as http;
 import 'package:mobx/mobx.dart';
 import 'package:project1/model/anime_model.dart';
-import 'package:http/http.dart' as http;
 import 'package:project1/model/categorie_model.dart';
 import 'package:project1/model/character_model.dart';
 import 'package:project1/support/global_variables.dart' as globals;
+import 'package:project1/stores/favoriteAnime_store.dart';
 
 part 'search_store.g.dart';
 
@@ -22,11 +23,14 @@ abstract class _SearchStoreBase with Store {
   @observable
   ObservableFuture<List<Categorie>> searchResultsCategories;
 
+  @observable
+  ObservableList<dynamic> favStatus;
+
   ObservableFuture<List<Object>> getListResult(String tab) {
     if (tab == globals.stringTabSearchAnimes) {
       return searchResultsAnimes;
     } else if (tab == globals.stringTabSearchCharacters) {
-      return searchResultsAnimes;
+      return searchResultsCharacters;
     } else if (tab == globals.stringTabSearchCategories) {
       return searchResultsCategories;
     }
@@ -38,7 +42,7 @@ abstract class _SearchStoreBase with Store {
     if (tab == globals.stringTabSearchAnimes) {
       return searchResultsAnimes = value;
     } else if (tab == globals.stringTabSearchCharacters) {
-      return searchResultsAnimes = value;
+      return searchResultsCharacters = value;
     } else if (tab == globals.stringTabSearchCategories) {
       return searchResultsCategories = value;
     }
@@ -49,21 +53,21 @@ abstract class _SearchStoreBase with Store {
   http.Response response;
 
   @action
-  search(String query, String typeSearch) {
+  search(String query, String typeSearch, {FavoriteAnimeStore favStore}) async {
     switch (typeSearch) {
       case "Anime":
-        EasyDebounce.debounce("my-debounce", Duration(milliseconds: 500), () {
+        EasyDebounce.debounce("my-debounce", Duration(milliseconds: 750), () {
           lastQuery = query;
           return searchResultsAnimes = ObservableFuture(_decodeAnime(
-                  "https://kitsu.io/api/edge/anime?filter[text]=$query"))
+                  "https://kitsu.io/api/edge/anime?filter[text]=$query",
+                  favStore))
               .then((value) {
             return value;
           });
         });
         break;
-
       case "Character":
-        EasyDebounce.debounce("my-debounce", Duration(milliseconds: 500), () {
+        EasyDebounce.debounce("my-debounce", Duration(milliseconds: 750), () {
           lastQuery = query;
           return searchResultsCharacters = ObservableFuture(_decodeCharacter(
                   "https://kitsu.io/api/edge/characters?filter[name]=$query"))
@@ -73,7 +77,7 @@ abstract class _SearchStoreBase with Store {
         });
         break;
       case "Categorie":
-        EasyDebounce.debounce("my-debounce", Duration(milliseconds: 500), () {
+        EasyDebounce.debounce("my-debounce", Duration(milliseconds: 750), () {
           lastQuery = query;
           return searchResultsCategories = ObservableFuture(_decodeCategorie(
                   "https://kitsu.io/api/edge/categories?filter[slug]=$query"))
@@ -85,11 +89,37 @@ abstract class _SearchStoreBase with Store {
     }
   }
 
-  _decodeAnime(String url) async {
+  _decodeAnime(String url, FavoriteAnimeStore favStore) async {
     response = await http
         .get(url, headers: {'Content-Type': 'application/json;charset=utf-8'});
     var decoded = json.decode(utf8.decode(response.bodyBytes));
-    return decoded['data'].map<Anime>((json) => Anime.fromJson(json)).toList();
+    if (favStore.favoriteAnimes == null) {
+      favStore.getFavoriteAnimes();
+      await Future.delayed(Duration(seconds: 3));
+    }
+    List<Anime> animesResult =
+        decoded['data'].map<Anime>((json) => Anime.fromJson(json)).toList();
+    if (animesResult.length == 0) {
+      return animesResult;
+    }
+    favStatus =
+        ObservableList.of(List.filled(animesResult.length, ["", false]));
+
+    for (int i = 0; i < animesResult.length; i++) {
+      animesResult[i].isFavorite = true;
+
+      List<Anime> localAnime = favStore.favoriteAnimes.value
+          .where((item) => item.id == animesResult[i].id)
+          .toList();
+      if (localAnime.length > 0) {
+        favStatus[i] = [localAnime[0].id, true];
+      } else {
+        favStatus[i] = [animesResult[i].id, false];
+        animesResult[i].isFavorite = false;
+      }
+    }
+
+    return animesResult;
   }
 
   _decodeCharacter(String url) async {
@@ -108,5 +138,18 @@ abstract class _SearchStoreBase with Store {
     return decoded['data']
         .map<Categorie>((json) => Categorie.fromJson(json))
         .toList();
+  }
+
+  changeStatus(int index) {
+    this.favStatus[index] = [favStatus[index][0], !favStatus[index][1]];
+  }
+
+  changeStatusById(Anime anime) {
+    for (int i = 0; i < favStatus.length; i++) {
+      if (favStatus[i][0] == anime.id) {
+        this.favStatus[i] = [favStatus[i][0], !favStatus[i][1]];
+        return;
+      }
+    }
   }
 }

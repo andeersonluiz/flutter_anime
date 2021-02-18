@@ -10,6 +10,8 @@ import 'package:toast/toast.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:project1/stores/anime_store.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:project1/stores/search_store.dart';
+import 'package:project1/stores/animeFilter_store.dart';
 
 class AnimeTile extends StatelessWidget {
   final Anime anime;
@@ -20,7 +22,8 @@ class AnimeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final firebaseStore = Provider.of<FirebaseStore>(context);
     final storeAnimes = Provider.of<AnimeStore>(context);
-
+    final storeSearch = Provider.of<SearchStore>(context);
+    final storeAnimesCategories = Provider.of<AnimeFilterStore>(context);
     final size = MediaQuery.of(context).size;
     final width = (size.width -
             ((globals.crossAxisCount - 1) * globals.crossAxisSpacing)) /
@@ -64,7 +67,13 @@ class AnimeTile extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: firebaseStore.isDarkTheme?AssetImage("assets/loading_white.gif",):AssetImage("assets/loading_black.gif",),
+                                image: firebaseStore.isDarkTheme
+                                    ? AssetImage(
+                                        "assets/loading_white.gif",
+                                      )
+                                    : AssetImage(
+                                        "assets/loading_black.gif",
+                                      ),
                                 fit: BoxFit.contain),
                             border: Border.all(
                                 color: firebaseStore.isDarkTheme
@@ -127,116 +136,192 @@ class AnimeTile extends StatelessWidget {
                       bottom: height * 0.78,
                       left: width * 0.75,
                       child: Container(
-                        width: width * 0.2,
-                        height: width * 0.2,
-                        decoration: BoxDecoration(
-                          color: firebaseStore.isDarkTheme
-                              ? Colors.black
-                              : Colors.white,
-                        ),
-                        child: actualBar == globals.stringAnimesPopular
-                            ? Center(
-                                child: IconButton(
-                                splashColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                icon: Icon(
-                                  storeAnimes.favoriteListPopular[index][1]
-                                      ? Icons.star
-                                      : Icons.star_border,
-                                  color: Colors.yellow,
-                                ),
-                                onPressed: () async {
-                                  if (firebaseStore.isLogged) {
-                                    await firebaseStore.setFavorite(anime,storeAnimes.favoriteListPopular[index][1]);
-                                    storeAnimes.setfavoriteListPopular(index);
-                                  } else {
-                                    return Toast.show(
-                                        translate('anime_info.error_favorite'),
-                                        context,
-                                        duration: Toast.LENGTH_LONG,
-                                        gravity: Toast.BOTTOM);
-                                  }
-                                },
-                              ))
-                            : actualBar == globals.stringAnimesHighest
-                                ? Center(
-                                    child: IconButton(
-                                    icon: Icon(
-                                      storeAnimes.favoriteListHighest[index][1]
-                                          ? Icons.star
-                                          : Icons.star_border,
-                                      color: Colors.yellow,
-                                    ),
-                                    onPressed: () {
-                                      if (firebaseStore.isLogged) {
-                                        firebaseStore.setFavorite(anime,storeAnimes.favoriteListHighest[index][1]);
-                                        storeAnimes
-                                            .setfavoriteListHighest(index);
-                                      } else {
-                                        return Toast.show(
-                                            translate(
-                                                'anime_info.error_favorite'),
-                                            context,
-                                            duration: Toast.LENGTH_LONG,
-                                            gravity: Toast.BOTTOM);
-                                      }
-                                    },
-                                  ))
-                                : actualBar == globals.stringAnimesAiring
-                                    ? Center(
-                                        child: IconButton(
-                                          icon: Icon(
-                                            storeAnimes.favoriteListAiring[
-                                                    index][1]
-                                                ? Icons.star
-                                                : Icons.star_border,
-                                            color: Colors.yellow,
-                                          ),
-                                          onPressed: () {
-                                            if (firebaseStore.isLogged) {
-                                              firebaseStore.setFavorite(anime,storeAnimes.favoriteListAiring[
-                                                    index][1]);
-                                              storeAnimes
-                                                  .setfavoriteListAiring(index);
-                                            } else {
-                                              return Toast.show(
-                                                  translate(
-                                                      'anime_info.error_favorite'),
-                                                  context,
-                                                  duration: Toast.LENGTH_LONG,
-                                                  gravity: Toast.BOTTOM);
-                                            }
-                                          },
-                                        ),
-                                      )
-                                    : Center(
-                                        child: IconButton(
-                                          icon: Icon(
-                                            storeAnimes.favoriteListUpComing[
-                                                    index][1]
-                                                ? Icons.star
-                                                : Icons.star_border,
-                                            color: Colors.yellow,
-                                          ),
-                                          onPressed: () {
-                                            if (firebaseStore.isLogged) {
-                                              firebaseStore.setFavorite(anime,storeAnimes.favoriteListUpComing[
-                                                    index][1]);
-                                              storeAnimes
-                                                  .setfavoriteListUpComing(
-                                                      index);
-                                            } else {
-                                              return Toast.show(
-                                                  translate(
-                                                      'anime_info.error_favorite'),
-                                                  context,
-                                                  duration: Toast.LENGTH_LONG,
-                                                  gravity: Toast.BOTTOM);
-                                            }
-                                          },
-                                        ),
+                          width: width * 0.2,
+                          height: width * 0.2,
+                          decoration: BoxDecoration(
+                            color: firebaseStore.isDarkTheme
+                                ? Colors.black
+                                : Colors.white,
+                          ),
+                          child: actualBar == globals.stringAnimesPopular
+                              ? Center(
+                                  child: IconButton(
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  icon: Icon(
+                                    storeAnimes.favoriteListPopular[index][1]
+                                        ? Icons.star
+                                        : Icons.star_border,
+                                    color: Colors.yellow,
+                                  ),
+                                  onPressed: () async {
+                                    if (firebaseStore.isLogged) {
+                                      await firebaseStore.setFavorite(
+                                          anime,
+                                          storeAnimes.favoriteListPopular[index]
+                                              [1]);
+                                      storeAnimes.setfavoriteListPopular(index);
+                                      storeSearch.changeStatusById(anime);
+                                    } else {
+                                      return Toast.show(
+                                          translate(
+                                              'anime_info.error_favorite'),
+                                          context,
+                                          duration: Toast.LENGTH_LONG,
+                                          gravity: Toast.BOTTOM);
+                                    }
+                                  },
+                                ))
+                              : actualBar == globals.stringAnimesHighest
+                                  ? Center(
+                                      child: IconButton(
+                                      splashColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      icon: Icon(
+                                        storeAnimes.favoriteListHighest[index]
+                                                [1]
+                                            ? Icons.star
+                                            : Icons.star_border,
+                                        color: Colors.yellow,
                                       ),
-                      ),
+                                      onPressed: () {
+                                        if (firebaseStore.isLogged) {
+                                          firebaseStore.setFavorite(
+                                              anime,
+                                              storeAnimes.favoriteListHighest[
+                                                  index][1]);
+                                          storeAnimes
+                                              .setfavoriteListHighest(index);
+                                          storeSearch.changeStatusById(anime);
+                                        } else {
+                                          return Toast.show(
+                                              translate(
+                                                  'anime_info.error_favorite'),
+                                              context,
+                                              duration: Toast.LENGTH_LONG,
+                                              gravity: Toast.BOTTOM);
+                                        }
+                                      },
+                                    ))
+                                  : actualBar == globals.stringAnimesAiring
+                                      ? Center(
+                                          child: IconButton(
+                                            splashColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            icon: Icon(
+                                              storeAnimes.favoriteListAiring[
+                                                      index][1]
+                                                  ? Icons.star
+                                                  : Icons.star_border,
+                                              color: Colors.yellow,
+                                            ),
+                                            onPressed: () {
+                                              if (firebaseStore.isLogged) {
+                                                firebaseStore.setFavorite(
+                                                    anime,
+                                                    storeAnimes
+                                                            .favoriteListAiring[
+                                                        index][1]);
+                                                storeAnimes
+                                                    .setfavoriteListAiring(
+                                                        index);
+                                                storeSearch
+                                                    .changeStatusById(anime);
+                                              } else {
+                                                return Toast.show(
+                                                    translate(
+                                                        'anime_info.error_favorite'),
+                                                    context,
+                                                    duration: Toast.LENGTH_LONG,
+                                                    gravity: Toast.BOTTOM);
+                                              }
+                                            },
+                                          ),
+                                        )
+                                      : actualBar ==
+                                              globals.stringAnimesUpcoming
+                                          ? Center(
+                                              child: IconButton(
+                                                splashColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                icon: Icon(
+                                                  storeAnimes.favoriteListUpComing[
+                                                          index][1]
+                                                      ? Icons.star
+                                                      : Icons.star_border,
+                                                  color: Colors.yellow,
+                                                ),
+                                                onPressed: () {
+                                                  if (firebaseStore.isLogged) {
+                                                    firebaseStore.setFavorite(
+                                                        anime,
+                                                        storeAnimes
+                                                                .favoriteListUpComing[
+                                                            index][1]);
+                                                    storeAnimes
+                                                        .setfavoriteListUpComing(
+                                                            index);
+                                                    storeSearch
+                                                        .changeStatusById(
+                                                            anime);
+                                                  } else {
+                                                    return Toast.show(
+                                                        translate(
+                                                            'anime_info.error_favorite'),
+                                                        context,
+                                                        duration:
+                                                            Toast.LENGTH_LONG,
+                                                        gravity: Toast.BOTTOM);
+                                                  }
+                                                },
+                                              ),
+                                            )
+                                          : Center(
+                                              child: IconButton(
+                                                splashColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                                icon: Icon(
+                                                  storeAnimesCategories
+                                                              .favCategorie[
+                                                          index][1]
+                                                      ? Icons.star
+                                                      : Icons.star_border,
+                                                  color: Colors.yellow,
+                                                ),
+                                                onPressed: () {
+                                                  if (firebaseStore.isLogged) {
+                                                    firebaseStore.setFavorite(
+                                                        anime,
+                                                        storeAnimesCategories
+                                                                .favCategorie[
+                                                            index][1]);
+                                                    if (storeAnimesCategories
+                                                            .favCategorie[index]
+                                                        [1]) {
+                                                      storeAnimes
+                                                          .removeFavoriteByName(
+                                                              anime.id);
+                                                    } else {
+                                                      storeAnimes
+                                                          .addFavoriteByName(
+                                                              anime.id);
+                                                    }
+                                                    storeSearch.changeStatusById(anime);
+                                                    storeAnimesCategories.changeStatusFav(index);
+                                                  } else {
+                                                    return Toast.show(
+                                                        translate(
+                                                            'anime_info.error_favorite'),
+                                                        context,
+                                                        duration:
+                                                            Toast.LENGTH_LONG,
+                                                        gravity: Toast.BOTTOM);
+                                                  }
+                                                },
+                                              ),
+                                            )),
                     );
                   }),
                 ],

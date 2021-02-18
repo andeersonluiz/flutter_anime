@@ -24,15 +24,30 @@ mixin _$AnimeFilterStore on _AnimeFilterStoreBase, Store {
     });
   }
 
+  final _$favCategorieAtom = Atom(name: '_AnimeFilterStoreBase.favCategorie');
+
+  @override
+  ObservableList<dynamic> get favCategorie {
+    _$favCategorieAtom.reportRead();
+    return super.favCategorie;
+  }
+
+  @override
+  set favCategorie(ObservableList<dynamic> value) {
+    _$favCategorieAtom.reportWrite(value, super.favCategorie, () {
+      super.favCategorie = value;
+    });
+  }
+
   final _$_AnimeFilterStoreBaseActionController =
       ActionController(name: '_AnimeFilterStoreBase');
 
   @override
-  dynamic getAnimesByCategorie(String categorie) {
+  dynamic getAnimesByCategorie(String categorie, FavoriteAnimeStore favStore) {
     final _$actionInfo = _$_AnimeFilterStoreBaseActionController.startAction(
         name: '_AnimeFilterStoreBase.getAnimesByCategorie');
     try {
-      return super.getAnimesByCategorie(categorie);
+      return super.getAnimesByCategorie(categorie, favStore);
     } finally {
       _$_AnimeFilterStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -41,7 +56,8 @@ mixin _$AnimeFilterStore on _AnimeFilterStoreBase, Store {
   @override
   String toString() {
     return '''
-listAnimes: ${listAnimes}
+listAnimes: ${listAnimes},
+favCategorie: ${favCategorie}
     ''';
   }
 }

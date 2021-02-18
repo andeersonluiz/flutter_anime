@@ -5,15 +5,17 @@ import 'package:project1/stores/search_store.dart';
 import 'package:project1/widgets/errorLoading_widget.dart';
 import 'package:project1/widgets/loading_widget.dart';
 import 'package:project1/widgets/tiles/animeSearchTile_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:project1/stores/favoriteAnime_store.dart';
 
 class ListSearchAnime extends StatelessWidget {
-  final SearchStore storeSearch;
   final query;
   final actualBar;
   final color;
-  ListSearchAnime({this.storeSearch, this.query, this.actualBar, this.color});
+  ListSearchAnime({this.query, this.actualBar, this.color});
   @override
   Widget build(BuildContext context) {
+    final storeSearch = Provider.of<SearchStore>(context);
     return Container(
       color: color,
       child: Observer(builder: (_) {
@@ -24,10 +26,11 @@ class ListSearchAnime extends StatelessWidget {
             case FutureStatus.rejected:
               return ErrorLoading(
                   msg: "Error to loading results, verify your connection",
-                  refresh: _refresh);
+                  refresh: () => _refresh(context));
             case FutureStatus.fulfilled:
               if (storeSearch.searchResultsAnimes.value.isEmpty) {
-                return ErrorLoading(msg: "Not found animes", refresh: _refresh);
+                return ErrorLoading(
+                    msg: "Not found animes", refresh: () => _refresh(context));
               }
               return ListView.builder(
                   itemCount: storeSearch.searchResultsAnimes.value.length,
@@ -35,8 +38,12 @@ class ListSearchAnime extends StatelessWidget {
                     return GestureDetector(
                       onTap: () {
                         Navigator.of(context).pushNamed("/animeInfo",
-                            arguments:
-                                storeSearch.searchResultsAnimes.value[index]);
+                            arguments: [
+                              storeSearch.searchResultsAnimes.value[index],
+                              index,
+                              actualBar,
+                              true
+                            ]);
                       },
                       child: AnimeSearchTile(
                           anime: storeSearch.searchResultsAnimes.value[index],
@@ -45,7 +52,8 @@ class ListSearchAnime extends StatelessWidget {
                   });
             default:
               return ErrorLoading(
-                  msg: "Error to load animes.", refresh: _refresh);
+                  msg: "Error to load animes.",
+                  refresh: () => _refresh(context));
           }
         } else {
           return Loading();
@@ -54,7 +62,9 @@ class ListSearchAnime extends StatelessWidget {
     );
   }
 
-  Future<void> _refresh() async {
-    return storeSearch.search(query, actualBar);
+  Future<void> _refresh(BuildContext context) async {
+    final storeSearch = Provider.of<SearchStore>(context);
+    final favStore = Provider.of<FavoriteAnimeStore>(context);
+    storeSearch.search(query, actualBar, favStore: favStore);
   }
 }

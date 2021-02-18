@@ -4,16 +4,17 @@ import 'package:mobx/mobx.dart';
 import 'package:project1/widgets/errorLoading_widget.dart';
 import 'package:project1/widgets/loading_widget.dart';
 import 'package:project1/widgets/tiles/categorieSearchTile_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:project1/stores/search_store.dart';
 
 class ListSearchCategorie extends StatelessWidget {
-  final storeSearch;
   final query;
   final actualBar;
   final color;
-  ListSearchCategorie(
-      {this.storeSearch, this.query, this.actualBar, this.color});
+  ListSearchCategorie({this.query, this.actualBar, this.color});
   @override
   Widget build(BuildContext context) {
+    final storeSearch = Provider.of<SearchStore>(context);
     return Container(
       color: color,
       child: Observer(builder: (_) {
@@ -24,12 +25,13 @@ class ListSearchCategorie extends StatelessWidget {
             case FutureStatus.rejected:
               return ErrorLoading(
                   msg: "Error to loading results, verify your connection",
-                  refresh: _refresh);
+                  refresh: () => _refresh(context));
 
             case FutureStatus.fulfilled:
               if (storeSearch.searchResultsCategories.value.isEmpty) {
                 return ErrorLoading(
-                    msg: "Not found categories", refresh: _refresh);
+                    msg: "Not found categories",
+                    refresh: () => _refresh(context));
               }
               return ListView.builder(
                   itemCount: storeSearch.searchResultsCategories.value.length,
@@ -48,7 +50,8 @@ class ListSearchCategorie extends StatelessWidget {
                   });
             default:
               return ErrorLoading(
-                  msg: "Error to load animes.", refresh: _refresh);
+                  msg: "Error to load animes.",
+                  refresh: () => _refresh(context));
           }
         } else {
           return Loading();
@@ -57,7 +60,8 @@ class ListSearchCategorie extends StatelessWidget {
     );
   }
 
-  Future<void> _refresh() async {
+  Future<void> _refresh(BuildContext context) async {
+    final storeSearch = Provider.of<SearchStore>(context);
     return storeSearch.search(query, actualBar);
   }
 }

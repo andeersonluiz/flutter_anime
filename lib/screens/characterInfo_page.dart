@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:project1/model/character_model.dart';
 import 'package:project1/stores/firebase_store.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_translate/flutter_translate.dart';
@@ -9,16 +8,36 @@ import 'package:project1/stores/translation_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:project1/widgets/loading_widget.dart';
 import 'package:project1/widgets/errorLoading_widget.dart';
+import 'dart:async';
 
-class CharacterInfoPage extends StatelessWidget {
-  final Character character;
+class CharacterInfoPage extends StatefulWidget {
+  final character;
   CharacterInfoPage(this.character);
+
+  @override
+  _CharacterInfoPageState createState() => _CharacterInfoPageState();
+}
+
+class _CharacterInfoPageState extends State<CharacterInfoPage> {
+  TranslateStore storeTranslation;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    storeTranslation = Provider.of<TranslateStore>(context);
+    Timer.run(() {
+      if (storeTranslation?.descriptionCharacter != null) {
+        storeTranslation.translateDescriptionCharacter(
+            _removeHtmlTags(widget.character.description), widget.character.id);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final firebaseStore = Provider.of<FirebaseStore>(context);
-    final storeTranslation = Provider.of<TranslateStore>(context);
 
     return Scaffold(
       body: CustomScrollView(
@@ -26,10 +45,10 @@ class CharacterInfoPage extends StatelessWidget {
         slivers: [
           SliverAppBar(
               title: AutoSizeText(
-            character.name +
-                (character.japaneseName == ""
+            widget.character.name +
+                (widget.character.japaneseName == ""
                     ? ""
-                    : " (${character.japaneseName})"),
+                    : " (${widget.character.japaneseName})"),
             maxLines: 1,
             maxFontSize: 15,
             minFontSize: 7,
@@ -50,7 +69,7 @@ class CharacterInfoPage extends StatelessWidget {
                             : Colors.white,
                         child: Center(
                             child: Image.network(
-                          character.image,
+                          widget.character.image,
                           height: height * 0.3,
                         ))),
                   ),
@@ -64,7 +83,7 @@ class CharacterInfoPage extends StatelessWidget {
                         padding: const EdgeInsets.all(8.0),
                         child: Center(
                             child: Text(
-                          "Created at: ${_formatData(character.createdAt)}",
+                          "Created at: ${_formatData(widget.character.createdAt)}",
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             color: firebaseStore.isDarkTheme
@@ -75,7 +94,7 @@ class CharacterInfoPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  character.otherNames.length > 0
+                  widget.character.otherNames.length > 0
                       ? Expanded(
                           flex: 5,
                           child: Container(
@@ -90,31 +109,42 @@ class CharacterInfoPage extends StatelessWidget {
                                     child: ListView.builder(
                                         shrinkWrap: true,
                                         scrollDirection: Axis.horizontal,
-                                        itemCount: character.otherNames.length,
+                                        itemCount:
+                                            widget.character.otherNames.length,
                                         itemBuilder: (ctx, index) {
                                           if (index == 0) {
                                             return Text(
-                                                "${translate('character_info.other_names')} ${character.otherNames[index]}",
+                                                "${translate('character_info.other_names')} ${widget.character.otherNames[index]}",
                                                 style: TextStyle(
                                                   fontStyle: FontStyle.italic,
                                                   color:
                                                       firebaseStore.isDarkTheme
                                                           ? Colors.white
-                                                          : Colors.white,
+                                                          : Colors.black,
                                                 ));
                                           }
                                           if (index ==
-                                              character.otherNames.length - 1) {
+                                              widget.character.otherNames
+                                                      .length -
+                                                  1) {
                                             return Text(
-                                                ", ${character.otherNames[index]}",
+                                                ", ${widget.character.otherNames[index]}",
                                                 style: TextStyle(
-                                                    fontStyle:
-                                                        FontStyle.italic));
+                                                  fontStyle: FontStyle.italic,
+                                                  color:
+                                                      firebaseStore.isDarkTheme
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                ));
                                           }
                                           return Text(
-                                              "${character.otherNames[index]}, ",
+                                              "${widget.character.otherNames[index]}, ",
                                               style: TextStyle(
-                                                  fontStyle: FontStyle.italic));
+                                                fontStyle: FontStyle.italic,
+                                                color: firebaseStore.isDarkTheme
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                              ));
                                         })),
                               ),
                             ),
@@ -164,28 +194,20 @@ class CharacterInfoPage extends StatelessWidget {
                             child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Observer(builder: (_) {
-                                  if (character.description == "") {
+                                  if (widget.character.description == "") {
                                     return Text(
-                                        "${translate('character_info.no_informations')} ${character.name}",
+                                        "${translate('character_info.no_informations')} ${widget.character.name}",
                                         style: TextStyle(
                                             color: firebaseStore.isDarkTheme
                                                 ? Colors.white
                                                 : Colors.black));
                                   }
-                                  storeTranslation?.descriptionCharacter ??
+                                  storeTranslation.descriptionCharacter ??
                                       storeTranslation
                                           .translateDescriptionCharacter(
                                               _removeHtmlTags(
-                                                  character.description),
-                                              character.id);
-                                  if (storeTranslation?.translationId !=
-                                      character.id) {
-                                    storeTranslation
-                                        .translateDescriptionCharacter(
-                                            _removeHtmlTags(
-                                                character.description),
-                                            character.id);
-                                  }
+                                                  widget.character.description),
+                                              widget.character.id);
                                   switch (storeTranslation
                                       ?.descriptionCharacter?.status) {
                                     case FutureStatus.pending:
@@ -220,7 +242,7 @@ class CharacterInfoPage extends StatelessWidget {
   Future<void> refresh(BuildContext context) {
     final storeTranslation = Provider.of<TranslateStore>(context);
     return storeTranslation.translateDescriptionCharacter(
-        _removeHtmlTags(character.description), character.id);
+        _removeHtmlTags(widget.character.description), widget.character.id);
   }
 
   String _removeHtmlTags(String htmlText) {

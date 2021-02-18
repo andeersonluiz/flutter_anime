@@ -20,6 +20,8 @@ import 'package:project1/support/shared_preferences.dart';
 import 'package:project1/stores/anime_store.dart';
 import 'package:project1/stores/translation_store.dart';
 import 'package:flutter/services.dart';
+import 'package:project1/stores/search_store.dart';
+import 'package:project1/stores/animeFilter_store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,8 +50,12 @@ void main() async {
       providers: [
         Provider<FirebaseStore>(create: (_) => FirebaseStore()),
         Provider<AnimeStore>(create: (_) => AnimeStore()),
+        Provider<SearchStore>(create: (_) => SearchStore()),
         Provider<FavoriteAnimeStore>(
           create: (_) => FavoriteAnimeStore(),
+        ),
+        Provider<AnimeFilterStore>(
+          create: (_) => AnimeFilterStore(),
         ),
         Provider<TranslateStore>(create: (_) => TranslateStore()),
       ],
@@ -77,8 +83,12 @@ class MyApp extends StatelessWidget {
       firebaseStore.loadUser().then((value) => firebaseStore.user = value);
       firebaseStore.setLogged = true;
     }
+
     if (isDarkTheme != null) {
-      firebaseStore.isDarkTheme = isDarkTheme;
+      SharedPrefs sharedPreferences = SharedPrefs();
+      sharedPreferences
+          .getPersistTheme()
+          .then((value) => firebaseStore.isDarkTheme = value);
     }
 
     return Observer(builder: (_) {
@@ -119,16 +129,24 @@ class MyApp extends StatelessWidget {
         );
       case '/animeInfo':
         final args = settings.arguments as List;
+
         return MaterialPageRoute(
             settings: settings,
-            builder: (_) =>
-                Hero(tag: args[0].id, child: AnimeInfoPage(args[0], args[1], args[2])));
+            builder: (_) => Hero(
+                tag: args[0].id,
+                child: AnimeInfoPage(
+                  args[0],
+                  args[1],
+                  args[2],
+                  args.length > 3 ? args[3] : false,
+                )));
       case '/animeInfoFavorite':
         final args = settings.arguments as List;
         return MaterialPageRoute(
             settings: settings,
-            builder: (_) =>
-                Hero(tag: args[0].id, child: AnimeInfoPageFavorite(args[0], args[1])));
+            builder: (_) => Hero(
+                tag: args[0].id,
+                child: AnimeInfoPageFavorite(args[0], args[1])));
 
       case '/characterInfo':
         final character = settings.arguments as Character;

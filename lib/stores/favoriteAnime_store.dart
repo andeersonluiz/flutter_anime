@@ -34,7 +34,6 @@ abstract class _FavoriteAnimeStoreBase with Store {
       for (int i = 0; i < value.length; i++) {
         favoriteList.add([value[i].id, true]);
       }
-
       return value;
     });
   }
