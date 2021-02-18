@@ -31,7 +31,7 @@ class DrawerSideBar extends StatelessWidget {
                   children: [
                     Container(
                       child: firebaseStore.isLogged
-                          ? Image.asset(firebaseStore.user.background,
+                          ? Image.asset(firebaseStore?.user?.background,
                               fit: BoxFit.fitWidth)
                           : Container(),
                       color: Colors.grey,

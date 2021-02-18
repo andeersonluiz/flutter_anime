@@ -91,4 +91,11 @@ class Anime {
         'linkCharacterList': linkCharacterList,
         'isFavorite': isFavorite
       };
+
+  @override
+  String toString() {
+    return "id: $id,synopsis: $synopsis,canonicalTitle: $canonicalTitle,ageRatingGuide: $ageRatingGuide, episodeCount: $episodeCount," +
+        "episodeLength: $episodeLength,youtubeVideoId: $youtubeVideoId,posterImage: $posterImage, coverImage: $coverImage," +
+        "status: $status,linkEpisodeList: $linkEpisodeList,linkCharacterList: $linkCharacterList,isFavorite: $isFavorite";
+  }
 }

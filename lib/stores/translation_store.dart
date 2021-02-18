@@ -38,15 +38,14 @@ abstract class _TranslateStoreBase with Store {
       code = "en_US";
     }
     if (code != "en_US") {
-      try {
-        synopsisTranslated.catchError(null);
-        synopsisTranslated =
-            ObservableFuture(translator.translate(text, to: code))
-                .then((value) => value.text);
-      } catch (e) {
-        synopsisTranslated = ObservableFuture.value(
-            text + "\n${translate("errors.translate_error")}");
-      }
+      synopsisTranslated =
+          ObservableFuture(translator.translate(text, to: code))
+              .then((value) => value.text)
+              .catchError((error, stackTrace) {
+        return synopsisTranslated = ObservableFuture.value(
+                text + "\n${translate("errors.translate_error")}")
+            .then((value) => value);
+      });
     } else {
       synopsisTranslated = ObservableFuture.value(text);
     }
@@ -81,15 +80,14 @@ abstract class _TranslateStoreBase with Store {
     String code = await sharedPreferences.getPersistLanguage();
     translationId = id;
     if (code != "en_US") {
-      try {
-        descriptionCharacter.catchError(null);
-        descriptionCharacter =
-            ObservableFuture(translator.translate(text, to: code))
-                .then((value) => value.text);
-      } catch (e) {
-        descriptionCharacter = ObservableFuture.value(
-            text + "\n${translate("errors.translate_error")}");
-      }
+      descriptionCharacter =
+          ObservableFuture(translator.translate(text, to: code)).then((value) {
+        return value.text;
+      }).catchError((error, stackTrace) {
+        return ObservableFuture.value(
+                text + "\n${translate("errors.translate_error")}")
+            .then((value) => value);
+      });
     } else {
       descriptionCharacter = ObservableFuture.value(text);
     }

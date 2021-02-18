@@ -22,19 +22,17 @@ class _AnimeFavoritesPageState extends State<AnimeFavoritesPage> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
     storeAnimesFavorites = Provider.of<FavoriteAnimeStore>(context);
-     Timer.run((){
-       if(storeAnimesFavorites.favoriteAnimes !=null){
-         storeAnimesFavorites.getFavoriteAnimes();
-       }
+    Timer.run(() {
+      if (storeAnimesFavorites.favoriteAnimes != null) {
+        storeAnimesFavorites.getFavoriteAnimes();
+      }
     });
-  
   }
 
   @override
@@ -61,14 +59,15 @@ class _AnimeFavoritesPageState extends State<AnimeFavoritesPage> {
               )),
         ),
         body: Observer(builder: (_) {
-          storeAnimesFavorites.favoriteAnimes ??storeAnimesFavorites.getFavoriteAnimes();
+          storeAnimesFavorites.favoriteAnimes ??
+              storeAnimesFavorites.getFavoriteAnimes();
           switch (storeAnimesFavorites.favoriteAnimes.status) {
             case FutureStatus.pending:
               return Loading();
             case FutureStatus.rejected:
               return ErrorLoading(
                   msg: translate('errors.error_load_page_favorite'),
-                  refresh: ()=>_refresh(storeAnimesFavorites));
+                  refresh: () => _refresh(storeAnimesFavorites));
             case FutureStatus.fulfilled:
               return AnimeListFavorite(
                 animes: storeAnimesFavorites.favoriteAnimes.value,
@@ -76,7 +75,7 @@ class _AnimeFavoritesPageState extends State<AnimeFavoritesPage> {
             default:
               return ErrorLoading(
                   msg: translate('errors.error_default'),
-                  refresh: _refresh(storeAnimesFavorites));
+                  refresh: () => _refresh(storeAnimesFavorites));
           }
         }));
   }

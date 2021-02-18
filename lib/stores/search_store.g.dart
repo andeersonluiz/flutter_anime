@@ -59,18 +59,28 @@ mixin _$SearchStore on _SearchStoreBase, Store {
     });
   }
 
-  final _$_SearchStoreBaseActionController =
-      ActionController(name: '_SearchStoreBase');
+  final _$favStatusAtom = Atom(name: '_SearchStoreBase.favStatus');
 
   @override
-  dynamic search(String query, String typeSearch) {
-    final _$actionInfo = _$_SearchStoreBaseActionController.startAction(
-        name: '_SearchStoreBase.search');
-    try {
-      return super.search(query, typeSearch);
-    } finally {
-      _$_SearchStoreBaseActionController.endAction(_$actionInfo);
-    }
+  ObservableList<dynamic> get favStatus {
+    _$favStatusAtom.reportRead();
+    return super.favStatus;
+  }
+
+  @override
+  set favStatus(ObservableList<dynamic> value) {
+    _$favStatusAtom.reportWrite(value, super.favStatus, () {
+      super.favStatus = value;
+    });
+  }
+
+  final _$searchAsyncAction = AsyncAction('_SearchStoreBase.search');
+
+  @override
+  Future search(String query, String typeSearch,
+      {FavoriteAnimeStore favStore}) {
+    return _$searchAsyncAction
+        .run(() => super.search(query, typeSearch, favStore: favStore));
   }
 
   @override
@@ -78,7 +88,8 @@ mixin _$SearchStore on _SearchStoreBase, Store {
     return '''
 searchResultsAnimes: ${searchResultsAnimes},
 searchResultsCharacters: ${searchResultsCharacters},
-searchResultsCategories: ${searchResultsCategories}
+searchResultsCategories: ${searchResultsCategories},
+favStatus: ${favStatus}
     ''';
   }
 }

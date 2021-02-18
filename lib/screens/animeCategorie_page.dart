@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -8,6 +10,7 @@ import 'package:project1/widgets/lists/listAnimes_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:project1/widgets/loading_widget.dart';
 import 'package:flutter_translate/flutter_translate.dart';
+import 'package:project1/stores/favoriteAnime_store.dart';
 
 class AnimeCategoriePage extends StatefulWidget {
   final String nameCategorie;
@@ -18,8 +21,9 @@ class AnimeCategoriePage extends StatefulWidget {
 }
 
 class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
-  final storeAnimesCategories = AnimeFilterStore();
+  AnimeFilterStore storeAnimesCategories;
   ScrollController _scrollController;
+  FavoriteAnimeStore storeAnimesFavorites;
   @override
   void initState() {
     super.initState();
@@ -30,6 +34,20 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
   void dispose() {
     super.dispose();
     _scrollController.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    storeAnimesCategories = Provider.of<AnimeFilterStore>(context);
+    storeAnimesFavorites = Provider.of<FavoriteAnimeStore>(context);
+
+    Timer.run(() {
+      if (storeAnimesCategories != null) {
+        storeAnimesCategories.getAnimesByCategorie(
+            widget.codeCategorie, storeAnimesFavorites);
+      }
+    });
   }
 
   @override
@@ -44,7 +62,8 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
         ),
         body: Observer(builder: (_) {
           storeAnimesCategories.listAnimes ??
-              storeAnimesCategories.getAnimesByCategorie(widget.codeCategorie);
+              storeAnimesCategories.getAnimesByCategorie(
+                  widget.codeCategorie, storeAnimesFavorites);
           switch (storeAnimesCategories.listAnimes.status) {
             case FutureStatus.pending:
               return Loading();
@@ -54,10 +73,12 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
                   refresh: _refresh);
             case FutureStatus.fulfilled:
               return AnimeList(
-                  keyName: "",
-                  animes: storeAnimesCategories.listAnimes.value,
-                  loadedAllList: storeAnimesCategories.loadedAllList,
-                  scrollController: _scrollController);
+                keyName: "",
+                animes: storeAnimesCategories.listAnimes.value,
+                loadedAllList: storeAnimesCategories.loadedAllList,
+                scrollController: _scrollController,
+                actualBar: "categorie",
+              );
             default:
               return ErrorLoading(
                   msg: translate('errors.error_default'), refresh: _refresh);
@@ -66,7 +87,8 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
   }
 
   Future<void> _refresh() async {
-    return storeAnimesCategories.getAnimesByCategorie(widget.codeCategorie);
+    return storeAnimesCategories.getAnimesByCategorie(
+        widget.codeCategorie, storeAnimesFavorites);
   }
 
   _scrollListener() {
@@ -75,7 +97,7 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
         !_scrollController.position.outOfRange &&
         !storeAnimesCategories.lockLoad) {
       if (storeAnimesCategories.loadedAllList == false) {
-        storeAnimesCategories.loadMoreAnimes();
+        storeAnimesCategories.loadMoreAnimes(storeAnimesFavorites);
         storeAnimesCategories.lockLoad = true;
       }
     }

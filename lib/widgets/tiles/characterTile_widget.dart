@@ -14,6 +14,7 @@ class CharacterTile extends StatelessWidget {
     return Hero(
       tag: character.id,
       child: Scaffold(
+        backgroundColor: color == Colors.white ? Colors.black : Colors.white,
         body: Card(
             color: color == Colors.white ? Colors.black : Colors.white,
             elevation: 3,
