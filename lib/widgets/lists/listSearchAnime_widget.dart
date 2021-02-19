@@ -7,6 +7,7 @@ import 'package:project1/widgets/loading_widget.dart';
 import 'package:project1/widgets/tiles/animeSearchTile_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:project1/stores/favoriteAnime_store.dart';
+import 'package:project1/stores/firebase_store.dart';
 
 class ListSearchAnime extends StatelessWidget {
   final query;
@@ -65,6 +66,9 @@ class ListSearchAnime extends StatelessWidget {
   Future<void> _refresh(BuildContext context) async {
     final storeSearch = Provider.of<SearchStore>(context);
     final favStore = Provider.of<FavoriteAnimeStore>(context);
-    storeSearch.search(query, actualBar, favStore: favStore);
+    final firebaseStore = Provider.of<FirebaseStore>(context);
+
+    storeSearch.search(query, actualBar, firebaseStore.isLogged,
+        favStore: favStore);
   }
 }

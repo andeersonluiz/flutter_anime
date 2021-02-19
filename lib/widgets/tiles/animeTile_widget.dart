@@ -283,10 +283,12 @@ class AnimeTile extends StatelessWidget {
                                                 highlightColor:
                                                     Colors.transparent,
                                                 icon: Icon(
-                                                  storeAnimesCategories
-                                                              .favCategorie[
-                                                          index][1]
-                                                      ? Icons.star
+                                                  firebaseStore.isLogged
+                                                      ? (storeAnimesCategories
+                                                                  .favCategorie[
+                                                              index][1]
+                                                          ? Icons.star
+                                                          : Icons.star_border)
                                                       : Icons.star_border,
                                                   color: Colors.yellow,
                                                 ),
@@ -308,8 +310,11 @@ class AnimeTile extends StatelessWidget {
                                                           .addFavoriteByName(
                                                               anime.id);
                                                     }
-                                                    storeSearch.changeStatusById(anime);
-                                                    storeAnimesCategories.changeStatusFav(index);
+                                                    storeSearch
+                                                        .changeStatusById(
+                                                            anime);
+                                                    storeAnimesCategories
+                                                        .changeStatusFav(index);
                                                   } else {
                                                     return Toast.show(
                                                         translate(

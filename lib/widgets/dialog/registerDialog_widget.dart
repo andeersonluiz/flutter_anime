@@ -131,6 +131,7 @@ class _RegisterDialogState extends State<RegisterDialog> {
                       _emailController.value.text,
                       _passwordController.value.text,
                       _usernameController.value.text);
+
                   if (firebaseStore.isLogged) {
                     firebaseStore.errorMsg = "";
                     Navigator.of(context).pop();

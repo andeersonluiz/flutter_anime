@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:project1/stores/firebase_store.dart';
 import 'package:provider/provider.dart';
 import 'package:sign_button/sign_button.dart';
@@ -62,10 +63,13 @@ class _LoginDialogState extends State<LoginDialog> {
         ),
         Observer(builder: (_) {
           return firebaseStore.errorMsg != ""
-              ? Center(
-                  child: Text(firebaseStore.errorMsg,
-                      maxLines: 1,
-                      style: TextStyle(color: Colors.red, fontSize: 13)))
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                      child: Text(firebaseStore.errorMsg,
+                          maxLines: 1,
+                          style: TextStyle(color: Colors.red, fontSize: 13))),
+                )
               : Container();
         }),
         Center(
@@ -82,6 +86,7 @@ class _LoginDialogState extends State<LoginDialog> {
                   bool result =
                       await firebaseStore.loginWithCredentials("Google");
                   if (result) {
+                    Phoenix.rebirth(context);
                     Navigator.of(context).pop();
                   }
                 },
@@ -94,6 +99,7 @@ class _LoginDialogState extends State<LoginDialog> {
                   bool result =
                       await firebaseStore.loginWithCredentials("Facebook");
                   if (result) {
+                    Phoenix.rebirth(context);
                     Navigator.of(context).pop();
                   }
                 },
@@ -107,6 +113,7 @@ class _LoginDialogState extends State<LoginDialog> {
               await firebaseStore.loginWithEmailAndPassword(
                   _emailController.value.text, _passwordController.value.text);
               if (firebaseStore.isLogged) {
+                Phoenix.rebirth(context);
                 firebaseStore.errorMsg = "";
                 Navigator.of(context).pop();
               }

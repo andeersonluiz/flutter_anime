@@ -24,6 +24,7 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
   AnimeFilterStore storeAnimesCategories;
   ScrollController _scrollController;
   FavoriteAnimeStore storeAnimesFavorites;
+  FirebaseStore firebaseStore;
   @override
   void initState() {
     super.initState();
@@ -42,10 +43,11 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
     storeAnimesCategories = Provider.of<AnimeFilterStore>(context);
     storeAnimesFavorites = Provider.of<FavoriteAnimeStore>(context);
 
+    firebaseStore = Provider.of<FirebaseStore>(context);
     Timer.run(() {
       if (storeAnimesCategories != null) {
         storeAnimesCategories.getAnimesByCategorie(
-            widget.codeCategorie, storeAnimesFavorites);
+            widget.codeCategorie, storeAnimesFavorites, firebaseStore.isLogged);
       }
     });
   }
@@ -62,8 +64,8 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
         ),
         body: Observer(builder: (_) {
           storeAnimesCategories.listAnimes ??
-              storeAnimesCategories.getAnimesByCategorie(
-                  widget.codeCategorie, storeAnimesFavorites);
+              storeAnimesCategories.getAnimesByCategorie(widget.codeCategorie,
+                  storeAnimesFavorites, firebaseStore.isLogged);
           switch (storeAnimesCategories.listAnimes.status) {
             case FutureStatus.pending:
               return Loading();
@@ -88,7 +90,7 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
 
   Future<void> _refresh() async {
     return storeAnimesCategories.getAnimesByCategorie(
-        widget.codeCategorie, storeAnimesFavorites);
+        widget.codeCategorie, storeAnimesFavorites, firebaseStore.isLogged);
   }
 
   _scrollListener() {
@@ -97,7 +99,8 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
         !_scrollController.position.outOfRange &&
         !storeAnimesCategories.lockLoad) {
       if (storeAnimesCategories.loadedAllList == false) {
-        storeAnimesCategories.loadMoreAnimes(storeAnimesFavorites);
+        storeAnimesCategories.loadMoreAnimes(
+            storeAnimesFavorites, firebaseStore.isLogged);
         storeAnimesCategories.lockLoad = true;
       }
     }

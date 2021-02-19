@@ -1,5 +1,6 @@
 import 'package:encrypt/encrypt.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:project1/firebase/cloudFirestore_firebase.dart';
@@ -34,17 +35,30 @@ class Auth {
       }
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
+        case 'account-exists-with-different-credential':
+          return translate("errors.account_exists_with_different_credential");
+        case 'invalid-credential':
+          return translate("errors.invalid_credential");
+        case 'operation-not-allowed':
+          return translate("errors.operation_not_allowed");
+        case 'user-disabled':
+          return translate("errors.user_disabled");
+        case 'user-not-found':
+          return translate("errors.user_not_found");
+        case 'wrong-password':
+          return translate("errors.wrong_password");
         case 'weak-password':
-          return "Password too weak";
+          return translate("errors.weak_password");
           break;
         case 'email-already-in-use':
-          return "Email already in use.";
+          return translate("errors.email_already_in_use");
           break;
         case 'invalid-email':
-          return "Email invalid";
+          return translate("errors.invalid_email");
           break;
+
         default:
-          return "Problems in database, try again.";
+          return translate("errors.default_email");
       }
     }
   }
@@ -71,19 +85,19 @@ class Auth {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'account-exists-with-different-credential':
-          return "The account already exists.";
+          return translate("errors.account_exists_with_different_credential");
         case 'invalid-credential':
-          return "Credential invalid.";
+          return translate("errors.invalid_credential");
         case 'operation-not-allowed':
-          return "Method not enabled.";
+          return translate("errors.operation_not_allowed");
         case 'user-disabled':
-          return "The user is disabled.";
+          return translate("errors.user_disabled");
         case 'user-not-found':
-          return "User not found.";
+          return translate("errors.user_not_found");
         case 'wrong-password':
-          return "Wrong password.";
+          return translate("errors.wrong_password");
         default:
-          return "Error to login with google, try again later";
+          return translate("errors.default_credential");
       }
     }
   }
@@ -107,19 +121,19 @@ class Auth {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'account-exists-with-different-credential':
-          return "The account already exists.";
+          return translate("errors.account_exists_with_different_credential");
         case 'invalid-credential':
-          return "Credential invalid.";
+          return translate("errors.invalid_credential");
         case 'operation-not-allowed':
-          return "Method not enabled.";
+          return translate("errors.operation_not_allowed");
         case 'user-disabled':
-          return "The user is disabled.";
+          return translate("errors.user_disabled");
         case 'user-not-found':
-          return "User not found.";
+          return translate("errors.user_not_found");
         case 'wrong-password':
-          return "Wrong password.";
+          return translate("errors.wrong_password");
         default:
-          return "Error to login with facebbok, try again later";
+          return translate("errors.default_credential");
       }
     }
   }
@@ -130,17 +144,30 @@ class Auth {
       return "";
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
+        case 'account-exists-with-different-credential':
+          return translate("errors.account_exists_with_different_credential");
+        case 'invalid-credential':
+          return translate("errors.invalid_credential");
+        case 'operation-not-allowed':
+          return translate("errors.operation_not_allowed");
+        case 'user-disabled':
+          return translate("errors.user_disabled");
+        case 'user-not-found':
+          return translate("errors.user_not_found");
+        case 'wrong-password':
+          return translate("errors.wrong_password");
         case 'weak-password':
-          return "Password too weak";
+          return translate("errors.weak_password");
           break;
         case 'email-already-in-use':
-          return "Email already in use.";
+          return translate("errors.email_already_in_use");
           break;
         case 'invalid-email':
-          return "Email invalid";
+          return translate("errors.invalid_email");
           break;
+
         default:
-          return "Problems in database, try again.";
+          return translate("errors.default_email");
       }
     }
   }
@@ -159,19 +186,19 @@ class Auth {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'account-exists-with-different-credential':
-          return "The account already exists.";
+          return translate("errors.account_exists_with_different_credential");
         case 'invalid-credential':
-          return "Credential invalid.";
+          return translate("errors.invalid_credential");
         case 'operation-not-allowed':
-          return "Method not enabled.";
+          return translate("errors.operation_not_allowed");
         case 'user-disabled':
-          return "The user is disabled.";
+          return translate("errors.user_disabled");
         case 'user-not-found':
-          return "User not found.";
+          return translate("errors.user_not_found");
         case 'wrong-password':
-          return "Wrong password.";
+          return translate("errors.wrong_password");
         default:
-          return "Error to login with google, try again later";
+          return translate("errors.default_credential");
       }
     }
   }
@@ -187,23 +214,22 @@ class Auth {
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'account-exists-with-different-credential':
-          return "The account already exists.";
+          return translate("errors.account_exists_with_different_credential");
         case 'invalid-credential':
-          return "Credential invalid.";
+          return translate("errors.invalid_credential");
         case 'operation-not-allowed':
-          return "Method not enabled.";
+          return translate("errors.operation_not_allowed");
         case 'user-disabled':
-          return "The user is disabled.";
+          return translate("errors.user_disabled");
         case 'user-not-found':
-          return "User not found.";
+          return translate("errors.user_not_found");
         case 'wrong-password':
-          return "Wrong password.";
+          return translate("errors.wrong_password");
         default:
-          return "Error to login with facebook, try again later";
+          return translate("errors.default_credential");
       }
     }
   }
-
 
   Future<void> signOut() {
     return auth.signOut();

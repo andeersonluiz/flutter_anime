@@ -23,22 +23,24 @@ abstract class _AnimeFilterStoreBase with Store {
   bool lockLoad = false;
 
   @action
-  getAnimesByCategorie(String categorie, FavoriteAnimeStore favStore) {
+  getAnimesByCategorie(
+      String categorie, FavoriteAnimeStore favStore, bool isLogged) {
     listAnimes = ObservableFuture(_decode(
             "https://kitsu.io/api/edge/anime?sort=-userCount,-favoritesCount&filter[categories]=$categorie",
-            favStore))
+            favStore,
+            isLogged))
         .then((value) => value);
   }
 
-  loadMoreAnimes(FavoriteAnimeStore favStore) {
-    listAnimes = listAnimes
-        .replace(ObservableFuture(_decode(nextPage, favStore)).then((value) {
+  loadMoreAnimes(FavoriteAnimeStore favStore, bool isLogged) {
+    listAnimes = listAnimes.replace(
+        ObservableFuture(_decode(nextPage, favStore, isLogged)).then((value) {
       lockLoad = false;
       return listAnimes.value + value;
     }));
   }
 
-  _decode(String url, FavoriteAnimeStore favStore) async {
+  _decode(String url, FavoriteAnimeStore favStore, bool isLogged) async {
     response = await http.get(url);
     var decoded = json.decode(utf8.decode(response.bodyBytes));
     decoded['links']['next'] == null
@@ -46,14 +48,14 @@ abstract class _AnimeFilterStoreBase with Store {
         : nextPage = decoded['links']['next'];
     List<Anime> animeResult =
         decoded['data'].map<Anime>((json) => Anime.fromJson(json)).toList();
-    if (favStore.favoriteAnimes == null) {
-      favStore.getFavoriteAnimes();
-      await Future.delayed(Duration(seconds: 5));
-    }
     if (animeResult.length == 0) {
       return animeResult;
     }
 
+    if (favStore.favoriteAnimes == null) {
+      favStore.getFavoriteAnimes();
+      await Future.delayed(Duration(seconds: 5));
+    }
     for (int i = 0; i < animeResult.length; i++) {
       animeResult[i].isFavorite = true;
 

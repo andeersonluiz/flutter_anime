@@ -53,14 +53,16 @@ abstract class _SearchStoreBase with Store {
   http.Response response;
 
   @action
-  search(String query, String typeSearch, {FavoriteAnimeStore favStore}) async {
+  search(String query, String typeSearch, bool isLogged,
+      {FavoriteAnimeStore favStore}) async {
     switch (typeSearch) {
       case "Anime":
         EasyDebounce.debounce("my-debounce", Duration(milliseconds: 750), () {
           lastQuery = query;
           return searchResultsAnimes = ObservableFuture(_decodeAnime(
                   "https://kitsu.io/api/edge/anime?filter[text]=$query",
-                  favStore))
+                  favStore,
+                  isLogged))
               .then((value) {
             return value;
           });
@@ -89,18 +91,19 @@ abstract class _SearchStoreBase with Store {
     }
   }
 
-  _decodeAnime(String url, FavoriteAnimeStore favStore) async {
+  _decodeAnime(String url, FavoriteAnimeStore favStore, bool isLogged) async {
     response = await http
         .get(url, headers: {'Content-Type': 'application/json;charset=utf-8'});
     var decoded = json.decode(utf8.decode(response.bodyBytes));
-    if (favStore.favoriteAnimes == null) {
-      favStore.getFavoriteAnimes();
-      await Future.delayed(Duration(seconds: 3));
-    }
+
     List<Anime> animesResult =
         decoded['data'].map<Anime>((json) => Anime.fromJson(json)).toList();
     if (animesResult.length == 0) {
       return animesResult;
+    }
+    if (favStore.favoriteAnimes == null) {
+      favStore.getFavoriteAnimes();
+      await Future.delayed(Duration(seconds: 5));
     }
     favStatus =
         ObservableList.of(List.filled(animesResult.length, ["", false]));
@@ -145,10 +148,12 @@ abstract class _SearchStoreBase with Store {
   }
 
   changeStatusById(Anime anime) {
-    for (int i = 0; i < favStatus.length; i++) {
-      if (favStatus[i][0] == anime.id) {
-        this.favStatus[i] = [favStatus[i][0], !favStatus[i][1]];
-        return;
+    if (favStatus != null) {
+      for (int i = 0; i < favStatus.length; i++) {
+        if (favStatus[i][0] == anime.id) {
+          this.favStatus[i] = [favStatus[i][0], !favStatus[i][1]];
+          return;
+        }
       }
     }
   }
