@@ -79,6 +79,8 @@ class Search extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     final store = Provider.of<SearchStore>(context);
     final favStore = Provider.of<FavoriteAnimeStore>(context);
+    final firebaseStore = Provider.of<FirebaseStore>(context);
+
     if (query == "") {
       if (store.getListResult(actualTab) == null) {
         return Container(color: color);
@@ -86,7 +88,8 @@ class Search extends SearchDelegate {
         return listSearchByName();
       }
     } else if (store.lastQuery != query) {
-      store.search(query, actualTab, favStore: favStore);
+      store.search(query, actualTab, firebaseStore.isLogged,
+          favStore: favStore);
       store.lastQuery = "";
       return listSearchByName();
     } else {

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobx/mobx.dart';
 import 'package:project1/firebase/auth_firebase.dart';
 import 'package:project1/firebase/cloudFirestore_firebase.dart';
@@ -29,6 +30,9 @@ abstract class _FavoriteAnimeStoreBase with Store {
 
   @action
   getFavoriteAnimes() async {
+    if (FirebaseAuth.instance.currentUser == null) {
+      return this.favoriteAnimes = ObservableFuture.value([]);
+    }
     this.favoriteAnimes = ObservableFuture(_decode()).then((value) async {
       favoriteList = ObservableList.of(List.filled(0, ["", false]));
       for (int i = 0; i < value.length; i++) {

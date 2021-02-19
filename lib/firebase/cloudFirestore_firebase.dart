@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:encrypt/encrypt.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:project1/model/anime_model.dart';
 import 'package:project1/model/user_model.dart';
 
@@ -8,7 +9,7 @@ class CloudFirestore {
   Key key;
   String keyValue;
   Encrypter encrypter;
-
+  FirebaseAuth auth;
   final iv = IV.fromLength(16);
   CloudFirestore() {
     if (instance == null) {
@@ -52,6 +53,9 @@ class CloudFirestore {
   }
 
   Future<Person> updateListAnimes(Person user, Anime anime, bool delete) async {
+    if (FirebaseAuth.instance.currentUser == null) {
+      return null;
+    }
     !delete
         ? await instance
             .collection("Users")
@@ -69,12 +73,16 @@ class CloudFirestore {
   }
 
   Future<String> getHashKey() async {
-    DocumentSnapshot doc =
+    /*DocumentSnapshot doc =
         await instance.collection("Hashes").doc("KeySha1").get();
-    return doc.data()['value'];
+    return doc.data()['value'];*/
+    return "xq adw zad qwer vsk escolhea aqj";
   }
 
   getFavoritesAnimesId(String email) async {
+    if (FirebaseAuth.instance.currentUser == null) {
+      return [];
+    }
     if (email == null) {
       return [];
     }
@@ -89,6 +97,9 @@ class CloudFirestore {
   }
 
   getFavoritesAnimes(String email) async {
+    if (FirebaseAuth.instance.currentUser == null) {
+      return [];
+    }
     await _initEncrypt();
     QuerySnapshot query = await instance
         .collection("Users")

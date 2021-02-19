@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:project1/model/character_model.dart';
@@ -46,25 +47,27 @@ void main() async {
       delegate.changeLocale(Locale(code, ''));
     }
   }
-  runApp(MultiProvider(
-      providers: [
-        Provider<FirebaseStore>(create: (_) => FirebaseStore()),
-        Provider<AnimeStore>(create: (_) => AnimeStore()),
-        Provider<SearchStore>(create: (_) => SearchStore()),
-        Provider<FavoriteAnimeStore>(
-          create: (_) => FavoriteAnimeStore(),
-        ),
-        Provider<AnimeFilterStore>(
-          create: (_) => AnimeFilterStore(),
-        ),
-        Provider<TranslateStore>(create: (_) => TranslateStore()),
-      ],
-      child: LocalizedApp(
-        delegate,
-        MyApp(
-          isDarkTheme: isDarkTheme,
-        ),
-      )));
+  runApp(Phoenix(
+    child: MultiProvider(
+        providers: [
+          Provider<FirebaseStore>(create: (_) => FirebaseStore()),
+          Provider<AnimeStore>(create: (_) => AnimeStore()),
+          Provider<SearchStore>(create: (_) => SearchStore()),
+          Provider<FavoriteAnimeStore>(
+            create: (_) => FavoriteAnimeStore(),
+          ),
+          Provider<AnimeFilterStore>(
+            create: (_) => AnimeFilterStore(),
+          ),
+          Provider<TranslateStore>(create: (_) => TranslateStore()),
+        ],
+        child: LocalizedApp(
+          delegate,
+          MyApp(
+            isDarkTheme: isDarkTheme,
+          ),
+        )),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -80,6 +83,7 @@ class MyApp extends StatelessWidget {
     var localizationDelegate = LocalizedApp.of(context).delegate;
     FirebaseStore firebaseStore = Provider.of<FirebaseStore>(context);
     if (firebaseStore.getUser() != null) {
+      print("fuuuuu user exists" + firebaseStore.getUser().toString());
       firebaseStore.loadUser().then((value) => firebaseStore.user = value);
       firebaseStore.setLogged = true;
     }

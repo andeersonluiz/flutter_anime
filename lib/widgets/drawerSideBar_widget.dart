@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:project1/stores/firebase_store.dart';
 import 'package:project1/widgets/dialog/registerDialog_widget.dart';
@@ -210,7 +211,10 @@ class DrawerSideBar extends StatelessWidget {
                                 : Colors.black,
                           ),
                         ),
-                        onTap: () async => await firebaseStore.signOut())
+                        onTap: () async {
+                          await firebaseStore.signOut();
+                          Phoenix.rebirth(context);
+                        })
                     : ListTile(
                         title: Text(
                           translate('drawer_options.login'),

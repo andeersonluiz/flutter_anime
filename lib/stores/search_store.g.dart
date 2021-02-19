@@ -77,10 +77,10 @@ mixin _$SearchStore on _SearchStoreBase, Store {
   final _$searchAsyncAction = AsyncAction('_SearchStoreBase.search');
 
   @override
-  Future search(String query, String typeSearch,
+  Future search(String query, String typeSearch, bool isLogged,
       {FavoriteAnimeStore favStore}) {
-    return _$searchAsyncAction
-        .run(() => super.search(query, typeSearch, favStore: favStore));
+    return _$searchAsyncAction.run(
+        () => super.search(query, typeSearch, isLogged, favStore: favStore));
   }
 
   @override

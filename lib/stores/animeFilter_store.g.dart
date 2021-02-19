@@ -43,11 +43,12 @@ mixin _$AnimeFilterStore on _AnimeFilterStoreBase, Store {
       ActionController(name: '_AnimeFilterStoreBase');
 
   @override
-  dynamic getAnimesByCategorie(String categorie, FavoriteAnimeStore favStore) {
+  dynamic getAnimesByCategorie(
+      String categorie, FavoriteAnimeStore favStore, bool isLogged) {
     final _$actionInfo = _$_AnimeFilterStoreBaseActionController.startAction(
         name: '_AnimeFilterStoreBase.getAnimesByCategorie');
     try {
-      return super.getAnimesByCategorie(categorie, favStore);
+      return super.getAnimesByCategorie(categorie, favStore, isLogged);
     } finally {
       _$_AnimeFilterStoreBaseActionController.endAction(_$actionInfo);
     }

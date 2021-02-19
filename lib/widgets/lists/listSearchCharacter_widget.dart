@@ -6,6 +6,7 @@ import 'package:project1/widgets/loading_widget.dart';
 import 'package:project1/widgets/tiles/characterSearchTile_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:project1/stores/search_store.dart';
+import 'package:project1/stores/firebase_store.dart';
 
 class ListSearchCharacter extends StatelessWidget {
   final query;
@@ -62,6 +63,8 @@ class ListSearchCharacter extends StatelessWidget {
 
   Future<void> _refresh(BuildContext context) async {
     final storeSearch = Provider.of<SearchStore>(context);
-    return storeSearch.search(query, actualBar);
+    final firebaseStore = Provider.of<FirebaseStore>(context);
+
+    return storeSearch.search(query, actualBar, firebaseStore.isLogged);
   }
 }

@@ -188,9 +188,9 @@ abstract class _FirebaseStoreBase with Store {
   getUser() => auth.getUser();
 
   @action
-  signOut() {
+  signOut() async {
     auth = Auth();
-    auth.signOut();
+    await auth.signOut();
     this.isLogged = false;
   }
 
@@ -224,14 +224,14 @@ abstract class _FirebaseStoreBase with Store {
   @action
   setFavorite(Anime anime, bool isFavorite) {
     this.anime = anime;
-      if (isFavorite) {
-        removeFavorite(this.anime);
-      } else {
-        addFavorite(this.anime);
-      }
+    if (isFavorite) {
+      removeFavorite(this.anime);
+    } else {
+      addFavorite(this.anime);
+    }
   }
 
-  removeFavorite(Anime anime)async {
+  removeFavorite(Anime anime) async {
     anime.isFavorite = false;
     user = await loadUser();
     user.favoritesAnimes.remove(anime);
