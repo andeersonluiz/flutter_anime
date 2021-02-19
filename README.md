@@ -1,16 +1,37 @@
-# flutter_anime
+## Animes IO
 
-Developing an app of informations about animes using flutter with MobX. The API used is https://kitsu.docs.apiary.io
+App of informations about animes using flutter with MobX and Firebase. The API used is https://kitsu.docs.apiary.io
 
-## Getting Started
+# Screens 
+## Home Page / Search anime 
 
-This project is a starting point for a Flutter application.
+<p float="left">  
+<img src="https://raw.githubusercontent.com/andeersonluiz/flutter_anime/master/assets/screenHome.png" width="40%" >⠀⠀
+<img src="https://raw.githubusercontent.com/andeersonluiz/flutter_anime/master/assets/screenSearchAnime.png" width="40%" >
+</p>
 
-A few resources to get you started if this is your first Flutter project:
+## Character Page / Categorie Page
+<p float="left">  
+<img  src="https://raw.githubusercontent.com/andeersonluiz/flutter_anime/master/assets/screenCharacter.png" width="40%">⠀⠀
+<img src="https://raw.githubusercontent.com/andeersonluiz/flutter_anime/master/assets/screenCategories.png" width="40%">
+</p>
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## DarkTheme enabled / DarkTheme disabled
+<p float="left">  
+<img  src="https://raw.githubusercontent.com/andeersonluiz/flutter_anime/master/assets/screenDarkTheme.png" width="40%">⠀⠀
+<img src="https://raw.githubusercontent.com/andeersonluiz/flutter_anime/master/assets/screenWhiteTheme.png" width="40%">
+</p>
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Register / Settings
+<p float="left">  
+<img  src="https://raw.githubusercontent.com/andeersonluiz/flutter_anime/master/assets/screenRegister.png" width="40%">⠀⠀
+<img src="https://raw.githubusercontent.com/andeersonluiz/flutter_anime/master/assets/screenSettings.png" width="40%">
+</p>
+
+# Warnings
+
+*API translate(to portuguese) support only 50 request per day*\
+*Avaliable languages: English, Portuguese*\
+*Search is also included in characters and categorie*\
+*Users can change avatar, username and background that are avaliable in app*\
+*Users can use this app as guest, but no has acess to favorite list, save anime as favorite, change avatar, username and background*
