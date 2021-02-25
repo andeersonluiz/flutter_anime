@@ -3,16 +3,16 @@ import 'package:project1/model/character_model.dart';
 
 class CharacterSearchTile extends StatelessWidget {
   final Character character;
-  final color;
-  CharacterSearchTile({this.character, this.color});
+  CharacterSearchTile(this.character);
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
 
     return Card(
-      color: color,
+      color: themeData.primaryColor,
       elevation: 5,
-      shadowColor: color == Colors.black ? Colors.white : Colors.black,
+      shadowColor: themeData.indicatorColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -34,8 +34,7 @@ class CharacterSearchTile extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color:
-                          color == Colors.black ? Colors.white : Colors.black),
+                      color: themeData.indicatorColor),
                   textAlign: TextAlign.center,
                 )),
               ],

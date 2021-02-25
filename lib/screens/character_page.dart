@@ -35,10 +35,11 @@ class _CharacterPageState extends State<CharacterPage> {
   @override
   Widget build(BuildContext context) {
     final firebaseStore = Provider.of<FirebaseStore>(context);
+    final themeData = Theme.of(context);
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+      backgroundColor: themeData.primaryColor,
       drawer: DrawerSideBar(),
       appBar: AppBar(
         actions: [
@@ -59,10 +60,8 @@ class _CharacterPageState extends State<CharacterPage> {
               showSearch(
                   context: context,
                   delegate: Search(
-                      actualTab: globals.stringTabSearchCharacters,
-                      color: firebaseStore.isDarkTheme
-                          ? Colors.black
-                          : Colors.white))
+                    actualTab: globals.stringTabSearchCharacters,
+                  ))
             },
           ),
         ],
@@ -84,7 +83,6 @@ class _CharacterPageState extends State<CharacterPage> {
                 scrollController: _scrollController,
                 loadedAllList: storeCharacters.loadedAllList,
                 crossAxisCount: 4,
-                color: firebaseStore.isDarkTheme ? Colors.white : Colors.black,
               ),
             );
           default:

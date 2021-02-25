@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:project1/stores/firebase_store.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:project1/stores/translation_store.dart';
@@ -37,7 +36,7 @@ class _CharacterInfoPageState extends State<CharacterInfoPage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    final firebaseStore = Provider.of<FirebaseStore>(context);
+    final themeData = Theme.of(context);
 
     return Scaffold(
       body: CustomScrollView(
@@ -64,9 +63,7 @@ class _CharacterInfoPageState extends State<CharacterInfoPage> {
                   Expanded(
                     flex: 35,
                     child: Container(
-                        color: firebaseStore.isDarkTheme
-                            ? Colors.black
-                            : Colors.white,
+                        color: themeData.primaryColor,
                         child: Center(
                             child: Image.network(
                           widget.character.image,
@@ -76,9 +73,7 @@ class _CharacterInfoPageState extends State<CharacterInfoPage> {
                   Expanded(
                     flex: 5,
                     child: Container(
-                      color: firebaseStore.isDarkTheme
-                          ? Colors.black
-                          : Colors.white,
+                      color: themeData.primaryColor,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Center(
@@ -86,9 +81,7 @@ class _CharacterInfoPageState extends State<CharacterInfoPage> {
                           "Created at: ${_formatData(widget.character.createdAt)}",
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
-                            color: firebaseStore.isDarkTheme
-                                ? Colors.white
-                                : Colors.black,
+                            color: themeData.indicatorColor,
                           ),
                         )),
                       ),
@@ -98,9 +91,7 @@ class _CharacterInfoPageState extends State<CharacterInfoPage> {
                       ? Expanded(
                           flex: 5,
                           child: Container(
-                            color: firebaseStore.isDarkTheme
-                                ? Colors.black
-                                : Colors.white,
+                            color: themeData.primaryColor,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Center(
@@ -118,9 +109,7 @@ class _CharacterInfoPageState extends State<CharacterInfoPage> {
                                                 style: TextStyle(
                                                   fontStyle: FontStyle.italic,
                                                   color:
-                                                      firebaseStore.isDarkTheme
-                                                          ? Colors.white
-                                                          : Colors.black,
+                                                      themeData.indicatorColor,
                                                 ));
                                           }
                                           if (index ==
@@ -132,18 +121,14 @@ class _CharacterInfoPageState extends State<CharacterInfoPage> {
                                                 style: TextStyle(
                                                   fontStyle: FontStyle.italic,
                                                   color:
-                                                      firebaseStore.isDarkTheme
-                                                          ? Colors.white
-                                                          : Colors.black,
+                                                      themeData.indicatorColor,
                                                 ));
                                           }
                                           return Text(
                                               "${widget.character.otherNames[index]}, ",
                                               style: TextStyle(
                                                 fontStyle: FontStyle.italic,
-                                                color: firebaseStore.isDarkTheme
-                                                    ? Colors.white
-                                                    : Colors.black,
+                                                color: themeData.indicatorColor,
                                               ));
                                         })),
                               ),
@@ -153,9 +138,7 @@ class _CharacterInfoPageState extends State<CharacterInfoPage> {
                       : Expanded(
                           flex: 5,
                           child: Container(
-                            color: firebaseStore.isDarkTheme
-                                ? Colors.black
-                                : Colors.white,
+                            color: themeData.primaryColor,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Center(
@@ -163,9 +146,7 @@ class _CharacterInfoPageState extends State<CharacterInfoPage> {
                                     "${translate('character_info.other_names')} -",
                                     style: TextStyle(
                                       fontStyle: FontStyle.italic,
-                                      color: firebaseStore.isDarkTheme
-                                          ? Colors.white
-                                          : Colors.black,
+                                      color: themeData.indicatorColor,
                                     )),
                               ),
                             ),
@@ -187,9 +168,7 @@ class _CharacterInfoPageState extends State<CharacterInfoPage> {
                       flex: 55,
                       child: Container(
                         width: double.infinity,
-                        color: firebaseStore.isDarkTheme
-                            ? Colors.black
-                            : Colors.white,
+                        color: themeData.primaryColor,
                         child: SingleChildScrollView(
                             child: Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -198,9 +177,8 @@ class _CharacterInfoPageState extends State<CharacterInfoPage> {
                                     return Text(
                                         "${translate('character_info.no_informations')} ${widget.character.name}",
                                         style: TextStyle(
-                                            color: firebaseStore.isDarkTheme
-                                                ? Colors.white
-                                                : Colors.black));
+                                          color: themeData.indicatorColor,
+                                        ));
                                   }
                                   storeTranslation.descriptionCharacter ??
                                       storeTranslation
@@ -223,9 +201,7 @@ class _CharacterInfoPageState extends State<CharacterInfoPage> {
                                           storeTranslation
                                               .descriptionCharacter.value,
                                           style: TextStyle(
-                                              color: firebaseStore.isDarkTheme
-                                                  ? Colors.white
-                                                  : Colors.black));
+                                              color: themeData.indicatorColor));
 
                                     default:
                                       return Container();

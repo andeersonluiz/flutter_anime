@@ -8,11 +8,12 @@ class AnimeSearchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
 
     return Card(
       color: color,
       elevation: 5,
-      shadowColor: color == Colors.black ? Colors.white : Colors.black,
+      shadowColor: themeData.indicatorColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -34,8 +35,7 @@ class AnimeSearchTile extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color:
-                          color == Colors.black ? Colors.white : Colors.black),
+                      color: themeData.indicatorColor),
                   textAlign: TextAlign.center,
                 )),
               ],

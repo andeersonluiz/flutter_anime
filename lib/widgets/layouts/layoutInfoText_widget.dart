@@ -15,9 +15,7 @@ class LayoutInfoText extends StatelessWidget {
               right: MediaQuery.of(context).size.width / 50,
               bottom: 0,
               top: 0),
-          decoration: BoxDecoration(
-              border: Border.all(
-                  color: color == Colors.black ? Colors.black : Colors.white)),
+          decoration: BoxDecoration(border: Border.all(color: color)),
           child: Center(
             child: Text(
               text,

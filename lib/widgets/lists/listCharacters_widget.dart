@@ -8,17 +8,17 @@ class ListCharacter extends StatelessWidget {
   final scrollController;
   final bool loadedAllList;
   final int crossAxisCount;
-  final color;
-  ListCharacter(
-      {this.characters,
-      this.scrollController,
-      this.loadedAllList,
-      this.crossAxisCount,
-      this.color});
+  ListCharacter({
+    this.characters,
+    this.scrollController,
+    this.loadedAllList,
+    this.crossAxisCount,
+  });
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return Container(
-      color: color == Colors.white ? Colors.black : Colors.white,
+      color: themeData.primaryColor,
       child: CustomScrollView(
         scrollDirection: Axis.vertical,
         controller: scrollController,
@@ -34,8 +34,7 @@ class ListCharacter extends StatelessWidget {
                     onTap: () => Navigator.pushNamed(context, '/characterInfo',
                         arguments: characters[index]),
                     child: CharacterTile(
-                      character: characters[index],
-                      color: color,
+                      characters[index],
                     )),
                 childCount: characters.length ?? 0),
           ),
@@ -47,7 +46,7 @@ class ListCharacter extends StatelessWidget {
                         child: loadedAllList
                             ? Container()
                             : CircularProgressIndicator(
-                                backgroundColor: color,
+                                backgroundColor: themeData.primaryColor,
                               ))),
                 childCount: 1),
           ),

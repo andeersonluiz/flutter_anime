@@ -40,9 +40,9 @@ class _AnimeFavoritesPageState extends State<AnimeFavoritesPage> {
     final firebaseStore = Provider.of<FirebaseStore>(context);
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final themeData = Theme.of(context);
     return Scaffold(
-        backgroundColor:
-            firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+        backgroundColor: themeData.primaryColor,
         drawer: DrawerSideBar(),
         appBar: AppBar(
           centerTitle: true,

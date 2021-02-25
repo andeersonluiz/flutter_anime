@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:project1/model/categorie_model.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:provider/provider.dart';
-import 'package:project1/stores/firebase_store.dart';
 
 class CategorieTile extends StatelessWidget {
   final Categorie categorie;
-  final color;
-  CategorieTile({this.categorie, this.color});
+  CategorieTile(
+    this.categorie,
+  );
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return Padding(
       padding:
           const EdgeInsets.only(left: 8.0, right: 8.0, top: 0.0, bottom: 0.0),
       child: Card(
-        color: color == Colors.black ? Colors.white : Colors.black,
+        color: themeData.primaryColor,
         elevation: 3,
-        shadowColor: color,
+        shadowColor: themeData.indicatorColor,
         child: Container(
           width: double.infinity,
           child: Column(
@@ -27,7 +27,9 @@ class CategorieTile extends StatelessWidget {
                 child: Text(
                   categorie.name,
                   style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold, color: color),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: themeData.indicatorColor),
                 ),
               ),
               Padding(
@@ -40,7 +42,7 @@ class CategorieTile extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 15,
                         fontStyle: FontStyle.italic,
-                        color: color),
+                        color: themeData.indicatorColor),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                     minFontSize: 10,
@@ -50,7 +52,7 @@ class CategorieTile extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text("Animes in categorie: " + categorie.totalMediaCount,
-                    style: TextStyle(color: color)),
+                    style: TextStyle(color: themeData.indicatorColor)),
               )
             ],
           ),
@@ -60,23 +62,20 @@ class CategorieTile extends StatelessWidget {
   }
 
   Future<void> _showDialog(BuildContext context) {
+    final themeData = Theme.of(context);
     return showDialog(
         context: context,
         builder: (ctx) {
-          final firebaseStore = Provider.of<FirebaseStore>(ctx);
-
           return Center(
             child: SingleChildScrollView(
               child: AlertDialog(
-                backgroundColor:
-                    firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+                backgroundColor: themeData.indicatorColor,
                 title: Text(
                   categorie.description,
                   style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: firebaseStore.isDarkTheme
-                          ? Colors.black
-                          : Colors.white),
+                    fontWeight: FontWeight.normal,
+                    color: themeData.primaryColor,
+                  ),
                 ),
                 actions: [
                   FlatButton(

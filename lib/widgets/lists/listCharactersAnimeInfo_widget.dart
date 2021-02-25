@@ -8,17 +8,17 @@ class ListCharacterAnimeInfo extends StatelessWidget {
   final scrollController;
   final bool loadedAllList;
   final int crossAxisCount;
-  final color;
-  ListCharacterAnimeInfo(
-      {this.characters,
-      this.scrollController,
-      this.loadedAllList,
-      this.crossAxisCount,
-      this.color});
+  ListCharacterAnimeInfo({
+    this.characters,
+    this.scrollController,
+    this.loadedAllList,
+    this.crossAxisCount,
+  });
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return Container(
-      color: color == Colors.white ? Colors.black : Colors.white,
+      color: themeData.primaryColor,
       child: CustomScrollView(
         scrollDirection: Axis.vertical,
         controller: scrollController,
@@ -34,8 +34,7 @@ class ListCharacterAnimeInfo extends StatelessWidget {
                     onTap: () => Navigator.pushNamed(context, '/characterInfo',
                         arguments: characters[index]),
                     child: CharacterTileAnimeInfo(
-                      character: characters[index],
-                      color: color,
+                      characters[index],
                     )),
                 childCount: characters.length ?? 0),
           ),
@@ -47,7 +46,7 @@ class ListCharacterAnimeInfo extends StatelessWidget {
                         child: loadedAllList
                             ? Container()
                             : CircularProgressIndicator(
-                                backgroundColor: color,
+                                backgroundColor: themeData.primaryColor,
                               ))),
                 childCount: 1),
           ),

@@ -3,14 +3,14 @@ import 'package:project1/model/categorie_model.dart';
 
 class CategorieSearchTile extends StatelessWidget {
   final Categorie categorie;
-  final color;
-  CategorieSearchTile({this.categorie, this.color});
+  CategorieSearchTile(this.categorie);
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return Card(
-      color: color,
+      color: themeData.primaryColor,
       elevation: 5,
-      shadowColor: color == Colors.black ? Colors.white : Colors.black,
+      shadowColor: themeData.indicatorColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -27,9 +27,7 @@ class CategorieSearchTile extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: color == Colors.black
-                            ? Colors.white
-                            : Colors.black),
+                        color: themeData.indicatorColor),
                     textAlign: TextAlign.center,
                   )),
                 ),
@@ -41,9 +39,7 @@ class CategorieSearchTile extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: color == Colors.black
-                            ? Colors.white
-                            : Colors.black),
+                        color: themeData.indicatorColor),
                     textAlign: TextAlign.center,
                   )),
                 ),

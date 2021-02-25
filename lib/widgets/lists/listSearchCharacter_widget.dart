@@ -44,9 +44,8 @@ class ListSearchCharacter extends StatelessWidget {
                                 .searchResultsCharacters.value[index]);
                       },
                       child: CharacterSearchTile(
-                          character:
-                              storeSearch.searchResultsCharacters.value[index],
-                          color: color),
+                        storeSearch.searchResultsCharacters.value[index],
+                      ),
                     );
                   });
             default:
