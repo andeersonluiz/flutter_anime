@@ -2,8 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:project1/model/episode_model.dart';
 import 'package:flutter_translate/flutter_translate.dart';
-import 'package:provider/provider.dart';
-import 'package:project1/stores/firebase_store.dart';
 
 class EpisodeTile extends StatelessWidget {
   final Episode episode;
@@ -13,19 +11,18 @@ class EpisodeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
 
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          decoration: BoxDecoration(
-              color: color == Colors.white ? Colors.black : Colors.white,
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 3,
-                    blurRadius: 3,
-                    offset: Offset(0, 3))
-              ]),
+          decoration: BoxDecoration(color: themeData.primaryColor, boxShadow: [
+            BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 3,
+                blurRadius: 3,
+                offset: Offset(0, 3))
+          ]),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
@@ -106,22 +103,19 @@ class EpisodeTile extends StatelessWidget {
   }
 
   Future<void> _showDialog(BuildContext context) {
+    final themeData = Theme.of(context);
     return showDialog(
         context: context,
         builder: (ctx) {
-          final firebaseStore = Provider.of<FirebaseStore>(ctx);
           return Center(
             child: SingleChildScrollView(
               child: AlertDialog(
-                backgroundColor:
-                    firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+                backgroundColor: themeData.indicatorColor,
                 title: Text(
                   episode.description,
                   style: TextStyle(
                       fontWeight: FontWeight.normal,
-                      color: firebaseStore.isDarkTheme
-                          ? Colors.black
-                          : Colors.white),
+                      color: themeData.primaryColor),
                 ),
                 actions: [
                   FlatButton(

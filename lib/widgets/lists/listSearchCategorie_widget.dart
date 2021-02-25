@@ -11,13 +11,14 @@ import 'package:project1/stores/firebase_store.dart';
 class ListSearchCategorie extends StatelessWidget {
   final query;
   final actualBar;
-  final color;
-  ListSearchCategorie({this.query, this.actualBar, this.color});
+  ListSearchCategorie({this.query, this.actualBar});
   @override
   Widget build(BuildContext context) {
     final storeSearch = Provider.of<SearchStore>(context);
+    final themeData = Theme.of(context);
+
     return Container(
-      color: color,
+      color: themeData.primaryColor,
       child: Observer(builder: (_) {
         if (storeSearch.searchResultsCategories != null) {
           switch (storeSearch.searchResultsCategories.status) {
@@ -44,9 +45,8 @@ class ListSearchCategorie extends StatelessWidget {
                                 .searchResultsCategories.value[index].name);
                       },
                       child: CategorieSearchTile(
-                          categorie:
-                              storeSearch.searchResultsCategories.value[index],
-                          color: color),
+                        storeSearch.searchResultsCategories.value[index],
+                      ),
                     );
                   });
             default:

@@ -90,6 +90,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final firebaseStore = Provider.of<FirebaseStore>(context);
+    final themeData = Theme.of(context);
     final storeSearch = Provider.of<SearchStore>(context);
     final storeAnimesCategories = Provider.of<AnimeFilterStore>(context);
     final List<Padding> myTabs = [
@@ -351,16 +352,13 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
             SliverFillRemaining(
               fillOverscroll: true,
               child: Scaffold(
-                backgroundColor:
-                    firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+                backgroundColor: themeData.primaryColor,
                 appBar: TabBar(
                   isScrollable: true,
                   indicatorPadding: EdgeInsets.all(8.0),
                   tabs: myTabs,
-                  indicatorColor:
-                      firebaseStore.isDarkTheme ? Colors.white : Colors.black,
-                  labelColor:
-                      firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+                  indicatorColor: themeData.indicatorColor,
+                  labelColor: themeData.indicatorColor,
                   indicatorSize: TabBarIndicatorSize.tab,
                 ),
                 body: TabBarView(
@@ -389,10 +387,9 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                             return AutoSizeText(
                               storeTranslation.synopsisTranslated.value,
                               style: TextStyle(
-                                  fontSize: 15,
-                                  color: firebaseStore.isDarkTheme
-                                      ? Colors.white
-                                      : Colors.black),
+                                fontSize: 15,
+                                color: themeData.indicatorColor,
+                              ),
                               maxLines: 40,
                               maxFontSize: 15,
                               minFontSize: 12,
@@ -429,9 +426,8 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                         widget.anime.youtubeVideoId != ""
                             ? LayoutTrailer(
                                 controllerYoutube: _controllerYoutube,
-                                color: firebaseStore.isDarkTheme
-                                    ? Colors.white
-                                    : Colors.black)
+                                color: themeData.indicatorColor,
+                              )
                             : Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
@@ -439,9 +435,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    color: firebaseStore.isDarkTheme
-                                        ? Colors.white
-                                        : Colors.black,
+                                    color: themeData.indicatorColor,
                                   ),
                                 ),
                               )
@@ -477,9 +471,7 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                             episodes: storeEpisodes.listEpisodes.value,
                             loadedAllList: storeEpisodes.loadedAllList,
                             scrollController: _scrollController,
-                            color: firebaseStore.isDarkTheme
-                                ? Colors.white
-                                : Colors.black,
+                            color: themeData.indicatorColor,
                           );
                         default:
                           return ErrorLoading(
@@ -511,14 +503,11 @@ class _AnimeInfoPageState extends State<AnimeInfoPage> {
                                   refresh: _refreshCharacter);
                             }
                             return ListCharacterAnimeInfo(
-                                characters:
-                                    storeCharacters.listCharacters.value,
-                                loadedAllList: storeCharacters.loadedAllList,
-                                scrollController: _scrollControllerCharacters,
-                                crossAxisCount: 3,
-                                color: firebaseStore.isDarkTheme
-                                    ? Colors.white
-                                    : Colors.black);
+                              characters: storeCharacters.listCharacters.value,
+                              loadedAllList: storeCharacters.loadedAllList,
+                              scrollController: _scrollControllerCharacters,
+                              crossAxisCount: 3,
+                            );
                           default:
                             return ErrorLoading(
                                 msg: translate('errors.error_default'),

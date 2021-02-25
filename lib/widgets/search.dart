@@ -11,39 +11,39 @@ import 'package:project1/stores/favoriteAnime_store.dart';
 class Search extends SearchDelegate {
   String lastQuery;
   String actualTab;
-  final color;
-  Search({this.actualTab, this.color});
+  ThemeData themeData;
+  Search({this.actualTab});
 
   @override
   ThemeData appBarTheme(BuildContext context) {
-    final firebaseStore = Provider.of<FirebaseStore>(context);
-    final colorText = firebaseStore.isDarkTheme ? Colors.white : Colors.black;
+    themeData = Theme.of(context);
     return ThemeData(
-      primaryColor: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+      primaryColor: themeData.primaryColor,
       inputDecorationTheme: InputDecorationTheme(
-        hintStyle: TextStyle(color: colorText),
-        labelStyle: TextStyle(color: colorText),
+        hintStyle: TextStyle(color: themeData.indicatorColor),
+        labelStyle: TextStyle(color: themeData.indicatorColor),
       ),
       appBarTheme: AppBarTheme(
-        color: colorText,
+        color: themeData.indicatorColor,
       ),
       textTheme: TextTheme(
           headline6: TextStyle(
-              color: firebaseStore.isDarkTheme ? Colors.white : Colors.black)),
+        color: themeData.indicatorColor,
+      )),
     );
   }
 
   @override
   List<Widget> buildActions(BuildContext context) {
     final store = Provider.of<SearchStore>(context);
+
     return <Widget>[
       Container(
-        color: color,
+        color: themeData.primaryColor,
         child: IconButton(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
-          icon: Icon(Icons.close,
-              color: color == Colors.black ? Colors.white : Colors.black),
+          icon: Icon(Icons.close, color: themeData.indicatorColor),
           onPressed: () {
             store.setListResult(actualTab, null);
             query = "";
@@ -58,8 +58,7 @@ class Search extends SearchDelegate {
     return IconButton(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      icon: Icon(Icons.arrow_back,
-          color: color == Colors.black ? Colors.white : Colors.black),
+      icon: Icon(Icons.arrow_back, color: themeData.indicatorColor),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -69,7 +68,7 @@ class Search extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     if (query == "") {
-      return Container(color: color);
+      return Container(color: themeData.primaryColor);
     } else {
       return listSearchByName();
     }
@@ -83,7 +82,7 @@ class Search extends SearchDelegate {
 
     if (query == "") {
       if (store.getListResult(actualTab) == null) {
-        return Container(color: color);
+        return Container(color: themeData.primaryColor);
       } else {
         return listSearchByName();
       }
@@ -94,7 +93,7 @@ class Search extends SearchDelegate {
       return listSearchByName();
     } else {
       if (store.getListResult(actualTab) == null) {
-        return Container(color: color);
+        return Container(color: themeData.primaryColor);
       } else {
         return listSearchByName();
       }
@@ -107,22 +106,21 @@ class Search extends SearchDelegate {
         return ListSearchAnime(
           query: query,
           actualBar: globals.stringTabSearchAnimes,
-          color: color,
+          color: themeData.primaryColor,
         );
       case globals.stringTabSearchCharacters:
         return ListSearchCharacter(
           query: query,
           actualBar: globals.stringTabSearchCharacters,
-          color: color,
+          color: themeData.primaryColor,
         );
       case globals.stringTabSearchCategories:
         return ListSearchCategorie(
           query: query,
           actualBar: globals.stringTabSearchCategories,
-          color: color,
         );
       default:
-        return Container(color: color);
+        return Container(color: themeData.primaryColor);
     }
   }
 }

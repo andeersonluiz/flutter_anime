@@ -11,20 +11,20 @@ import 'dialog/loginDialog_widget.dart';
 import 'dialog/selectAvatarDialog_widget.dart';
 import 'dialog/selectBackground_widget.dart';
 import 'package:project1/support/shared_preferences.dart';
-
 import 'dialog/settings_widget.dart';
 
 class DrawerSideBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final firebaseStore = Provider.of<FirebaseStore>(context);
+    final themeData = Theme.of(context);
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final sharedPreferences = SharedPrefs();
     return Drawer(
       child: SafeArea(
         child: Container(
-          color: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+          color: themeData.primaryColor,
           child: Column(
             children: [
               Observer(builder: (_) {
@@ -129,9 +129,7 @@ class DrawerSideBar extends StatelessWidget {
                   title: Text(
                     'Animes',
                     style: TextStyle(
-                      color: firebaseStore.isDarkTheme
-                          ? Colors.white
-                          : Colors.black,
+                      color: themeData.indicatorColor,
                     ),
                   ),
                   onTap: () async {
@@ -144,9 +142,7 @@ class DrawerSideBar extends StatelessWidget {
                   title: Text(
                     translate('drawer_options.characters'),
                     style: TextStyle(
-                      color: firebaseStore.isDarkTheme
-                          ? Colors.white
-                          : Colors.black,
+                      color: themeData.indicatorColor,
                     ),
                   ),
                   onTap: () async {
@@ -160,10 +156,7 @@ class DrawerSideBar extends StatelessWidget {
               ListTile(
                 title: Text(
                   translate('drawer_options.categories'),
-                  style: TextStyle(
-                    color:
-                        firebaseStore.isDarkTheme ? Colors.white : Colors.black,
-                  ),
+                  style: TextStyle(color: themeData.indicatorColor),
                 ),
                 onTap: () async {
                   if (ModalRoute.of(context).settings.name !=
@@ -178,9 +171,7 @@ class DrawerSideBar extends StatelessWidget {
                   title: Text(
                     translate('drawer_options.my_favorites'),
                     style: TextStyle(
-                      color: firebaseStore.isDarkTheme
-                          ? Colors.white
-                          : Colors.black,
+                      color: themeData.indicatorColor,
                     ),
                   ),
                   onTap: () async {
@@ -198,7 +189,7 @@ class DrawerSideBar extends StatelessWidget {
                     }
                   }),
               Divider(
-                color: firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+                color: themeData.indicatorColor,
               ),
               Observer(builder: (_) {
                 return firebaseStore.isLogged
@@ -206,22 +197,20 @@ class DrawerSideBar extends StatelessWidget {
                         title: Text(
                           translate('drawer_options.logout'),
                           style: TextStyle(
-                            color: firebaseStore.isDarkTheme
-                                ? Colors.white
-                                : Colors.black,
+                            color: themeData.indicatorColor,
                           ),
                         ),
                         onTap: () async {
                           await firebaseStore.signOut();
-                          Phoenix.rebirth(context);
+                          Phoenix.rebirth(
+                            context,
+                          );
                         })
                     : ListTile(
                         title: Text(
                           translate('drawer_options.login'),
                           style: TextStyle(
-                            color: firebaseStore.isDarkTheme
-                                ? Colors.white
-                                : Colors.black,
+                            color: themeData.indicatorColor,
                           ),
                         ),
                         onTap: () {
@@ -236,9 +225,7 @@ class DrawerSideBar extends StatelessWidget {
                         title: Text(
                           translate('drawer_options.register'),
                           style: TextStyle(
-                            color: firebaseStore.isDarkTheme
-                                ? Colors.white
-                                : Colors.black,
+                            color: themeData.indicatorColor,
                           ),
                         ),
                         onTap: () {
@@ -250,9 +237,7 @@ class DrawerSideBar extends StatelessWidget {
                   title: Text(
                     translate('drawer_options.settings'),
                     style: TextStyle(
-                      color: firebaseStore.isDarkTheme
-                          ? Colors.white
-                          : Colors.black,
+                      color: themeData.indicatorColor,
                     ),
                   ),
                   onTap: () {
@@ -274,9 +259,7 @@ class DrawerSideBar extends StatelessWidget {
                           firebaseStore.isDarkTheme
                               ? Icons.wb_sunny
                               : Icons.wb_sunny_outlined,
-                          color: firebaseStore.isDarkTheme
-                              ? Colors.white
-                              : Colors.black,
+                          color: themeData.indicatorColor,
                         ));
                   }),
                 ),

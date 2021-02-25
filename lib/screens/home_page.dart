@@ -62,9 +62,10 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final themeData = Theme.of(context);
     final firebaseStore = Provider.of<FirebaseStore>(context);
     return Scaffold(
-      backgroundColor: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+      backgroundColor: themeData.primaryColor,
       drawer: DrawerSideBar(),
       appBar: AppBar(
         actions: [
@@ -85,10 +86,8 @@ class _MyHomePageState extends State<MyHomePage>
               showSearch(
                 context: context,
                 delegate: Search(
-                    actualTab: globals.stringTabSearchAnimes,
-                    color: firebaseStore.isDarkTheme
-                        ? Colors.black
-                        : Colors.white),
+                  actualTab: globals.stringTabSearchAnimes,
+                ),
               )
             },
           ),
@@ -97,10 +96,8 @@ class _MyHomePageState extends State<MyHomePage>
       body: Column(
         children: [
           TabBar(
-              indicatorColor:
-                  firebaseStore.isDarkTheme ? Colors.white : Colors.black,
-              labelColor:
-                  firebaseStore.isDarkTheme ? Colors.white : Colors.black,
+              indicatorColor: themeData.indicatorColor,
+              labelColor: themeData.indicatorColor,
               controller: _tabController,
               isScrollable: true,
               tabs: <Tab>[

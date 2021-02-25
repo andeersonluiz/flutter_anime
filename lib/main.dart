@@ -26,27 +26,27 @@ import 'package:project1/stores/animeFilter_store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
   SharedPrefs sharedPreferences = SharedPrefs();
-  bool isDarkTheme = await sharedPreferences.getPersistTheme();
   String code = await sharedPreferences.getPersistLanguage();
-
   LocalizationDelegate delegate = await LocalizationDelegate.create(
     fallbackLocale: "en_US",
     supportedLocales: ["en_US", "pt"],
   );
-  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
-  if (code != null) {
-    if (code.contains("_")) {
-      var codeSplited = code.split("_");
-      delegate.changeLocale(Locale(codeSplited[0], codeSplited[1]));
-    } else {
-      delegate.changeLocale(Locale(code, ''));
-    }
+  if (code == null) {
+    await sharedPreferences.persistLanguage("en_US");
   }
+  if (code.contains("_")) {
+    var codeSplited = code.split("_");
+    delegate.changeLocale(Locale(codeSplited[0], codeSplited[1]));
+  } else {
+    delegate.changeLocale(Locale(code, ''));
+  }
+  print("yu");
   runApp(Phoenix(
     child: MultiProvider(
         providers: [
@@ -63,43 +63,34 @@ void main() async {
         ],
         child: LocalizedApp(
           delegate,
-          MyApp(
-            isDarkTheme: isDarkTheme,
-          ),
+          MyApp(),
         )),
   ));
 }
 
 class MyApp extends StatelessWidget {
-  final isDarkTheme;
   final durationTransition = 500;
-  MyApp({this.isDarkTheme});
+  final sharedPreferences = SharedPrefs();
+
   @override
   Widget build(BuildContext context) {
-    return init(context);
-  }
-
-  init(BuildContext context) {
-    var localizationDelegate = LocalizedApp.of(context).delegate;
-    FirebaseStore firebaseStore = Provider.of<FirebaseStore>(context);
-    if (firebaseStore.getUser() != null) {
-      print("fuuuuu user exists" + firebaseStore.getUser().toString());
-      firebaseStore.loadUser().then((value) => firebaseStore.user = value);
-      firebaseStore.setLogged = true;
+    final localizationDelegate = LocalizedApp.of(context).delegate;
+    final firebaseStore = Provider.of<FirebaseStore>(context);
+    if (sharedPreferences.getPersistTheme() != null) {
+      sharedPreferences.getPersistTheme().then((value) {
+        firebaseStore.isDarkTheme = value;
+      });
     }
 
-    if (isDarkTheme != null) {
-      SharedPrefs sharedPreferences = SharedPrefs();
-      sharedPreferences
-          .getPersistTheme()
-          .then((value) => firebaseStore.isDarkTheme = value);
+    if (firebaseStore.getUser() != null) {
+      firebaseStore.loadUser().then((value) => firebaseStore.user = value);
+      firebaseStore.setLogged = true;
     }
 
     return Observer(builder: (_) {
       return LocalizationProvider(
         state: LocalizationProvider.of(context).state,
         child: MaterialApp(
-          title: 'AnimesAPI',
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
@@ -114,7 +105,7 @@ class MyApp extends StatelessWidget {
             fontFamily: 'RobotoCondensed',
             primaryColor:
                 firebaseStore.isDarkTheme ? Colors.black : Colors.white,
-            unselectedWidgetColor:
+            indicatorColor:
                 firebaseStore.isDarkTheme ? Colors.white : Colors.black,
           ),
         ),

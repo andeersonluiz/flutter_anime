@@ -24,6 +24,7 @@ class AnimeTile extends StatelessWidget {
     final storeAnimes = Provider.of<AnimeStore>(context);
     final storeSearch = Provider.of<SearchStore>(context);
     final storeAnimesCategories = Provider.of<AnimeFilterStore>(context);
+    final themeData = Theme.of(context);
     final size = MediaQuery.of(context).size;
     final width = (size.width -
             ((globals.crossAxisCount - 1) * globals.crossAxisSpacing)) /
@@ -32,25 +33,22 @@ class AnimeTile extends StatelessWidget {
     return Hero(
       tag: anime.id,
       child: Scaffold(
-        backgroundColor:
-            firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+        backgroundColor: themeData.primaryColor,
         body: GestureDetector(
           onTap: () => Navigator.pushNamed(context, '/animeInfo',
               arguments: [anime, index, actualBar]),
           child: Padding(
             padding: const EdgeInsets.all(4.0),
             child: Container(
-              decoration: BoxDecoration(
-                  color:
-                      firebaseStore.isDarkTheme ? Colors.black : Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 3,
-                      blurRadius: 3,
-                      offset: Offset(0, 3),
-                    )
-                  ]),
+              decoration:
+                  BoxDecoration(color: themeData.primaryColor, boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 3,
+                  blurRadius: 3,
+                  offset: Offset(0, 3),
+                )
+              ]),
               child: Center(
                   child: Stack(
                 children: [
@@ -76,10 +74,7 @@ class AnimeTile extends StatelessWidget {
                                       ),
                                 fit: BoxFit.contain),
                             border: Border.all(
-                                color: firebaseStore.isDarkTheme
-                                    ? Colors.black
-                                    : Colors.white,
-                                width: 2),
+                                color: themeData.primaryColor, width: 2),
                           )),
                     ),
                   ),
@@ -121,9 +116,7 @@ class AnimeTile extends StatelessWidget {
                               child: Text('${anime.canonicalTitle}',
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: firebaseStore.isDarkTheme
-                                        ? Colors.white
-                                        : Colors.black,
+                                    color: themeData.indicatorColor,
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2)),
@@ -139,9 +132,7 @@ class AnimeTile extends StatelessWidget {
                           width: width * 0.2,
                           height: width * 0.2,
                           decoration: BoxDecoration(
-                            color: firebaseStore.isDarkTheme
-                                ? Colors.black
-                                : Colors.white,
+                            color: themeData.primaryColor,
                           ),
                           child: actualBar == globals.stringAnimesPopular
                               ? Center(

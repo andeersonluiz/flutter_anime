@@ -55,10 +55,10 @@ class _AnimeCategoriePageState extends State<AnimeCategoriePage> {
   @override
   Widget build(BuildContext context) {
     final firebaseStore = Provider.of<FirebaseStore>(context);
+    final themeData = Theme.of(context);
 
     return Scaffold(
-        backgroundColor:
-            firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+        backgroundColor: themeData.primaryColor,
         appBar: AppBar(
           title: Text(widget.nameCategorie + " animes"),
         ),

@@ -4,21 +4,23 @@ import 'package:project1/model/character_model.dart';
 
 class CharacterTile extends StatelessWidget {
   final Character character;
-  final color;
-  CharacterTile({this.character, this.color});
+  CharacterTile(
+    this.character,
+  );
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    final themeData = Theme.of(context);
     return Hero(
       tag: character.id,
       child: Scaffold(
-        backgroundColor: color == Colors.white ? Colors.black : Colors.white,
+        backgroundColor: themeData.primaryColor,
         body: Card(
-            color: color == Colors.white ? Colors.black : Colors.white,
+            color: themeData.primaryColor,
             elevation: 3,
-            shadowColor: color,
+            shadowColor: themeData.indicatorColor,
             child: Column(
               children: [
                 Expanded(
@@ -41,7 +43,9 @@ class CharacterTile extends StatelessWidget {
                         maxFontSize: 15,
                         minFontSize: 5,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: color),
+                        style: TextStyle(
+                          color: themeData.indicatorColor,
+                        ),
                       ),
                     ),
                   ),

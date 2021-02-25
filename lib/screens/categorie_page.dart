@@ -31,6 +31,7 @@ class _CategoriePageState extends State<CategoriePage> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    final themeData = Theme.of(context);
     final firebaseStore = Provider.of<FirebaseStore>(context);
 
     return Scaffold(
@@ -54,10 +55,8 @@ class _CategoriePageState extends State<CategoriePage> {
               showSearch(
                   context: context,
                   delegate: Search(
-                      actualTab: globals.stringTabSearchCategories,
-                      color: firebaseStore.isDarkTheme
-                          ? Colors.black
-                          : Colors.white))
+                    actualTab: globals.stringTabSearchCategories,
+                  ))
             },
           ),
         ],
@@ -67,38 +66,36 @@ class _CategoriePageState extends State<CategoriePage> {
           Expanded(
               flex: 7,
               child: Container(
-                color: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+                color: themeData.primaryColor,
                 child: Center(
                   child: Align(
                     alignment: Alignment.center,
                     child: Observer(builder: (_) {
-                      return CheckboxListTile(
-                        activeColor: firebaseStore.isDarkTheme
-                            ? Colors.white
-                            : Colors.black,
-                        checkColor: firebaseStore.isDarkTheme
-                            ? Colors.black
-                            : Colors.white,
-                        contentPadding: EdgeInsets.only(
-                            left: width * 0.25, right: width * 0.25),
-                        title: AutoSizeText(translate('categories.show_all'),
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: firebaseStore.isDarkTheme
-                                  ? Colors.white
-                                  : Colors.black,
-                            )),
-                        controlAffinity: ListTileControlAffinity.trailing,
-                        onChanged: (checked) {
-                          if (checked) {
-                            storeCategories.checkedBox = true;
-                            return storeCategories.getAllCategories();
-                          } else {
-                            storeCategories.checkedBox = false;
-                            return storeCategories.getCategoriesTrends();
-                          }
-                        },
-                        value: storeCategories.checkedBox,
+                      return Theme(
+                        data: themeData.copyWith(
+                            unselectedWidgetColor: themeData.indicatorColor),
+                        child: CheckboxListTile(
+                          activeColor: themeData.indicatorColor,
+                          checkColor: themeData.primaryColor,
+                          contentPadding: EdgeInsets.only(
+                              left: width * 0.27, right: width * 0.27),
+                          title: AutoSizeText(translate('categories.show_all'),
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: themeData.indicatorColor,
+                              )),
+                          controlAffinity: ListTileControlAffinity.trailing,
+                          onChanged: (checked) {
+                            if (checked) {
+                              storeCategories.checkedBox = true;
+                              return storeCategories.getAllCategories();
+                            } else {
+                              storeCategories.checkedBox = false;
+                              return storeCategories.getCategoriesTrends();
+                            }
+                          },
+                          value: storeCategories.checkedBox,
+                        ),
                       );
                     }),
                   ),
@@ -107,7 +104,7 @@ class _CategoriePageState extends State<CategoriePage> {
           Expanded(
             flex: 93,
             child: Container(
-              color: firebaseStore.isDarkTheme ? Colors.black : Colors.white,
+              color: themeData.primaryColor,
               child: Observer(builder: (_) {
                 storeCategories.listCategories ??
                     storeCategories.getCategoriesTrends();
@@ -126,9 +123,6 @@ class _CategoriePageState extends State<CategoriePage> {
                       loadedAllList: storeCategories.checkedBox
                           ? storeCategories.loadedAllList
                           : true,
-                      color: firebaseStore.isDarkTheme
-                          ? Colors.white
-                          : Colors.black,
                     );
 
                   default:
