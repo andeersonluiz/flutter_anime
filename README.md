@@ -4,10 +4,15 @@ App of informations about animes using flutter with MobX and Firebase. The API u
 
 # Screens 
 ## Home Page / Search anime 
-
 <p float="left">  
 <img src="https://raw.githubusercontent.com/andeersonluiz/flutter_anime/master/assets/screenHome.png" width="40%" >⠀⠀
 <img src="https://raw.githubusercontent.com/andeersonluiz/flutter_anime/master/assets/screenSearchAnime.png" width="40%" >
+</p>
+
+## Anime page (Synopsis) / Anime page (Infos)
+<p float="left">  
+<img src="https://raw.githubusercontent.com/andeersonluiz/flutter_anime/master/assets/screenAnimeSynopsis.png" width="40%" >⠀⠀
+<img src="https://raw.githubusercontent.com/andeersonluiz/flutter_anime/master/assets/screenAnimeInfo.png" width="40%" >
 </p>
 
 ## Character Page / Categorie Page
@@ -29,7 +34,6 @@ App of informations about animes using flutter with MobX and Firebase. The API u
 </p>
 
 # Warnings
-
 *API translate(to portuguese) support only 50 request per day*\
 *Avaliable languages: English, Portuguese*\
 *Search is also included in characters and categorie*\
