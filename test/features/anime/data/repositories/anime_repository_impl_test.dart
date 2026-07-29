@@ -72,5 +72,64 @@ void main() {
         (r) => fail('Should be Left'),
       );
     });
+
+    test('should return cached data when cache is available', () async {
+      when(() => mockLocalDataSource.getCachedAnimes(any()))
+          .thenAnswer((_) async => tAnimeModelList);
+
+      final result = await repository.getTrendingAnimes(offset: 0, limit: 10);
+
+      expect(result.isRight(), isTrue);
+      verifyNever(
+          () => mockRemoteDataSource.getTrendingAnimes(offset: 0, limit: 10));
+    });
+  });
+
+  group('searchAnimes', () {
+    test('should return list from remote without cache', () async {
+      when(() =>
+              mockRemoteDataSource.searchAnimes('Naruto', offset: 0, limit: 10))
+          .thenAnswer((_) async => tAnimeModelList);
+
+      final result =
+          await repository.searchAnimes('Naruto', offset: 0, limit: 10);
+
+      expect(result.isRight(), isTrue);
+    });
+
+    test('should return ServerFailure when search remote throws', () async {
+      when(() =>
+              mockRemoteDataSource.searchAnimes('Naruto', offset: 0, limit: 10))
+          .thenThrow(const ServerException('error'));
+
+      final result =
+          await repository.searchAnimes('Naruto', offset: 0, limit: 10);
+
+      expect(result.isLeft(), isTrue);
+      result.fold(
+        (f) => expect(f, isA<ServerFailure>()),
+        (_) => fail('Expected Left'),
+      );
+    });
+  });
+
+  group('getAnimeDetails', () {
+    test('should return anime from remote', () async {
+      when(() => mockRemoteDataSource.getAnimeDetails('1'))
+          .thenAnswer((_) async => tAnimeModel);
+
+      final result = await repository.getAnimeDetails('1');
+
+      expect(result.isRight(), isTrue);
+    });
+
+    test('should return ServerFailure when remote throws', () async {
+      when(() => mockRemoteDataSource.getAnimeDetails('1'))
+          .thenThrow(const ServerException('error'));
+
+      final result = await repository.getAnimeDetails('1');
+
+      expect(result.isLeft(), isTrue);
+    });
   });
 }
