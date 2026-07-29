@@ -1,0 +1,51 @@
+import 'package:dartz/dartz.dart';
+import '../../../../core/error/exceptions.dart';
+import '../../../../core/error/failures.dart';
+import '../../domain/repositories/settings_repository.dart';
+import '../datasources/settings_local_datasource.dart';
+
+class SettingsRepositoryImpl implements SettingsRepository {
+  final SettingsLocalDataSource localDataSource;
+
+  SettingsRepositoryImpl(this.localDataSource);
+
+  @override
+  Either<Failure, bool> getTheme() {
+    try {
+      final isDark = localDataSource.getTheme();
+      return Right(isDark);
+    } catch (e) {
+      return Left(CacheFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> saveTheme(bool isDark) async {
+    try {
+      await localDataSource.saveTheme(isDark);
+      return const Right(unit);
+    } catch (e) {
+      return Left(CacheFailure(e.toString()));
+    }
+  }
+
+  @override
+  Either<Failure, String> getLanguage() {
+    try {
+      final lang = localDataSource.getLanguage();
+      return Right(lang);
+    } catch (e) {
+      return Left(CacheFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> saveLanguage(String code) async {
+    try {
+      await localDataSource.saveLanguage(code);
+      return const Right(unit);
+    } catch (e) {
+      return Left(CacheFailure(e.toString()));
+    }
+  }
+}
