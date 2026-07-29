@@ -1,3 +1,4 @@
+import 'package:animes_io/core/error/failures.dart';
 import 'package:animes_io/features/favorites/domain/repositories/favorites_repository.dart';
 import 'package:animes_io/features/favorites/domain/usecases/toggle_favorite.dart';
 import 'package:dartz/dartz.dart';
@@ -20,13 +21,13 @@ void main() {
 
   test('should call addFavorite when anime is not yet favorite', () async {
     when(() => mockFavoritesRepository.isFavorite(tUserId, tAnimeId))
-        .thenAnswer((_) async => const Right(false));
+        .thenAnswer((_) async => const Right<Failure, bool>(false));
     when(() => mockFavoritesRepository.addFavorite(tUserId, tAnimeId))
-        .thenAnswer((_) async => const Right(unit));
+        .thenAnswer((_) async => const Right<Failure, Unit>(unit));
 
     final result = await usecase(tUserId, tAnimeId);
 
-    expect(result, const Right(unit));
+    expect(result, const Right<Failure, Unit>(unit));
     verify(() => mockFavoritesRepository.isFavorite(tUserId, tAnimeId))
         .called(1);
     verify(() => mockFavoritesRepository.addFavorite(tUserId, tAnimeId))
@@ -35,13 +36,13 @@ void main() {
 
   test('should call removeFavorite when anime is already favorite', () async {
     when(() => mockFavoritesRepository.isFavorite(tUserId, tAnimeId))
-        .thenAnswer((_) async => const Right(true));
+        .thenAnswer((_) async => const Right<Failure, bool>(true));
     when(() => mockFavoritesRepository.removeFavorite(tUserId, tAnimeId))
-        .thenAnswer((_) async => const Right(unit));
+        .thenAnswer((_) async => const Right<Failure, Unit>(unit));
 
     final result = await usecase(tUserId, tAnimeId);
 
-    expect(result, const Right(unit));
+    expect(result, const Right<Failure, Unit>(unit));
     verify(() => mockFavoritesRepository.isFavorite(tUserId, tAnimeId))
         .called(1);
     verify(() => mockFavoritesRepository.removeFavorite(tUserId, tAnimeId))

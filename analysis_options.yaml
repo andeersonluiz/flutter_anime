@@ -28,6 +28,7 @@ analyzer:
     flutter_style_todos: ignore
     dead_null_aware_expression: ignore
     inference_failure_on_function_invocation: ignore
+    inference_failure_on_instance_creation: ignore
     strict_raw_type: ignore
     unused_import: ignore
     unnecessary_lambdas: ignore

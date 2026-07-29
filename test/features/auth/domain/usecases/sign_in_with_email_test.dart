@@ -27,11 +27,11 @@ void main() {
 
   test('should return AppUser on successful sign in', () async {
     when(() => mockAuthRepository.signInWithEmail(tEmail, tPassword))
-        .thenAnswer((_) async => const Right(tUser));
+        .thenAnswer((_) async => const Right<AuthFailure, AppUser>(tUser));
 
     final result = await usecase(tEmail, tPassword);
 
-    expect(result, const Right(tUser));
+    expect(result, const Right<AuthFailure, AppUser>(tUser));
     verify(() => mockAuthRepository.signInWithEmail(tEmail, tPassword))
         .called(1);
   });

@@ -27,12 +27,12 @@ void main() {
 
   test('should get trending animes from repository', () async {
     when(() => mockAnimeRepository.getTrendingAnimes(offset: 0, limit: 10))
-        .thenAnswer((_) async => const Right(tAnimeList));
+        .thenAnswer((_) async => const Right<Failure, List<Anime>>(tAnimeList));
 
     final result =
         await usecase(const GetTrendingAnimesParams(offset: 0, limit: 10));
 
-    expect(result, const Right(tAnimeList));
+    expect(result, const Right<Failure, List<Anime>>(tAnimeList));
     verify(() => mockAnimeRepository.getTrendingAnimes(offset: 0, limit: 10))
         .called(1);
   });
