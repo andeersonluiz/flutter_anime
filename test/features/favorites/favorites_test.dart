@@ -212,7 +212,7 @@ void main() {
       act: (bloc) => bloc.add(const LoadFavorites(tUserId)),
       expect: () => [
         FavoritesLoading(),
-        FavoritesLoaded(favoriteIds: {'anime1', 'anime2'}),
+        const FavoritesLoaded(favoriteIds: {'anime1', 'anime2'}),
       ],
     );
 
@@ -234,7 +234,7 @@ void main() {
       'ToggleFavoriteEvent adds optimistically then persists',
       build: () {
         when(() => mockGetFavorites(tUserId))
-            .thenAnswer((_) async => Right(['anime2']));
+            .thenAnswer((_) async => const Right(['anime2']));
         when(() => mockToggleFavorite(tUserId, tAnimeId))
             .thenAnswer((_) async => const Right(unit));
         return buildBloc();
@@ -246,9 +246,9 @@ void main() {
       },
       expect: () => [
         FavoritesLoading(),
-        FavoritesLoaded(favoriteIds: {'anime2'}),
+        const FavoritesLoaded(favoriteIds: {'anime2'}),
         // Optimistically adds anime1
-        FavoritesLoaded(favoriteIds: {'anime2', tAnimeId}),
+        const FavoritesLoaded(favoriteIds: {'anime2', tAnimeId}),
       ],
     );
 
@@ -268,9 +268,9 @@ void main() {
       },
       expect: () => [
         FavoritesLoading(),
-        FavoritesLoaded(favoriteIds: {'anime1', 'anime2'}),
+        const FavoritesLoaded(favoriteIds: {'anime1', 'anime2'}),
         // Optimistically removes anime1
-        FavoritesLoaded(favoriteIds: {'anime2'}),
+        const FavoritesLoaded(favoriteIds: {'anime2'}),
       ],
     );
 
@@ -278,7 +278,7 @@ void main() {
       'ToggleFavoriteEvent does nothing when state is not FavoritesLoaded',
       build: () => buildBloc(),
       act: (bloc) => bloc.add(const ToggleFavoriteEvent(tUserId, tAnimeId)),
-      expect: () => [],
+      expect: () => <FavoritesState>[],
     );
   });
 }
