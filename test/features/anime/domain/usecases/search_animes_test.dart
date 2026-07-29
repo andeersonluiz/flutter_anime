@@ -28,12 +28,12 @@ void main() {
 
   test('should search animes from repository', () async {
     when(() => mockAnimeRepository.searchAnimes(tQuery, offset: 0, limit: 10))
-        .thenAnswer((_) async => const Right(tAnimeList));
+        .thenAnswer((_) async => const Right<Failure, List<Anime>>(tAnimeList));
 
     final result = await usecase(
         const SearchAnimesParams(query: tQuery, offset: 0, limit: 10));
 
-    expect(result, const Right(tAnimeList));
+    expect(result, const Right<Failure, List<Anime>>(tAnimeList));
     verify(() => mockAnimeRepository.searchAnimes(tQuery, offset: 0, limit: 10))
         .called(1);
   });

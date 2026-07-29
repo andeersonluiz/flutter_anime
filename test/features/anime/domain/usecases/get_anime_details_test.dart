@@ -27,22 +27,22 @@ void main() {
 
   test('should get anime details from the repository', () async {
     when(() => mockAnimeRepository.getAnimeDetails(tId))
-        .thenAnswer((_) async => const Right(tAnime));
+        .thenAnswer((_) async => const Right<Failure, Anime>(tAnime));
 
     final result = await usecase(const GetAnimeDetailsParams(id: tId));
 
-    expect(result, const Right(tAnime));
+    expect(result, const Right<Failure, Anime>(tAnime));
     verify(() => mockAnimeRepository.getAnimeDetails(tId)).called(1);
     verifyNoMoreInteractions(mockAnimeRepository);
   });
 
   test('should return ServerFailure when repository fails', () async {
-    when(() => mockAnimeRepository.getAnimeDetails(tId))
-        .thenAnswer((_) async => const Left(ServerFailure('Server Failure')));
+    when(() => mockAnimeRepository.getAnimeDetails(tId)).thenAnswer((_) async =>
+        const Left<Failure, Anime>(ServerFailure('Server Failure')));
 
     final result = await usecase(const GetAnimeDetailsParams(id: tId));
 
-    expect(result, const Left(ServerFailure('Server Failure')));
+    expect(result, const Left<Failure, Anime>(ServerFailure('Server Failure')));
     verify(() => mockAnimeRepository.getAnimeDetails(tId)).called(1);
   });
 }
