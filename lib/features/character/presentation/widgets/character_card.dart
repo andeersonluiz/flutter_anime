@@ -30,7 +30,7 @@ class CharacterCard extends StatelessWidget {
             Hero(
               tag: 'character_${character.id}',
               child: Image.network(
-                character.image ?? '',
+                character.image,
                 fit: BoxFit.cover,
                 errorBuilder: (_, __, ___) =>
                     const ColoredBox(color: Colors.grey),

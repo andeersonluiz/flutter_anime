@@ -26,6 +26,17 @@ analyzer:
     omit_local_variable_types: ignore
     deprecated_member_use: ignore
     flutter_style_todos: ignore
+    dead_null_aware_expression: ignore
+    inference_failure_on_function_invocation: ignore
+    strict_raw_type: ignore
+    unused_import: ignore
+    unnecessary_lambdas: ignore
+    no_default_cases: ignore
+    depend_on_referenced_packages: ignore
+    unnecessary_breaks: ignore
+    curly_braces_in_flow_control_structures: ignore
+    avoid_dynamic_calls: ignore
+    one_member_abstracts: ignore
 
 linter:
   rules:

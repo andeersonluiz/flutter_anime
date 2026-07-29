@@ -7,7 +7,7 @@ class EpisodeTile extends StatelessWidget {
   const EpisodeTile({super.key, required this.episode});
 
   void _showSynopsisDialog(BuildContext context) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (context) {
         return AlertDialog(

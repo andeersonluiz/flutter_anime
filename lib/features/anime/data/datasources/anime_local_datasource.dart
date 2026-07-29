@@ -10,10 +10,10 @@ abstract class AnimeLocalDataSource {
 }
 
 class AnimeLocalDataSourceImpl implements AnimeLocalDataSource {
-  AnimeLocalDataSourceImpl({Box? hiveBox}) : _hiveBox = hiveBox;
-  final Box? _hiveBox;
+  AnimeLocalDataSourceImpl({Box<dynamic>? hiveBox}) : _hiveBox = hiveBox;
+  final Box<dynamic>? _hiveBox;
 
-  Box get _box => _hiveBox ?? Hive.box('anime_cache');
+  Box<dynamic> get _box => _hiveBox ?? Hive.box<dynamic>('anime_cache');
 
   static const String cacheExpiryPrefix = 'expiry_';
   static const int cacheExpiryMinutes = 30;
@@ -33,33 +33,37 @@ class AnimeLocalDataSourceImpl implements AnimeLocalDataSource {
   @override
   Future<List<AnimeModel>> getCachedAnimes(String key) async {
     try {
-      final timestamp = _box.get('$cacheExpiryPrefix$key') as int?;
-      if (timestamp != null) {
-        final cacheTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-        final difference = DateTime.now().difference(cacheTime).inMinutes;
-
-        if (difference < cacheExpiryMinutes) {
-          final jsonString = _box.get(key) as String?;
-          if (jsonString != null) {
-            final decoded = jsonDecode(jsonString) as List<dynamic>;
-            return decoded
-                .map((e) => AnimeModel.fromJson(e as Map<String, dynamic>))
-                .toList();
-          }
-        }
+      final expiryTime = _box.get('$cacheExpiryPrefix$key') as int?;
+      if (expiryTime == null) {
+        throw const CacheException('Cache expired or not found');
       }
-      throw const CacheException('Cache expired or empty');
+
+      final now = DateTime.now().millisecondsSinceEpoch;
+      final diffMinutes = (now - expiryTime) / (1000 * 60);
+
+      if (diffMinutes > cacheExpiryMinutes) {
+        await _box.delete(key);
+        await _box.delete('$cacheExpiryPrefix$key');
+        throw const CacheException('Cache expired');
+      }
+
+      final rawData = _box.get(key) as String?;
+      if (rawData == null) {
+        throw const CacheException('Cache data empty');
+      }
+
+      final List<dynamic> decoded = jsonDecode(rawData) as List<dynamic>;
+      return decoded
+          .map((json) => AnimeModel.fromJson(json as Map<String, dynamic>))
+          .toList();
     } catch (e) {
-      throw const CacheException('Failed to get cache');
+      if (e is CacheException) rethrow;
+      throw const CacheException('Failed to read cache');
     }
   }
 
   @override
   Future<void> clearCache() async {
-    try {
-      await _box.clear();
-    } catch (e) {
-      throw const CacheException('Failed to clear cache');
-    }
+    await _box.clear();
   }
 }

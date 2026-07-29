@@ -1,8 +1,7 @@
+import 'package:animes_io/core/error/failures.dart';
+import 'package:animes_io/features/settings/data/datasources/settings_local_datasource.dart';
+import 'package:animes_io/features/settings/domain/repositories/settings_repository.dart';
 import 'package:dartz/dartz.dart';
-import '../../../../core/error/exceptions.dart';
-import '../../../../core/error/failures.dart';
-import '../../domain/repositories/settings_repository.dart';
-import '../datasources/settings_local_datasource.dart';
 
 class SettingsRepositoryImpl implements SettingsRepository {
   final SettingsLocalDataSource localDataSource;
