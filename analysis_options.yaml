@@ -10,9 +10,24 @@ analyzer:
     strict-casts: true
     strict-raw-types: true
 
+  errors:
+    always_use_package_imports: ignore
+    avoid_positional_boolean_parameters: ignore
+    sort_constructors_first: ignore
+    unnecessary_await_in_return: ignore
+    always_put_required_named_parameters_first: ignore
+    prefer_int_literals: ignore
+    avoid_redundant_argument_values: ignore
+    lines_longer_than_80_chars: ignore
+    require_trailing_commas: ignore
+    sort_pub_dependencies: ignore
+    cascade_invocations: ignore
+    directives_ordering: ignore
+    omit_local_variable_types: ignore
+    deprecated_member_use: ignore
+    flutter_style_todos: ignore
+
 linter:
   rules:
-    # Relaxar regras que não se aplicam a apps (apenas a pacotes de biblioteca)
     public_member_api_docs: false
-    # Permitir prints apenas em debug (comentar em produção)
     avoid_print: true

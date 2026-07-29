@@ -1,14 +1,13 @@
+import 'package:animes_io/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:animes_io/features/auth/presentation/bloc/auth_state.dart';
+import 'package:animes_io/features/favorites/presentation/bloc/favorites_bloc.dart';
+import 'package:animes_io/features/favorites/presentation/bloc/favorites_event.dart';
+import 'package:animes_io/features/favorites/presentation/bloc/favorites_state.dart';
+import 'package:animes_io/shared/widgets/empty_state_widget.dart';
+import 'package:animes_io/shared/widgets/error_widget.dart';
+import 'package:animes_io/shared/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../../shared/widgets/empty_state_widget.dart';
-import '../../../../shared/widgets/error_widget.dart';
-import '../../../../shared/widgets/loading_widget.dart';
-import '../../../auth/presentation/bloc/auth_bloc.dart';
-import '../../../auth/presentation/bloc/auth_state.dart';
-import '../bloc/favorites_bloc.dart';
-import '../bloc/favorites_event.dart';
-import '../bloc/favorites_state.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({super.key});
