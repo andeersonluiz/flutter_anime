@@ -13,7 +13,7 @@ enum AnimeListType {
 
 sealed class AnimeState extends Equatable {
   const AnimeState();
-  
+
   @override
   List<Object?> get props => [];
 }

@@ -16,8 +16,10 @@ class CategoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: onTap ?? () => context.push('/categories/${category.slug}', extra: category),
-      title: Text(category.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+      onTap: onTap ??
+          () => context.push('/categories/${category.slug}', extra: category),
+      title: Text(category.title,
+          style: const TextStyle(fontWeight: FontWeight.bold)),
       subtitle: category.description.isNotEmpty
           ? Text(
               category.description,

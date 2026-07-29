@@ -42,7 +42,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onSignInWithEmail(SignInWithEmailEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onSignInWithEmail(
+      SignInWithEmailEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     final result = await signInWithEmail(event.email, event.password);
     result.fold(
@@ -51,7 +52,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  Future<void> _onSignInWithGoogle(SignInWithGoogleEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onSignInWithGoogle(
+      SignInWithGoogleEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     final result = await signInWithGoogle();
     result.fold(
@@ -60,7 +62,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  Future<void> _onSignInAsGuest(SignInAsGuestEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onSignInAsGuest(
+      SignInAsGuestEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     final result = await signInAsGuest();
     result.fold(
@@ -78,7 +81,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     );
   }
 
-  Future<void> _onUpdateUserProfile(UpdateUserProfileEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onUpdateUserProfile(
+      UpdateUserProfileEvent event, Emitter<AuthState> emit) async {
     if (state is Authenticated) {
       emit(AuthLoading());
       final result = await updateUserProfile(

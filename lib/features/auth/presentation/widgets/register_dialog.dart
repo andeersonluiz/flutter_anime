@@ -64,8 +64,9 @@ class _RegisterDialogState extends State<RegisterDialog> {
                   labelText: 'Email',
                   prefixIcon: Icon(Icons.email),
                 ),
-                validator: (val) =>
-                    val != null && val.contains('@') ? null : 'Enter valid email',
+                validator: (val) => val != null && val.contains('@')
+                    ? null
+                    : 'Enter valid email',
               ),
               const SizedBox(height: 16),
               TextFormField(

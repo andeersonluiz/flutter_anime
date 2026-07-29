@@ -46,7 +46,8 @@ class CharactersTab extends StatelessWidget {
                         child: Image.network(
                           character.image ?? '',
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => const Icon(Icons.person),
+                          errorBuilder: (_, __, ___) =>
+                              const Icon(Icons.person),
                         ),
                       ),
                       Padding(

@@ -8,7 +8,8 @@ class GetAnimeCharacters {
 
   GetAnimeCharacters(this.repository);
 
-  Future<Either<Failure, List<Character>>> call(String animeId, {int offset = 0, int limit = 20}) {
+  Future<Either<Failure, List<Character>>> call(String animeId,
+      {int offset = 0, int limit = 20}) {
     return repository.getAnimeCharacters(animeId, offset: offset, limit: limit);
   }
 }

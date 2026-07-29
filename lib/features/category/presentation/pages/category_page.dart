@@ -33,7 +33,8 @@ class _CategoryPageState extends State<CategoryPage> {
             body: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
                   child: Row(
                     children: [
                       Checkbox(
@@ -43,9 +44,13 @@ class _CategoryPageState extends State<CategoryPage> {
                             _showTrendingOnly = value ?? false;
                           });
                           if (_showTrendingOnly) {
-                            context.read<CategoryBloc>().add(LoadTrendingCategories());
+                            context
+                                .read<CategoryBloc>()
+                                .add(LoadTrendingCategories());
                           } else {
-                            context.read<CategoryBloc>().add(LoadAllCategories());
+                            context
+                                .read<CategoryBloc>()
+                                .add(LoadAllCategories());
                           }
                         },
                       ),

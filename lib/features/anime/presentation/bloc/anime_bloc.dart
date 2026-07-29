@@ -171,7 +171,8 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
     _currentOffset = event.offset;
 
     final result = await searchAnimes(
-      SearchAnimesParams(query: event.query, offset: _currentOffset, limit: _limit),
+      SearchAnimesParams(
+          query: event.query, offset: _currentOffset, limit: _limit),
     );
 
     result.fold(
@@ -253,7 +254,8 @@ class AnimeBloc extends Bloc<AnimeEvent, AnimeState> {
           break;
         case AnimeListType.airing:
           result = await getCurrentlyAiringAnimes(
-            GetCurrentlyAiringAnimesParams(offset: _currentOffset, limit: _limit),
+            GetCurrentlyAiringAnimesParams(
+                offset: _currentOffset, limit: _limit),
           );
           break;
         case AnimeListType.byCategory:

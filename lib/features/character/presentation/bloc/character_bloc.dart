@@ -20,7 +20,8 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
     on<LoadAnimeCharacters>(_onLoadAnimeCharacters);
   }
 
-  Future<void> _onLoadCharacters(LoadCharacters event, Emitter<CharacterState> emit) async {
+  Future<void> _onLoadCharacters(
+      LoadCharacters event, Emitter<CharacterState> emit) async {
     emit(CharacterLoading());
     _offset = 0;
 
@@ -30,12 +31,14 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
       (failure) => emit(CharacterError(message: failure.message)),
       (characters) {
         _offset += _limit;
-        emit(CharacterLoaded(characters: characters, hasMore: characters.length == _limit));
+        emit(CharacterLoaded(
+            characters: characters, hasMore: characters.length == _limit));
       },
     );
   }
 
-  Future<void> _onLoadMoreCharacters(LoadMoreCharacters event, Emitter<CharacterState> emit) async {
+  Future<void> _onLoadMoreCharacters(
+      LoadMoreCharacters event, Emitter<CharacterState> emit) async {
     final currentState = state;
     if (currentState is CharacterLoaded && currentState.hasMore) {
       final result = await getCharacters(offset: _offset, limit: _limit);
@@ -53,17 +56,20 @@ class CharacterBloc extends Bloc<CharacterEvent, CharacterState> {
     }
   }
 
-  Future<void> _onLoadAnimeCharacters(LoadAnimeCharacters event, Emitter<CharacterState> emit) async {
+  Future<void> _onLoadAnimeCharacters(
+      LoadAnimeCharacters event, Emitter<CharacterState> emit) async {
     emit(CharacterLoading());
     _offset = 0;
 
-    final result = await getAnimeCharacters(event.animeId, offset: _offset, limit: _limit);
+    final result =
+        await getAnimeCharacters(event.animeId, offset: _offset, limit: _limit);
 
     result.fold(
       (failure) => emit(CharacterError(message: failure.message)),
       (characters) {
         _offset += _limit;
-        emit(CharacterLoaded(characters: characters, hasMore: characters.length == _limit));
+        emit(CharacterLoaded(
+            characters: characters, hasMore: characters.length == _limit));
       },
     );
   }

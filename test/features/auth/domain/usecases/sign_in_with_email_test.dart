@@ -32,6 +32,7 @@ void main() {
     final result = await usecase(tEmail, tPassword);
 
     expect(result, const Right(tUser));
-    verify(() => mockAuthRepository.signInWithEmail(tEmail, tPassword)).called(1);
+    verify(() => mockAuthRepository.signInWithEmail(tEmail, tPassword))
+        .called(1);
   });
 }

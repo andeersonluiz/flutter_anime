@@ -3,7 +3,7 @@ import 'package:animes_io/features/character/domain/entities/character.dart';
 
 sealed class CharacterState extends Equatable {
   const CharacterState();
-  
+
   @override
   List<Object?> get props => [];
 }

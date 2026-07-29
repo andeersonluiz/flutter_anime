@@ -27,8 +27,10 @@ void main() {
     final result = await usecase(tUserId, tAnimeId);
 
     expect(result, const Right(unit));
-    verify(() => mockFavoritesRepository.isFavorite(tUserId, tAnimeId)).called(1);
-    verify(() => mockFavoritesRepository.addFavorite(tUserId, tAnimeId)).called(1);
+    verify(() => mockFavoritesRepository.isFavorite(tUserId, tAnimeId))
+        .called(1);
+    verify(() => mockFavoritesRepository.addFavorite(tUserId, tAnimeId))
+        .called(1);
   });
 
   test('should call removeFavorite when anime is already favorite', () async {
@@ -40,7 +42,9 @@ void main() {
     final result = await usecase(tUserId, tAnimeId);
 
     expect(result, const Right(unit));
-    verify(() => mockFavoritesRepository.isFavorite(tUserId, tAnimeId)).called(1);
-    verify(() => mockFavoritesRepository.removeFavorite(tUserId, tAnimeId)).called(1);
+    verify(() => mockFavoritesRepository.isFavorite(tUserId, tAnimeId))
+        .called(1);
+    verify(() => mockFavoritesRepository.removeFavorite(tUserId, tAnimeId))
+        .called(1);
   });
 }

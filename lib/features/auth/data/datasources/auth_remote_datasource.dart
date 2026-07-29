@@ -36,7 +36,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         password: password,
       );
       final user = userCredential.user;
-      if (user == null) throw const ServerException('User is null after sign in.');
+      if (user == null)
+        throw const ServerException('User is null after sign in.');
 
       final doc = await firestore.collection('users').doc(user.uid).get();
       if (!doc.exists) {
@@ -60,17 +61,21 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserModel> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-      if (googleUser == null) throw const ServerException('Google sign in cancelled.');
+      if (googleUser == null)
+        throw const ServerException('Google sign in cancelled.');
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      final userCredential = await firebaseAuth.signInWithCredential(credential);
+      final userCredential =
+          await firebaseAuth.signInWithCredential(credential);
       final user = userCredential.user;
-      if (user == null) throw const ServerException('User is null after sign in.');
+      if (user == null)
+        throw const ServerException('User is null after sign in.');
 
       final doc = await firestore.collection('users').doc(user.uid).get();
       if (!doc.exists) {
@@ -96,7 +101,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final userCredential = await firebaseAuth.signInAnonymously();
       final user = userCredential.user;
-      if (user == null) throw const ServerException('User is null after sign in.');
+      if (user == null)
+        throw const ServerException('User is null after sign in.');
 
       final newUser = UserModel(
         uid: user.uid,

@@ -17,12 +17,20 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockGetTrendingAnimes extends Mock implements GetTrendingAnimes {}
+
 class MockGetMostPopularAnimes extends Mock implements GetMostPopularAnimes {}
+
 class MockGetTopRatedAnimes extends Mock implements GetTopRatedAnimes {}
+
 class MockGetUpcomingAnimes extends Mock implements GetUpcomingAnimes {}
-class MockGetCurrentlyAiringAnimes extends Mock implements GetCurrentlyAiringAnimes {}
+
+class MockGetCurrentlyAiringAnimes extends Mock
+    implements GetCurrentlyAiringAnimes {}
+
 class MockGetAnimeDetails extends Mock implements GetAnimeDetails {}
+
 class MockSearchAnimes extends Mock implements SearchAnimes {}
+
 class MockGetAnimesByCategory extends Mock implements GetAnimesByCategory {}
 
 void main() {
@@ -45,7 +53,8 @@ void main() {
     );
 
     registerFallbackValue(const GetTrendingAnimesParams(offset: 0, limit: 10));
-    registerFallbackValue(const SearchAnimesParams(query: 'test', offset: 0, limit: 10));
+    registerFallbackValue(
+        const SearchAnimesParams(query: 'test', offset: 0, limit: 10));
   });
 
   const tAnime = Anime(

@@ -28,7 +28,8 @@ class CharacterDetailPage extends StatelessWidget {
                 child: Image.network(
                   character.image ?? '',
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => const ColoredBox(color: Colors.grey),
+                  errorBuilder: (_, __, ___) =>
+                      const ColoredBox(color: Colors.grey),
                 ),
               ),
             ),

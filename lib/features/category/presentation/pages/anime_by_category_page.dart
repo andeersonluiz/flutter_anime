@@ -56,7 +56,8 @@ class _AnimeByCategoryPageState extends State<AnimeByCategoryPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<AnimeBloc>()..add(LoadAnimesByCategory(widget.category.slug)),
+      create: (_) =>
+          sl<AnimeBloc>()..add(LoadAnimesByCategory(widget.category.slug)),
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.category.title),
@@ -69,7 +70,9 @@ class _AnimeByCategoryPageState extends State<AnimeByCategoryPage> {
               return AppErrorWidget(
                 message: state.message,
                 onRetry: () {
-                  context.read<AnimeBloc>().add(LoadAnimesByCategory(widget.category.slug));
+                  context
+                      .read<AnimeBloc>()
+                      .add(LoadAnimesByCategory(widget.category.slug));
                 },
               );
             } else if (state is AnimeListLoaded || state is AnimeLoadingMore) {

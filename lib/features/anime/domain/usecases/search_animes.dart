@@ -18,7 +18,8 @@ class SearchAnimes {
 }
 
 class SearchAnimesParams extends Equatable {
-  const SearchAnimesParams({required this.query, this.offset = 0, this.limit = 10});
+  const SearchAnimesParams(
+      {required this.query, this.offset = 0, this.limit = 10});
   final String query;
   final int offset;
   final int limit;

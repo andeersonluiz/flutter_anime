@@ -35,7 +35,8 @@ class AnimeCard extends StatelessWidget {
                 placeholder: kTransparentImage,
                 image: anime.posterImage ?? '',
                 fit: BoxFit.cover,
-                imageErrorBuilder: (_, __, ___) => const ColoredBox(color: Colors.grey),
+                imageErrorBuilder: (_, __, ___) =>
+                    const ColoredBox(color: Colors.grey),
               ),
               Positioned(
                 bottom: 0,
@@ -52,7 +53,8 @@ class AnimeCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   child: Text(
                     anime.title,
-                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -62,7 +64,8 @@ class AnimeCard extends StatelessWidget {
                 top: 8,
                 right: 8,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   decoration: BoxDecoration(
                     color: Colors.black54,
                     borderRadius: BorderRadius.circular(4),
@@ -74,7 +77,8 @@ class AnimeCard extends StatelessWidget {
                       const SizedBox(width: 4),
                       Text(
                         anime.rating?.toStringAsFixed(1) ?? 'N/A',
-                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
                       ),
                     ],
                   ),
@@ -90,7 +94,8 @@ class AnimeCard extends StatelessWidget {
                       isFav = state.favoriteIds.contains(anime.id);
                     }
                     if (!isFav) return const SizedBox.shrink();
-                    return const Icon(Icons.favorite, color: Colors.red, size: 16);
+                    return const Icon(Icons.favorite,
+                        color: Colors.red, size: 16);
                   },
                 ),
               ),

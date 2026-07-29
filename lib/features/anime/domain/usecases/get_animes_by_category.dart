@@ -18,7 +18,8 @@ class GetAnimesByCategory {
 }
 
 class GetAnimesByCategoryParams extends Equatable {
-  const GetAnimesByCategoryParams({required this.categorySlug, this.offset = 0, this.limit = 10});
+  const GetAnimesByCategoryParams(
+      {required this.categorySlug, this.offset = 0, this.limit = 10});
   final String categorySlug;
   final int offset;
   final int limit;

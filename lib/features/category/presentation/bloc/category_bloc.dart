@@ -19,7 +19,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<ToggleCategoryView>(_onToggleCategoryView);
   }
 
-  Future<void> _onLoadTrendingCategories(LoadTrendingCategories event, Emitter<CategoryState> emit) async {
+  Future<void> _onLoadTrendingCategories(
+      LoadTrendingCategories event, Emitter<CategoryState> emit) async {
     emit(CategoryLoading());
     _isShowingTrending = true;
 
@@ -27,11 +28,13 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
 
     result.fold(
       (failure) => emit(CategoryError(message: failure.message)),
-      (categories) => emit(CategoryLoaded(categories: categories, isShowingTrending: true)),
+      (categories) =>
+          emit(CategoryLoaded(categories: categories, isShowingTrending: true)),
     );
   }
 
-  Future<void> _onLoadAllCategories(LoadAllCategories event, Emitter<CategoryState> emit) async {
+  Future<void> _onLoadAllCategories(
+      LoadAllCategories event, Emitter<CategoryState> emit) async {
     emit(CategoryLoading());
     _isShowingTrending = false;
 
@@ -39,11 +42,13 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
 
     result.fold(
       (failure) => emit(CategoryError(message: failure.message)),
-      (categories) => emit(CategoryLoaded(categories: categories, isShowingTrending: false)),
+      (categories) => emit(
+          CategoryLoaded(categories: categories, isShowingTrending: false)),
     );
   }
 
-  Future<void> _onToggleCategoryView(ToggleCategoryView event, Emitter<CategoryState> emit) async {
+  Future<void> _onToggleCategoryView(
+      ToggleCategoryView event, Emitter<CategoryState> emit) async {
     if (_isShowingTrending) {
       add(LoadAllCategories());
     } else {

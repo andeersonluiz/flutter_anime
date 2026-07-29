@@ -11,9 +11,11 @@ class CharacterRepositoryImpl implements CharacterRepository {
   CharacterRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, List<Character>>> getCharacters({int offset = 0, int limit = 20}) async {
+  Future<Either<Failure, List<Character>>> getCharacters(
+      {int offset = 0, int limit = 20}) async {
     try {
-      final models = await remoteDataSource.getCharacters(offset: offset, limit: limit);
+      final models =
+          await remoteDataSource.getCharacters(offset: offset, limit: limit);
       return Right(models.map((m) => m.toEntity()).toList());
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
@@ -23,9 +25,11 @@ class CharacterRepositoryImpl implements CharacterRepository {
   }
 
   @override
-  Future<Either<Failure, List<Character>>> getAnimeCharacters(String animeId, {int offset = 0, int limit = 20}) async {
+  Future<Either<Failure, List<Character>>> getAnimeCharacters(String animeId,
+      {int offset = 0, int limit = 20}) async {
     try {
-      final models = await remoteDataSource.getAnimeCharacters(animeId, offset: offset, limit: limit);
+      final models = await remoteDataSource.getAnimeCharacters(animeId,
+          offset: offset, limit: limit);
       return Right(models.map((m) => m.toEntity()).toList());
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));

@@ -8,7 +8,8 @@ class GetEpisodes {
 
   GetEpisodes(this.repository);
 
-  Future<Either<Failure, List<Episode>>> call(String animeId, {int offset = 0, int limit = 20}) async {
+  Future<Either<Failure, List<Episode>>> call(String animeId,
+      {int offset = 0, int limit = 20}) async {
     return await repository.getEpisodes(animeId, offset: offset, limit: limit);
   }
 }

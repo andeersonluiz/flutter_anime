@@ -82,9 +82,8 @@ class _AnimeDetailPageState extends State<AnimeDetailPage>
                           color: isFav ? Colors.red : null,
                         ),
                         onPressed: () {
-                          context
-                              .read<FavoritesBloc>()
-                              .add(ToggleFavoriteEvent(userId, widget.anime.id));
+                          context.read<FavoritesBloc>().add(
+                              ToggleFavoriteEvent(userId, widget.anime.id));
                         },
                       );
                     },

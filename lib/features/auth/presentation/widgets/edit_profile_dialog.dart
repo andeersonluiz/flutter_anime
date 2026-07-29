@@ -86,7 +86,8 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                 ),
               ),
               const SizedBox(height: 16),
-              const Text('Select Avatar:', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Select Avatar:',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               SizedBox(
                 height: 60,
@@ -103,7 +104,9 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: isSelected
-                              ? Border.all(color: Theme.of(context).primaryColor, width: 3)
+                              ? Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 3)
                               : null,
                         ),
                         child: CircleAvatar(
@@ -116,7 +119,8 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                 ),
               ),
               const SizedBox(height: 16),
-              const Text('Select Background:', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Select Background:',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               SizedBox(
                 height: 60,
@@ -134,7 +138,9 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           border: isSelected
-                              ? Border.all(color: Theme.of(context).primaryColor, width: 3)
+                              ? Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: 3)
                               : null,
                           image: DecorationImage(
                             image: AssetImage(bg),

@@ -10,7 +10,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockSettingsRepository extends Mock implements SettingsRepository {}
+
 class MockToggleTheme extends Mock implements ToggleTheme {}
+
 class MockChangeLanguage extends Mock implements ChangeLanguage {}
 
 void main() {
@@ -52,7 +54,8 @@ void main() {
     blocTest<SettingsBloc, SettingsState>(
       'should flip isDark when ToggleThemeEvent is added',
       build: () {
-        when(() => mockToggleTheme(true)).thenAnswer((_) async => const Right(unit));
+        when(() => mockToggleTheme(true))
+            .thenAnswer((_) async => const Right(unit));
         return bloc;
       },
       seed: () => const SettingsLoaded(isDark: false, languageCode: 'en'),
@@ -65,7 +68,8 @@ void main() {
     blocTest<SettingsBloc, SettingsState>(
       'should update languageCode when ChangeLanguageEvent is added',
       build: () {
-        when(() => mockChangeLanguage('pt')).thenAnswer((_) async => const Right(unit));
+        when(() => mockChangeLanguage('pt'))
+            .thenAnswer((_) async => const Right(unit));
         return bloc;
       },
       seed: () => const SettingsLoaded(isDark: false, languageCode: 'en'),

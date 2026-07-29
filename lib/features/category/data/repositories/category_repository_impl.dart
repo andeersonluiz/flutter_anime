@@ -11,7 +11,8 @@ class CategoryRepositoryImpl implements CategoryRepository {
   CategoryRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, List<Category>>> getTrendingCategories({int limit = 20}) async {
+  Future<Either<Failure, List<Category>>> getTrendingCategories(
+      {int limit = 20}) async {
     try {
       final models = await remoteDataSource.getTrendingCategories(limit: limit);
       return Right(models.map((m) => m.toEntity()).toList());
@@ -23,9 +24,11 @@ class CategoryRepositoryImpl implements CategoryRepository {
   }
 
   @override
-  Future<Either<Failure, List<Category>>> getAllCategories({int offset = 0, int limit = 20}) async {
+  Future<Either<Failure, List<Category>>> getAllCategories(
+      {int offset = 0, int limit = 20}) async {
     try {
-      final models = await remoteDataSource.getAllCategories(offset: offset, limit: limit);
+      final models =
+          await remoteDataSource.getAllCategories(offset: offset, limit: limit);
       return Right(models.map((m) => m.toEntity()).toList());
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
