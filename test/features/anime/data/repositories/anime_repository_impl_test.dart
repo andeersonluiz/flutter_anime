@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAnimeRemoteDataSource extends Mock implements AnimeRemoteDataSource {}
+
 class MockAnimeLocalDataSource extends Mock implements AnimeLocalDataSource {}
 
 void main() {
@@ -48,7 +49,8 @@ void main() {
 
       final result = await repository.getTrendingAnimes(offset: 0, limit: 10);
 
-      verify(() => mockRemoteDataSource.getTrendingAnimes(offset: 0, limit: 10)).called(1);
+      verify(() => mockRemoteDataSource.getTrendingAnimes(offset: 0, limit: 10))
+          .called(1);
       expect(result.isRight(), isTrue);
       result.fold(
         (l) => fail('Should be Right'),

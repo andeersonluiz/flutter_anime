@@ -79,7 +79,8 @@ class AppDrawer extends StatelessWidget {
               const Divider(),
               BlocBuilder<SettingsBloc, SettingsState>(
                 builder: (context, settingsState) {
-                  final isDark = settingsState is SettingsLoaded && settingsState.isDark;
+                  final isDark =
+                      settingsState is SettingsLoaded && settingsState.isDark;
                   return SwitchListTile(
                     secondary: const Icon(Icons.dark_mode),
                     title: const Text('Dark Mode'),
@@ -105,7 +106,8 @@ class AppDrawer extends StatelessWidget {
                 ),
                 ListTile(
                   leading: const Icon(Icons.logout, color: Colors.red),
-                  title: const Text('Logout', style: TextStyle(color: Colors.red)),
+                  title:
+                      const Text('Logout', style: TextStyle(color: Colors.red)),
                   onTap: () {
                     context.pop();
                     context.read<AuthBloc>().add(SignOutEvent());

@@ -33,24 +33,28 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(SettingsLoaded(isDark: isDark, languageCode: langCode));
   }
 
-  Future<void> _onToggleTheme(ToggleThemeEvent event, Emitter<SettingsState> emit) async {
+  Future<void> _onToggleTheme(
+      ToggleThemeEvent event, Emitter<SettingsState> emit) async {
     if (state is SettingsLoaded) {
       final currentState = state as SettingsLoaded;
       final result = await toggleTheme(event.isDark);
       result.fold(
         (failure) => emit(SettingsError(failure.message)),
-        (_) => emit(SettingsLoaded(isDark: event.isDark, languageCode: currentState.languageCode)),
+        (_) => emit(SettingsLoaded(
+            isDark: event.isDark, languageCode: currentState.languageCode)),
       );
     }
   }
 
-  Future<void> _onChangeLanguage(ChangeLanguageEvent event, Emitter<SettingsState> emit) async {
+  Future<void> _onChangeLanguage(
+      ChangeLanguageEvent event, Emitter<SettingsState> emit) async {
     if (state is SettingsLoaded) {
       final currentState = state as SettingsLoaded;
       final result = await changeLanguage(event.code);
       result.fold(
         (failure) => emit(SettingsError(failure.message)),
-        (_) => emit(SettingsLoaded(isDark: currentState.isDark, languageCode: event.code)),
+        (_) => emit(SettingsLoaded(
+            isDark: currentState.isDark, languageCode: event.code)),
       );
     }
   }

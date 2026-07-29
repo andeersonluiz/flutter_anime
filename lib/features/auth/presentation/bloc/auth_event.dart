@@ -26,7 +26,8 @@ class UpdateUserProfileEvent extends AuthEvent {
   final String? username;
   final String? avatarUrl;
   final String? backgroundUrl;
-  const UpdateUserProfileEvent({this.username, this.avatarUrl, this.backgroundUrl});
+  const UpdateUserProfileEvent(
+      {this.username, this.avatarUrl, this.backgroundUrl});
   @override
   List<Object?> get props => [username, avatarUrl, backgroundUrl];
 }

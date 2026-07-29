@@ -22,7 +22,8 @@ void main() {
     final tResponseData = {'key': 'value'};
 
     test('should return response data when GET is successful', () async {
-      when(() => mockDio.get<dynamic>(any(), queryParameters: any(named: 'queryParameters')))
+      when(() => mockDio.get<dynamic>(any(),
+              queryParameters: any(named: 'queryParameters')))
           .thenAnswer((_) async => Response(
                 data: tResponseData,
                 statusCode: 200,
@@ -35,24 +36,28 @@ void main() {
     });
 
     test('should throw ServerException when response is 404', () async {
-      when(() => mockDio.get<dynamic>(any(), queryParameters: any(named: 'queryParameters')))
+      when(() => mockDio.get<dynamic>(any(),
+              queryParameters: any(named: 'queryParameters')))
           .thenThrow(DioException(
-            requestOptions: RequestOptions(path: tUrl),
-            response: Response(statusCode: 404, requestOptions: RequestOptions(path: tUrl)),
-            type: DioExceptionType.badResponse,
-          ));
+        requestOptions: RequestOptions(path: tUrl),
+        response: Response(
+            statusCode: 404, requestOptions: RequestOptions(path: tUrl)),
+        type: DioExceptionType.badResponse,
+      ));
 
       final call = apiClient.get;
 
       expect(() => call(tUrl), throwsA(isA<ServerException>()));
     });
 
-    test('should throw ServerException when connection timeout occurs', () async {
-      when(() => mockDio.get<dynamic>(any(), queryParameters: any(named: 'queryParameters')))
+    test('should throw ServerException when connection timeout occurs',
+        () async {
+      when(() => mockDio.get<dynamic>(any(),
+              queryParameters: any(named: 'queryParameters')))
           .thenThrow(DioException(
-            requestOptions: RequestOptions(path: tUrl),
-            type: DioExceptionType.connectionTimeout,
-          ));
+        requestOptions: RequestOptions(path: tUrl),
+        type: DioExceptionType.connectionTimeout,
+      ));
 
       final call = apiClient.get;
 

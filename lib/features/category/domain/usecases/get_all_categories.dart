@@ -8,7 +8,8 @@ class GetAllCategories {
 
   GetAllCategories(this.repository);
 
-  Future<Either<Failure, List<Category>>> call({int offset = 0, int limit = 20}) {
+  Future<Either<Failure, List<Category>>> call(
+      {int offset = 0, int limit = 20}) {
     return repository.getAllCategories(offset: offset, limit: limit);
   }
 }

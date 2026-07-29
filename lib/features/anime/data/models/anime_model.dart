@@ -35,11 +35,13 @@ class AnimeModel {
       id: json['id'] as String,
       title: attributes['canonicalTitle'] as String? ?? 'No Title',
       synopsis: attributes['synopsis'] as String? ?? 'No Synopsis',
-      posterImage: (attributes['posterImage'] as Map<String, dynamic>?)?['medium'] as String?,
-      coverImage: (attributes['coverImage'] as Map<String, dynamic>?)?['large'] as String?,
+      posterImage: (attributes['posterImage']
+          as Map<String, dynamic>?)?['medium'] as String?,
+      coverImage: (attributes['coverImage'] as Map<String, dynamic>?)?['large']
+          as String?,
       youtubeVideoId: attributes['youtubeVideoId'] as String?,
-      rating: attributes['averageRating'] != null 
-          ? double.tryParse(attributes['averageRating'].toString()) 
+      rating: attributes['averageRating'] != null
+          ? double.tryParse(attributes['averageRating'].toString())
           : null,
       episodeCount: attributes['episodeCount'] as int?,
       episodeLength: attributes['episodeLength']?.toString(),

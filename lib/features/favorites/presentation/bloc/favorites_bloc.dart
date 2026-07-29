@@ -17,7 +17,8 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     // CheckIsFavorite might not change state fully, or you can implement it based on need.
   }
 
-  Future<void> _onLoadFavorites(LoadFavorites event, Emitter<FavoritesState> emit) async {
+  Future<void> _onLoadFavorites(
+      LoadFavorites event, Emitter<FavoritesState> emit) async {
     emit(FavoritesLoading());
     final result = await getFavorites(event.userId);
     result.fold(
@@ -26,11 +27,12 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     );
   }
 
-  Future<void> _onToggleFavorite(ToggleFavoriteEvent event, Emitter<FavoritesState> emit) async {
+  Future<void> _onToggleFavorite(
+      ToggleFavoriteEvent event, Emitter<FavoritesState> emit) async {
     if (state is FavoritesLoaded) {
       final currentState = state as FavoritesLoaded;
       final Set<String> currentIds = Set.from(currentState.favoriteIds);
-      
+
       // Optimistic update
       if (currentIds.contains(event.animeId)) {
         currentIds.remove(event.animeId);
@@ -40,7 +42,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
       emit(FavoritesLoaded(favoriteIds: currentIds));
 
       final result = await toggleFavorite(event.userId, event.animeId);
-      
+
       // On failure, rollback by reloading favorites
       if (result.isLeft()) {
         add(LoadFavorites(event.userId));

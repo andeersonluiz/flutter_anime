@@ -37,7 +37,8 @@ class AnimeRepositoryImpl implements AnimeRepository {
   }
 
   @override
-  Future<Either<Failure, List<Anime>>> getTrendingAnimes({int offset = 0, int limit = 10}) async {
+  Future<Either<Failure, List<Anime>>> getTrendingAnimes(
+      {int offset = 0, int limit = 10}) async {
     return _fetchList(
       'anime_trending_$offset',
       () => remoteDataSource.getTrendingAnimes(offset: offset, limit: limit),
@@ -45,7 +46,8 @@ class AnimeRepositoryImpl implements AnimeRepository {
   }
 
   @override
-  Future<Either<Failure, List<Anime>>> getMostPopularAnimes({int offset = 0, int limit = 10}) async {
+  Future<Either<Failure, List<Anime>>> getMostPopularAnimes(
+      {int offset = 0, int limit = 10}) async {
     return _fetchList(
       'anime_popular_$offset',
       () => remoteDataSource.getMostPopularAnimes(offset: offset, limit: limit),
@@ -53,7 +55,8 @@ class AnimeRepositoryImpl implements AnimeRepository {
   }
 
   @override
-  Future<Either<Failure, List<Anime>>> getTopRatedAnimes({int offset = 0, int limit = 10}) async {
+  Future<Either<Failure, List<Anime>>> getTopRatedAnimes(
+      {int offset = 0, int limit = 10}) async {
     return _fetchList(
       'anime_top_rated_$offset',
       () => remoteDataSource.getTopRatedAnimes(offset: offset, limit: limit),
@@ -61,7 +64,8 @@ class AnimeRepositoryImpl implements AnimeRepository {
   }
 
   @override
-  Future<Either<Failure, List<Anime>>> getUpcomingAnimes({int offset = 0, int limit = 10}) async {
+  Future<Either<Failure, List<Anime>>> getUpcomingAnimes(
+      {int offset = 0, int limit = 10}) async {
     return _fetchList(
       'anime_upcoming_$offset',
       () => remoteDataSource.getUpcomingAnimes(offset: offset, limit: limit),
@@ -69,17 +73,21 @@ class AnimeRepositoryImpl implements AnimeRepository {
   }
 
   @override
-  Future<Either<Failure, List<Anime>>> getCurrentlyAiringAnimes({int offset = 0, int limit = 10}) async {
+  Future<Either<Failure, List<Anime>>> getCurrentlyAiringAnimes(
+      {int offset = 0, int limit = 10}) async {
     return _fetchList(
       'anime_airing_$offset',
-      () => remoteDataSource.getCurrentlyAiringAnimes(offset: offset, limit: limit),
+      () => remoteDataSource.getCurrentlyAiringAnimes(
+          offset: offset, limit: limit),
     );
   }
 
   @override
-  Future<Either<Failure, List<Anime>>> searchAnimes(String query, {int offset = 0, int limit = 10}) async {
+  Future<Either<Failure, List<Anime>>> searchAnimes(String query,
+      {int offset = 0, int limit = 10}) async {
     try {
-      final remoteAnimes = await remoteDataSource.searchAnimes(query, offset: offset, limit: limit);
+      final remoteAnimes = await remoteDataSource.searchAnimes(query,
+          offset: offset, limit: limit);
       return Right(remoteAnimes.map((e) => e.toEntity()).toList());
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message ?? 'Server error occurred'));
@@ -89,10 +97,12 @@ class AnimeRepositoryImpl implements AnimeRepository {
   }
 
   @override
-  Future<Either<Failure, List<Anime>>> getAnimesByCategory(String categorySlug, {int offset = 0, int limit = 10}) async {
+  Future<Either<Failure, List<Anime>>> getAnimesByCategory(String categorySlug,
+      {int offset = 0, int limit = 10}) async {
     return _fetchList(
       'anime_category_${categorySlug}_$offset',
-      () => remoteDataSource.getAnimesByCategory(categorySlug, offset: offset, limit: limit),
+      () => remoteDataSource.getAnimesByCategory(categorySlug,
+          offset: offset, limit: limit),
     );
   }
 

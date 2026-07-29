@@ -8,7 +8,8 @@ class GetCharacters {
 
   GetCharacters(this.repository);
 
-  Future<Either<Failure, List<Character>>> call({int offset = 0, int limit = 20}) {
+  Future<Either<Failure, List<Character>>> call(
+      {int offset = 0, int limit = 20}) {
     return repository.getCharacters(offset: offset, limit: limit);
   }
 }

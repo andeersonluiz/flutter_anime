@@ -63,7 +63,8 @@ class ApiClient {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.receiveTimeout:
       case DioExceptionType.sendTimeout:
-        return const ServerException('Connection timeout. Check your internet.');
+        return const ServerException(
+            'Connection timeout. Check your internet.');
       case DioExceptionType.connectionError:
         return const ServerException('No internet connection.');
       case DioExceptionType.badResponse:

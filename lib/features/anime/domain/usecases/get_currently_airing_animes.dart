@@ -8,7 +8,8 @@ class GetCurrentlyAiringAnimes {
   const GetCurrentlyAiringAnimes(this._repository);
   final AnimeRepository _repository;
 
-  Future<Either<Failure, List<Anime>>> call(GetCurrentlyAiringAnimesParams params) {
+  Future<Either<Failure, List<Anime>>> call(
+      GetCurrentlyAiringAnimesParams params) {
     return _repository.getCurrentlyAiringAnimes(
       offset: params.offset,
       limit: params.limit,

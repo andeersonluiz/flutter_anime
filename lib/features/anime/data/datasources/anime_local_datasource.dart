@@ -23,7 +23,8 @@ class AnimeLocalDataSourceImpl implements AnimeLocalDataSource {
     try {
       final jsonList = animes.map((a) => a.toJson()).toList();
       await _box.put(key, jsonEncode(jsonList));
-      await _box.put('$cacheExpiryPrefix$key', DateTime.now().millisecondsSinceEpoch);
+      await _box.put(
+          '$cacheExpiryPrefix$key', DateTime.now().millisecondsSinceEpoch);
     } catch (e) {
       throw const CacheException('Failed to cache data');
     }
@@ -41,7 +42,9 @@ class AnimeLocalDataSourceImpl implements AnimeLocalDataSource {
           final jsonString = _box.get(key) as String?;
           if (jsonString != null) {
             final decoded = jsonDecode(jsonString) as List<dynamic>;
-            return decoded.map((e) => AnimeModel.fromJson(e as Map<String, dynamic>)).toList();
+            return decoded
+                .map((e) => AnimeModel.fromJson(e as Map<String, dynamic>))
+                .toList();
           }
         }
       }

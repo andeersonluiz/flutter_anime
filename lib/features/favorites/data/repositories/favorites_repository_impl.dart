@@ -22,7 +22,8 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> addFavorite(String userId, String animeId) async {
+  Future<Either<Failure, Unit>> addFavorite(
+      String userId, String animeId) async {
     try {
       await remoteDataSource.addFavorite(userId, animeId);
       return const Right(unit);
@@ -34,7 +35,8 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> removeFavorite(String userId, String animeId) async {
+  Future<Either<Failure, Unit>> removeFavorite(
+      String userId, String animeId) async {
     try {
       await remoteDataSource.removeFavorite(userId, animeId);
       return const Right(unit);
@@ -46,7 +48,8 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> isFavorite(String userId, String animeId) async {
+  Future<Either<Failure, bool>> isFavorite(
+      String userId, String animeId) async {
     try {
       final result = await remoteDataSource.isFavorite(userId, animeId);
       return Right(result);

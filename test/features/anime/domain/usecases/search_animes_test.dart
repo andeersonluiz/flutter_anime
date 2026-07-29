@@ -30,9 +30,11 @@ void main() {
     when(() => mockAnimeRepository.searchAnimes(tQuery, offset: 0, limit: 10))
         .thenAnswer((_) async => const Right(tAnimeList));
 
-    final result = await usecase(const SearchAnimesParams(query: tQuery, offset: 0, limit: 10));
+    final result = await usecase(
+        const SearchAnimesParams(query: tQuery, offset: 0, limit: 10));
 
     expect(result, const Right(tAnimeList));
-    verify(() => mockAnimeRepository.searchAnimes(tQuery, offset: 0, limit: 10)).called(1);
+    verify(() => mockAnimeRepository.searchAnimes(tQuery, offset: 0, limit: 10))
+        .called(1);
   });
 }

@@ -24,10 +24,19 @@ class CharacterModel {
     return CharacterModel(
       id: json['id'] as String,
       name: attributes['canonicalName'] as String,
-      names: attributes['names'] != null ? CharacterNamesModel.fromJson(attributes['names'] as Map<String, dynamic>) : null,
-      otherNames: (attributes['otherNames'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
+      names: attributes['names'] != null
+          ? CharacterNamesModel.fromJson(
+              attributes['names'] as Map<String, dynamic>)
+          : null,
+      otherNames: (attributes['otherNames'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
       description: attributes['description'] as String?,
-      image: attributes['image'] != null ? CharacterImageModel.fromJson(attributes['image'] as Map<String, dynamic>) : null,
+      image: attributes['image'] != null
+          ? CharacterImageModel.fromJson(
+              attributes['image'] as Map<String, dynamic>)
+          : null,
       malId: _malIdFromJson(attributes['malId']),
     );
   }

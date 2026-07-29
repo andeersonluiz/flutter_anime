@@ -27,7 +27,10 @@ class UserModel {
       avatarUrl: json['avatarUrl'] as String?,
       backgroundUrl: json['backgroundUrl'] as String?,
       isAnonymous: json['isAnonymous'] as bool? ?? false,
-      favoriteAnimeIds: (json['favoriteAnimeIds'] as List<dynamic>?)?.map((e) => e as String).toList() ?? const [],
+      favoriteAnimeIds: (json['favoriteAnimeIds'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
   }
 

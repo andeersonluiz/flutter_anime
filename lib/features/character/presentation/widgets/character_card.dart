@@ -16,7 +16,8 @@ class CharacterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap ?? () => context.push('/character/${character.id}', extra: character),
+      onTap: onTap ??
+          () => context.push('/character/${character.id}', extra: character),
       child: Card(
         clipBehavior: Clip.antiAlias,
         elevation: 4,
@@ -31,7 +32,8 @@ class CharacterCard extends StatelessWidget {
               child: Image.network(
                 character.image ?? '',
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const ColoredBox(color: Colors.grey),
+                errorBuilder: (_, __, ___) =>
+                    const ColoredBox(color: Colors.grey),
               ),
             ),
             Positioned(

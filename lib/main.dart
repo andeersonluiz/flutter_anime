@@ -50,7 +50,8 @@ class AnimesApp extends StatelessWidget {
       ],
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, settingsState) {
-          final isDark = settingsState is SettingsLoaded && settingsState.isDark;
+          final isDark =
+              settingsState is SettingsLoaded && settingsState.isDark;
 
           final localizationDelegate = LocalizedApp.of(context).delegate;
 

@@ -23,6 +23,7 @@ class ApiEndpoints {
 
   // Query param helpers
   static String animeById(String id) => '/anime/$id';
-  static String animeCharacters(String animeId) => '/anime/$animeId/relationships/characters';
+  static String animeCharacters(String animeId) =>
+      '/anime/$animeId/relationships/characters';
   static String animeEpisodes(String animeId) => '/anime/$animeId/episodes';
 }

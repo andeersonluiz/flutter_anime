@@ -12,7 +12,8 @@ class EpisodeBloc extends Bloc<EpisodeEvent, EpisodeState> {
     on<LoadMoreEpisodes>(_onLoadMoreEpisodes);
   }
 
-  Future<void> _onLoadEpisodes(LoadEpisodes event, Emitter<EpisodeState> emit) async {
+  Future<void> _onLoadEpisodes(
+      LoadEpisodes event, Emitter<EpisodeState> emit) async {
     emit(EpisodeLoading());
     final result = await getEpisodes(event.animeId, offset: 0, limit: _limit);
     result.fold(
@@ -20,13 +21,17 @@ class EpisodeBloc extends Bloc<EpisodeEvent, EpisodeState> {
       (episodes) {
         final hasMore = episodes.length == _limit;
         // Determine if it's a movie (e.g. only 1 episode returned or specific flag)
-        final isMovie = episodes.isNotEmpty && episodes.length == 1 && episodes.first.episodeNumber == null;
-        emit(EpisodeLoaded(episodes: episodes, hasMore: hasMore, isMovie: isMovie));
+        final isMovie = episodes.isNotEmpty &&
+            episodes.length == 1 &&
+            episodes.first.episodeNumber == null;
+        emit(EpisodeLoaded(
+            episodes: episodes, hasMore: hasMore, isMovie: isMovie));
       },
     );
   }
 
-  Future<void> _onLoadMoreEpisodes(LoadMoreEpisodes event, Emitter<EpisodeState> emit) async {
+  Future<void> _onLoadMoreEpisodes(
+      LoadMoreEpisodes event, Emitter<EpisodeState> emit) async {
     if (state is EpisodeLoaded) {
       final currentState = state as EpisodeLoaded;
       if (!currentState.hasMore) return;

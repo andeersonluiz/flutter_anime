@@ -27,7 +27,8 @@ class _EpisodesTabState extends State<EpisodesTab> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent * 0.8) {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.8) {
       context.read<EpisodeBloc>().add(LoadMoreEpisodes(widget.anime.id));
     }
   }

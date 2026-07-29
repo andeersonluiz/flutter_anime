@@ -11,7 +11,8 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, AppUser>> signInWithEmail(String email, String password) async {
+  Future<Either<Failure, AppUser>> signInWithEmail(
+      String email, String password) async {
     try {
       final userModel = await remoteDataSource.signInWithEmail(email, password);
       return Right(userModel.toEntity());

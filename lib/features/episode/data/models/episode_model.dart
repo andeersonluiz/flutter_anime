@@ -12,7 +12,8 @@ class EpisodeModel {
   factory EpisodeModel.fromJson(Map<String, dynamic> json) {
     return EpisodeModel(
       id: json['id'] as String,
-      attributes: EpisodeAttributes.fromJson(json['attributes'] as Map<String, dynamic>),
+      attributes: EpisodeAttributes.fromJson(
+          json['attributes'] as Map<String, dynamic>),
     );
   }
 
@@ -58,7 +59,9 @@ class EpisodeAttributes {
     return EpisodeAttributes(
       canonicalTitle: json['canonicalTitle'] as String?,
       synopsis: json['synopsis'] as String?,
-      thumbnail: json['thumbnail'] != null ? Thumbnail.fromJson(json['thumbnail'] as Map<String, dynamic>) : null,
+      thumbnail: json['thumbnail'] != null
+          ? Thumbnail.fromJson(json['thumbnail'] as Map<String, dynamic>)
+          : null,
       number: json['number'] as int?,
       seasonNumber: json['seasonNumber'] as int?,
       airdate: json['airdate'] as String?,

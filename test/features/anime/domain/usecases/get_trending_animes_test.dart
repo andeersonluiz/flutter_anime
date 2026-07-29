@@ -29,9 +29,11 @@ void main() {
     when(() => mockAnimeRepository.getTrendingAnimes(offset: 0, limit: 10))
         .thenAnswer((_) async => const Right(tAnimeList));
 
-    final result = await usecase(const GetTrendingAnimesParams(offset: 0, limit: 10));
+    final result =
+        await usecase(const GetTrendingAnimesParams(offset: 0, limit: 10));
 
     expect(result, const Right(tAnimeList));
-    verify(() => mockAnimeRepository.getTrendingAnimes(offset: 0, limit: 10)).called(1);
+    verify(() => mockAnimeRepository.getTrendingAnimes(offset: 0, limit: 10))
+        .called(1);
   });
 }

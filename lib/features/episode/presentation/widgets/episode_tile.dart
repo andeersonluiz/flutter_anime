@@ -46,7 +46,8 @@ class EpisodeTile extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('S${episode.seasonNumber ?? '-'} E${episode.episodeNumber ?? '-'}'),
+          Text(
+              'S${episode.seasonNumber ?? '-'} E${episode.episodeNumber ?? '-'}'),
           if (episode.airdate != null) Text(episode.airdate!),
         ],
       ),
