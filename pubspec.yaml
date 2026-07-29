@@ -74,6 +74,9 @@ dev_dependencies:
   # Lint
   very_good_analysis: ^6.0.0
 
+  # Git Hooks (Pre-commit / Pre-push CI check)
+  git_hooks: ^1.0.2
+
 module:
   androidX: true
 
