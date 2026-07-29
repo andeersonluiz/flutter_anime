@@ -374,7 +374,7 @@ void main() {
           listType: AnimeListType.trending,
         ),
         const AnimeLoadingMore(currentAnimes: tAnime10),
-        AnimeListLoaded(
+        const AnimeListLoaded(
           animes: [...tAnime10, ...tAnimeList],
           hasMore: false,
           listType: AnimeListType.trending,
@@ -386,7 +386,7 @@ void main() {
       'does nothing when state is not AnimeListLoaded',
       build: () => buildBloc(trending: mockTrending),
       act: (bloc) => bloc.add(const LoadMoreAnimes()),
-      expect: () => [],
+      expect: () => <AnimeState>[],
     );
 
     blocTest<AnimeBloc, AnimeState>(

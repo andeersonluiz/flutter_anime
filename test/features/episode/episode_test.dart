@@ -222,7 +222,7 @@ void main() {
       build: () {
         const movieEpisode = Episode(id: 'm1', isMovie: false);
         when(() => mockGetEpisodes('99', offset: 0, limit: 20))
-            .thenAnswer((_) async => Right([movieEpisode]));
+            .thenAnswer((_) async => const Right([movieEpisode]));
         return buildBloc();
       },
       act: (bloc) => bloc.add(const LoadEpisodes('99')),
@@ -256,7 +256,7 @@ void main() {
       'LoadMoreEpisodes does nothing when state is not EpisodeLoaded',
       build: () => buildBloc(),
       act: (bloc) => bloc.add(const LoadMoreEpisodes('42')),
-      expect: () => [],
+      expect: () => <EpisodeState>[],
     );
   });
 }
