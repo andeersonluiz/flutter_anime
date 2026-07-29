@@ -29,7 +29,7 @@ class AnimeRepositoryImpl implements AnimeRepository {
         await localDataSource.cacheAnimes(cacheKey, remoteAnimes);
         return Right(remoteAnimes.map((e) => e.toEntity()).toList());
       } on ServerException catch (e) {
-        return Left(ServerFailure(e.message ?? 'Server error occurred'));
+        return Left(ServerFailure(e.message));
       } catch (e) {
         return Left(ServerFailure(e.toString()));
       }
@@ -90,7 +90,7 @@ class AnimeRepositoryImpl implements AnimeRepository {
           offset: offset, limit: limit);
       return Right(remoteAnimes.map((e) => e.toEntity()).toList());
     } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? 'Server error occurred'));
+      return Left(ServerFailure(e.message));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }
@@ -112,7 +112,7 @@ class AnimeRepositoryImpl implements AnimeRepository {
       final remoteAnime = await remoteDataSource.getAnimeDetails(id);
       return Right(remoteAnime.toEntity());
     } on ServerException catch (e) {
-      return Left(ServerFailure(e.message ?? 'Server error occurred'));
+      return Left(ServerFailure(e.message));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }

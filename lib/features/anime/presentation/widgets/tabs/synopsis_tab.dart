@@ -15,7 +15,7 @@ class SynopsisTab extends StatelessWidget {
         children: [
           // TODO: Add translation toggle button here in the future
           Text(
-            anime.synopsis ?? 'No synopsis available.',
+            anime.synopsis,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
         ],

@@ -98,7 +98,7 @@ class AppDrawer extends StatelessWidget {
                   title: const Text('Edit Profile'),
                   onTap: () {
                     context.pop();
-                    showDialog(
+                    showDialog<void>(
                       context: context,
                       builder: (_) => const EditProfileDialog(),
                     );
@@ -119,7 +119,7 @@ class AppDrawer extends StatelessWidget {
                   title: const Text('Login'),
                   onTap: () {
                     context.pop();
-                    showDialog(
+                    showDialog<void>(
                       context: context,
                       builder: (_) => const LoginDialog(),
                     );
