@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-O projeto segue **Clean Architecture** com organização **feature-first**, refatorado a partir de um código legado (2020) usando agentes de IA.
+O projeto segue **Clean Architecture** com organização **feature-first**, refatorado a partir da base legada original de 2020.
 
 ## Diagrama de Camadas
 

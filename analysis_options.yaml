@@ -1,0 +1,18 @@
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "lib/generated/**"
+
+  language:
+    strict-casts: true
+    strict-raw-types: true
+
+linter:
+  rules:
+    # Relaxar regras que não se aplicam a apps (apenas a pacotes de biblioteca)
+    public_member_api_docs: false
+    # Permitir prints apenas em debug (comentar em produção)
+    avoid_print: true
