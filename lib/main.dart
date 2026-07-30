@@ -27,7 +27,7 @@ Future<void> main() async {
 
   try {
     await Firebase.initializeApp();
-  } on Exception catch (e) {
+  } on Object catch (e) {
     debugPrint('Firebase initialization warning: $e');
   }
   await initDependencies();
@@ -44,7 +44,7 @@ Future<void> main() async {
       supportedLocales: ['en', 'pt'],
       basePath: 'assets/i18n',
     );
-  } on Exception catch (e) {
+  } on Object catch (e) {
     debugPrint('LocalizationDelegate failed: $e');
     await AppLocalization.init('en');
   }
@@ -108,7 +108,7 @@ class AnimesApp extends StatelessWidget {
             bool hasLocalizedApp = true;
             try {
               LocalizedApp.of(context);
-            } on Exception {
+            } on Object catch (_) {
               hasLocalizedApp = false;
             }
 
