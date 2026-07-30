@@ -22,7 +22,7 @@ import 'package:animes_io/features/settings/presentation/bloc/settings_state.dar
 import 'package:animes_io/core/utils/app_localization.dart';
 import 'package:animes_io/features/favorites/presentation/bloc/favorites_bloc.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();

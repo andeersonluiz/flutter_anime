@@ -11,7 +11,7 @@ void main() {
         'Validates main user journey across all tabs, dialogs and search',
         (tester) async {
       // 1. Boot application
-      app.main();
+      await app.main();
       await tester.pumpAndSettle(const Duration(seconds: 3));
 
       // 2. Verify Home Page loaded with main title and bottom navigation bar
@@ -25,11 +25,8 @@ void main() {
       await tester.pumpAndSettle(const Duration(seconds: 1));
 
       // Close search delegate back to home
-      final backButton = find.byType(BackButton);
-      if (backButton.evaluate().isNotEmpty) {
-        await tester.tap(backButton);
-        await tester.pumpAndSettle(const Duration(seconds: 1));
-      }
+      await tester.pageBack();
+      await tester.pumpAndSettle(const Duration(seconds: 1));
 
       // 4. Navigate to Categories Tab (Branch 1)
       final categoriesTab = find.byIcon(Icons.category_outlined);
