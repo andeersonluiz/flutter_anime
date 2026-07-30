@@ -31,7 +31,7 @@ void main() {
 
         // Verify AnimeDetailsPage is open (checking for TabBar)
         expect(find.byType(TabBar), findsOneWidget);
-        
+
         // Return to Home Page
         await tester.tap(find.byIcon(Icons.arrow_back).first);
         await tester.pump(const Duration(seconds: 2));
@@ -47,8 +47,9 @@ void main() {
         final searchField = find.byType(TextField);
         expect(searchField, findsOneWidget);
         await tester.enterText(searchField, 'Naruto');
-        await tester.pump(const Duration(seconds: 3)); // wait for debounce and network
-        
+        await tester
+            .pump(const Duration(seconds: 3)); // wait for debounce and network
+
         // Verify AnimeSearchTile is present
         expect(find.byType(AnimeSearchTile), findsWidgets);
 
