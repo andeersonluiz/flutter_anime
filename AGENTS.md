@@ -61,6 +61,7 @@ lib/
 - Usar `GoRouter` para navegação (não `Navigator.push` direto)
 - Seguir as regras de `very_good_analysis` (sem warnings)
 - **EXECUTAR SEMPRE `dart format lib test integration_test` E `flutter analyze` APÓS QUALQUER MODIFICAÇÃO DE CÓDIGO** para garantir 0 erros de sintaxe, tipos, compilação ou linter. (Aviso: O CI pipeline roda `dart format --set-exit-if-changed .`, o que significa que o build falhará imediatamente se você commitar qualquer arquivo fora do padrão de formatação. O `flutter analyze` deve ser executado para verificar erros de compilação; testes unitários com `flutter test` são executados ao final ou sob demanda).
+- **SEMPRE INCREMENTAR A VERSÃO NO `pubspec.yaml`** antes de realizar um `git push` final. A cada nova feature ou bugfix concluído, o *build number* (o número após o `+`) ou a versão semântica deve ser aumentada para refletir o novo build.
 - **O `git_hooks.dart` DEVE SEMPRE REFLETIR EXATAMENTE AS MESMAS CHECAGENS DO CI (`.github/workflows/ci.yml`)**. NUNCA modifique ou enfraqueça as regras do `git_hooks.dart` (como remover `--fatal-infos`) para fazer um commit passar. Caso ocorra erro de linter ou compilação, o agente DEVE RESOLVER O ERRO NO CÓDIGO FONTE em vez de burlar a validação do Git Hook.
 
 ---
