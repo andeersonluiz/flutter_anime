@@ -6,6 +6,15 @@ import 'package:integration_test/integration_test.dart';
 import 'package:animes_io/features/anime/presentation/widgets/anime_card.dart';
 import 'package:animes_io/features/anime/presentation/widgets/anime_search_tile.dart';
 
+Future<void> pumpUntilFound(WidgetTester tester, Finder finder,
+    {int maxIterations = 30}) async {
+  for (int i = 0; i < maxIterations; i++) {
+    await tester.pump(const Duration(milliseconds: 500));
+    if (tester.any(finder)) return;
+  }
+  throw Exception('Timeout waiting for $finder');
+}
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -24,7 +33,9 @@ void main() {
 
         // --- 2.1 Test AnimeDetailsPage Deep Dive ---
         // Find the first AnimeCard and tap it to enter details
-        final firstAnimeCard = find.byType(AnimeCard).first;
+        final animeCardFinder = find.byType(AnimeCard);
+        await pumpUntilFound(tester, animeCardFinder);
+        final firstAnimeCard = animeCardFinder.first;
         expect(firstAnimeCard, findsOneWidget);
         await tester.tap(firstAnimeCard);
         await tester.pump(const Duration(seconds: 2));
@@ -47,11 +58,13 @@ void main() {
         final searchField = find.byType(TextField);
         expect(searchField, findsOneWidget);
         await tester.enterText(searchField, 'Naruto');
-        await tester
-            .pump(const Duration(seconds: 3)); // wait for debounce and network
+
+        // wait for debounce and network
+        final searchTileFinder = find.byType(AnimeSearchTile);
+        await pumpUntilFound(tester, searchTileFinder);
 
         // Verify AnimeSearchTile is present
-        expect(find.byType(AnimeSearchTile), findsWidgets);
+        expect(searchTileFinder, findsWidgets);
 
         // Close search delegate back to home
         final backIcon = find.byIcon(Icons.arrow_back);
