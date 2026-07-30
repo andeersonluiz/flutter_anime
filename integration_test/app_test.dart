@@ -12,7 +12,7 @@ void main() {
         (tester) async {
       // 1. Boot application
       await app.main();
-      await tester.pumpAndSettle(const Duration(seconds: 3));
+      await tester.pump(const Duration(seconds: 3));
 
       // 2. Verify Home Page loaded with main title and bottom navigation bar
       expect(find.text('Animes IO'), findsOneWidget);
@@ -22,29 +22,29 @@ void main() {
       final searchIcon = find.byIcon(Icons.search);
       expect(searchIcon, findsOneWidget);
       await tester.tap(searchIcon);
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.pump(const Duration(seconds: 1));
 
       // Close search delegate back to home
       await tester.pageBack();
-      await tester.pumpAndSettle(const Duration(seconds: 1));
+      await tester.pump(const Duration(seconds: 1));
 
       // 4. Navigate to Categories Tab (Branch 1)
       final categoriesTab = find.byIcon(Icons.category_outlined);
       expect(categoriesTab, findsOneWidget);
       await tester.tap(categoriesTab);
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.pump(const Duration(seconds: 2));
 
       // 5. Navigate to Characters Tab (Branch 2)
       final charactersTab = find.byIcon(Icons.people_outline);
       expect(charactersTab, findsOneWidget);
       await tester.tap(charactersTab);
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.pump(const Duration(seconds: 2));
 
       // 6. Navigate to Favorites Tab (Branch 3 - Unauthenticated State)
       final favoritesTab = find.byIcon(Icons.favorite_outline);
       expect(favoritesTab, findsOneWidget);
       await tester.tap(favoritesTab);
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.pump(const Duration(seconds: 2));
 
       // Verify Login button appears for unauthenticated user on Favorites tab
       final loginBtn = find.byIcon(Icons.login);
@@ -54,7 +54,7 @@ void main() {
       final profileTab = find.byIcon(Icons.person_outline);
       expect(profileTab, findsOneWidget);
       await tester.tap(profileTab);
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.pump(const Duration(seconds: 2));
 
       // Verify Dark Mode switch is present
       expect(find.byType(SwitchListTile), findsOneWidget);
@@ -63,7 +63,7 @@ void main() {
       final homeTab = find.byIcon(Icons.home_outlined);
       expect(homeTab, findsOneWidget);
       await tester.tap(homeTab);
-      await tester.pumpAndSettle(const Duration(seconds: 2));
+      await tester.pump(const Duration(seconds: 2));
 
       // Final assertion: App state is intact
       expect(find.text('Animes IO'), findsOneWidget);
