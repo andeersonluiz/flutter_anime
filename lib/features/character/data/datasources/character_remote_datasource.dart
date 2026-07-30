@@ -26,10 +26,21 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
           'page[offset]': offset,
         },
       );
-      final data = response.data['data'] as List;
-      return data
-          .map((json) => CharacterModel.fromJson(json as Map<String, dynamic>))
-          .toList();
+
+      final responseData = response.data as Map<String, dynamic>?;
+      final data = responseData?['data'] as List<dynamic>? ?? [];
+
+      final list = <CharacterModel>[];
+      for (final item in data) {
+        if (item is Map<String, dynamic>) {
+          try {
+            list.add(CharacterModel.fromJson(item));
+          } catch (_) {
+            // Skip invalid character entry gracefully
+          }
+        }
+      }
+      return list;
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -44,12 +55,46 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
         queryParameters: {
           'page[limit]': limit,
           'page[offset]': offset,
+          'include': 'character',
         },
       );
 
-      final relData = relResponse.data['data'] as List;
-      final characterLinks =
-          relData.map((e) => e['links']['related'] as String).toList();
+      final responseData = relResponse.data as Map<String, dynamic>?;
+      if (responseData == null) {
+        return [];
+      }
+
+      // Check compound document pattern ('included' contains character entities directly)
+      if (responseData.containsKey('included') &&
+          responseData['included'] is List) {
+        final included = responseData['included'] as List<dynamic>;
+        final characters = <CharacterModel>[];
+        for (final item in included) {
+          if (item is Map<String, dynamic> && item['type'] == 'characters') {
+            try {
+              characters.add(CharacterModel.fromJson(item));
+            } catch (_) {
+              // Skip malformed item
+            }
+          }
+        }
+        if (characters.isNotEmpty) {
+          return characters;
+        }
+      }
+
+      // Fallback: extract related links with strict null-safety
+      final relData = responseData['data'] as List<dynamic>? ?? [];
+      final characterLinks = <String>[];
+      for (final e in relData) {
+        if (e is Map<String, dynamic>) {
+          final links = e['links'] as Map<String, dynamic>?;
+          final related = links?['related']?.toString();
+          if (related != null && related.isNotEmpty) {
+            characterLinks.add(related);
+          }
+        }
+      }
 
       if (characterLinks.isEmpty) {
         return [];
@@ -59,10 +104,19 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
         characterLinks.map((link) => apiClient.get(link)),
       );
 
-      return characterResponses.map((res) {
-        return CharacterModel.fromJson(
-            res.data['data'] as Map<String, dynamic>);
-      }).toList();
+      final result = <CharacterModel>[];
+      for (final res in characterResponses) {
+        final resData = res.data as Map<String, dynamic>?;
+        final charMap = resData?['data'] as Map<String, dynamic>?;
+        if (charMap != null) {
+          try {
+            result.add(CharacterModel.fromJson(charMap));
+          } catch (_) {
+            // Skip invalid character payload
+          }
+        }
+      }
+      return result;
     } catch (e) {
       throw ServerException(e.toString());
     }

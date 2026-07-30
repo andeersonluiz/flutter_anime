@@ -19,17 +19,26 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
   String _selectedBackground = '';
 
   final List<String> _avatars = [
-    'assets/avatars/avatar1.png',
-    'assets/avatars/avatar2.png',
-    'assets/avatars/avatar3.png',
-    'assets/avatars/avatar4.png',
+    'assets/avatars/avatar (1).jpg',
+    'assets/avatars/avatar (2).jpg',
+    'assets/avatars/avatar (3).jpg',
+    'assets/avatars/avatar (4).jpg',
+    'assets/avatars/avatar (5).jpg',
+    'assets/avatars/avatar (6).jpg',
+    'assets/avatars/avatar (7).jpg',
+    'assets/avatars/avatar (8).jpg',
+    'assets/avatars/default.jpg',
   ];
 
   final List<String> _backgrounds = [
-    'assets/background/bg1.png',
-    'assets/background/bg2.png',
-    'assets/background/bg3.png',
-    'assets/background/bg4.png',
+    'assets/background/background (1).png',
+    'assets/background/background (2).png',
+    'assets/background/background (3).png',
+    'assets/background/background (4).png',
+    'assets/background/background (5).png',
+    'assets/background/background (6).png',
+    'assets/background/background (7).png',
+    'assets/background/background (8).png',
   ];
 
   @override
@@ -39,14 +48,26 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
     final user = authState is Authenticated ? authState.user : null;
 
     _usernameController = TextEditingController(text: user?.username ?? '');
-    _selectedAvatar = user?.avatarUrl ?? _avatars.first;
-    _selectedBackground = user?.backgroundUrl ?? _backgrounds.first;
+    _selectedAvatar = (user?.avatarUrl != null && user!.avatarUrl!.isNotEmpty)
+        ? user.avatarUrl!
+        : _avatars.first;
+    _selectedBackground =
+        (user?.backgroundUrl != null && user!.backgroundUrl!.isNotEmpty)
+            ? user.backgroundUrl!
+            : _backgrounds.first;
   }
 
   @override
   void dispose() {
     _usernameController.dispose();
     super.dispose();
+  }
+
+  ImageProvider _getImageProvider(String path) {
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return NetworkImage(path);
+    }
+    return AssetImage(path);
   }
 
   void _submit() {
@@ -90,7 +111,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                   style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               SizedBox(
-                height: 60,
+                height: 70,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: _avatars.length,
@@ -100,18 +121,19 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                     return GestureDetector(
                       onTap: () => setState(() => _selectedAvatar = avatar),
                       child: Container(
-                        margin: const EdgeInsets.only(right: 8),
+                        margin: const EdgeInsets.only(right: 10),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: isSelected
                               ? Border.all(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 3)
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 3,
+                                )
                               : null,
                         ),
                         child: CircleAvatar(
-                          radius: 26,
-                          backgroundImage: AssetImage(avatar),
+                          radius: 28,
+                          backgroundImage: _getImageProvider(avatar),
                         ),
                       ),
                     );
@@ -123,7 +145,7 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                   style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               SizedBox(
-                height: 60,
+                height: 70,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: _backgrounds.length,
@@ -133,17 +155,18 @@ class _EditProfileDialogState extends State<EditProfileDialog> {
                     return GestureDetector(
                       onTap: () => setState(() => _selectedBackground = bg),
                       child: Container(
-                        margin: const EdgeInsets.only(right: 8),
-                        width: 80,
+                        margin: const EdgeInsets.only(right: 10),
+                        width: 90,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
                           border: isSelected
                               ? Border.all(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 3)
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 3,
+                                )
                               : null,
                           image: DecorationImage(
-                            image: AssetImage(bg),
+                            image: _getImageProvider(bg),
                             fit: BoxFit.cover,
                           ),
                         ),

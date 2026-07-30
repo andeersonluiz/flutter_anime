@@ -27,6 +27,7 @@ void main() {
 
   setUp(() {
     mockBox = MockHiveBox();
+    when(() => mockBox.isOpen).thenReturn(true);
     dataSource = AnimeLocalDataSourceImpl(hiveBox: mockBox);
   });
 

@@ -9,6 +9,16 @@ class UserProfileHeader extends StatelessWidget {
     required this.user,
   });
 
+  ImageProvider _getImageProvider(String? path, String defaultAsset) {
+    if (path == null || path.isEmpty) {
+      return AssetImage(defaultAsset);
+    }
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return NetworkImage(path);
+    }
+    return AssetImage(path);
+  }
+
   @override
   Widget build(BuildContext context) {
     final avatar = user.avatarUrl;
@@ -29,10 +39,9 @@ class UserProfileHeader extends StatelessWidget {
         ),
       ),
       currentAccountPicture: CircleAvatar(
-        backgroundImage: AssetImage(
-          avatar != null && avatar.isNotEmpty
-              ? avatar
-              : 'assets/avatars/avatar1.png',
+        backgroundImage: _getImageProvider(
+          avatar,
+          'assets/avatars/default.jpg',
         ),
         backgroundColor: Colors.grey.shade800,
       ),
@@ -40,7 +49,10 @@ class UserProfileHeader extends StatelessWidget {
         color: Theme.of(context).primaryColor,
         image: background != null && background.isNotEmpty
             ? DecorationImage(
-                image: AssetImage(background),
+                image: _getImageProvider(
+                  background,
+                  'assets/background/background (1).png',
+                ),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
                   Colors.black.withAlpha(80),

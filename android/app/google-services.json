@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "946900606440",
     "project_id": "flutter-anime-e27ac",
-    "storage_bucket": "flutter-anime-e27ac.appspot.com"
+    "storage_bucket": "flutter-anime-e27ac.firebasestorage.app"
   },
   "client": [
     {
@@ -13,6 +13,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "946900606440-uebjq96h2uleck96tsjcc3lp0l45tvbk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.project1",
+            "certificate_hash": "151d2c62e05bc94147f04acff6c6d0b1c89de36d"
+          }
+        },
         {
           "client_id": "946900606440-7trscnjpopdag1upoi829m32jptfrtes.apps.googleusercontent.com",
           "client_type": 3

@@ -60,6 +60,7 @@ lib/
 - Usar `json_serializable` para fromJson/toJson (não manual)
 - Usar `GoRouter` para navegação (não `Navigator.push` direto)
 - Seguir as regras de `very_good_analysis` (sem warnings)
+- **EXECUTAR SEMPRE `dart format lib test` E `flutter analyze` APÓS QUALQUER MODIFICAÇÃO DE CÓDIGO** para garantir 0 erros de sintaxe, tipos, compilação ou linter antes de considerar a tarefa finalizada. (Aviso: O `flutter analyze` deve ser executado para verificar erros de compilação; testes unitários com `flutter test` são executados ao final ou sob demanda).
 
 ---
 

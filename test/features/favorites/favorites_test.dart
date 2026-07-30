@@ -275,10 +275,18 @@ void main() {
     );
 
     blocTest<FavoritesBloc, FavoritesState>(
-      'ToggleFavoriteEvent does nothing when state is not FavoritesLoaded',
-      build: () => buildBloc(),
+      'ToggleFavoriteEvent fetches favorites first when state is not FavoritesLoaded',
+      build: () {
+        when(() => mockGetFavorites(tUserId))
+            .thenAnswer((_) async => const Right([]));
+        when(() => mockToggleFavorite(tUserId, tAnimeId))
+            .thenAnswer((_) async => const Right(unit));
+        return buildBloc();
+      },
       act: (bloc) => bloc.add(const ToggleFavoriteEvent(tUserId, tAnimeId)),
-      expect: () => <FavoritesState>[],
+      expect: () => const [
+        FavoritesLoaded(favoriteIds: {tAnimeId}),
+      ],
     );
   });
 }

@@ -20,20 +20,31 @@ class CharacterModel {
   });
 
   factory CharacterModel.fromJson(Map<String, dynamic> json) {
-    final attributes = json['attributes'] as Map<String, dynamic>;
+    final attributes = (json['attributes'] as Map<String, dynamic>?) ?? {};
+    final canonicalName = attributes['canonicalName']?.toString();
+    final nameAttr = attributes['name']?.toString();
+    final fallbackName = (canonicalName != null && canonicalName.isNotEmpty)
+        ? canonicalName
+        : ((nameAttr != null && nameAttr.isNotEmpty)
+            ? nameAttr
+            : 'Unknown Character');
+
     return CharacterModel(
-      id: json['id'] as String,
-      name: attributes['canonicalName'] as String,
-      names: attributes['names'] != null
+      id: (json['id'] ?? '').toString(),
+      name: fallbackName,
+      names: attributes['names'] != null &&
+              attributes['names'] is Map<String, dynamic>
           ? CharacterNamesModel.fromJson(
               attributes['names'] as Map<String, dynamic>)
           : null,
       otherNames: (attributes['otherNames'] as List<dynamic>?)
-              ?.map((e) => e as String)
+              ?.map((e) => e.toString())
+              .where((e) => e.isNotEmpty)
               .toList() ??
           [],
-      description: attributes['description'] as String?,
-      image: attributes['image'] != null
+      description: attributes['description']?.toString(),
+      image: attributes['image'] != null &&
+              attributes['image'] is Map<String, dynamic>
           ? CharacterImageModel.fromJson(
               attributes['image'] as Map<String, dynamic>)
           : null,
@@ -76,8 +87,8 @@ class CharacterNamesModel {
 
   factory CharacterNamesModel.fromJson(Map<String, dynamic> json) {
     return CharacterNamesModel(
-      ja: json['ja'] as String?,
-      en: json['en'] as String?,
+      ja: json['ja']?.toString() ?? json['ja_jp']?.toString(),
+      en: json['en']?.toString() ?? json['en_us']?.toString(),
     );
   }
 
@@ -95,8 +106,13 @@ class CharacterImageModel {
   CharacterImageModel({this.original});
 
   factory CharacterImageModel.fromJson(Map<String, dynamic> json) {
+    final original = json['original']?.toString();
+    final medium = json['medium']?.toString();
+    final small = json['small']?.toString();
     return CharacterImageModel(
-      original: json['original'] as String?,
+      original: (original != null && original.isNotEmpty)
+          ? original
+          : ((medium != null && medium.isNotEmpty) ? medium : small),
     );
   }
 
