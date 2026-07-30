@@ -5,10 +5,15 @@ import '../../../../core/di/injection_container.dart';
 import '../../../../shared/widgets/empty_state_widget.dart';
 import '../../../../shared/widgets/error_widget.dart';
 import '../../../../shared/widgets/loading_widget.dart';
+import '../../../../shared/widgets/profile_avatar_button.dart';
 import '../bloc/category_bloc.dart';
 import '../bloc/category_event.dart';
 import '../bloc/category_state.dart';
 import '../widgets/category_tile.dart';
+
+import '../../../../core/utils/app_localization.dart';
+import '../../../settings/presentation/bloc/settings_bloc.dart';
+import '../../../settings/presentation/bloc/settings_state.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({super.key});
@@ -24,11 +29,12 @@ class _CategoryPageState extends State<CategoryPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => sl<CategoryBloc>()..add(LoadAllCategories()),
-      child: Builder(
-        builder: (context) {
+      child: BlocBuilder<SettingsBloc, SettingsState>(
+        builder: (context, settingsState) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Categories'),
+              title:
+                  Text(AppLocalization.translate('drawer_options.categories')),
             ),
             body: Column(
               children: [
@@ -54,7 +60,7 @@ class _CategoryPageState extends State<CategoryPage> {
                           }
                         },
                       ),
-                      const Text('Trending only'),
+                      Text(AppLocalization.translate('categories.show_all')),
                     ],
                   ),
                 ),

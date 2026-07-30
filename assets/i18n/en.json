@@ -1,8 +1,12 @@
 {
     "drawer_options": {
+        "home": "Home",
         "characters": "Characters",
         "categories": "Categories",
-        "my_favorites": "My Favorites",
+        "my_favorites": "Favorites",
+        "profile": "Profile",
+        "dark_mode": "Dark Mode",
+        "preferences": "Preferences",
         "login": "Login",
         "register": "Register",
         "logout": "Logout",

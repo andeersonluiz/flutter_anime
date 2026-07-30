@@ -30,24 +30,50 @@ class AnimeModel {
   final String? ageRatingGuide;
 
   factory AnimeModel.fromJson(Map<String, dynamic> json) {
-    final attributes = json['attributes'] as Map<String, dynamic>? ?? {};
+    if (json.containsKey('attributes')) {
+      final attributes = json['attributes'] as Map<String, dynamic>? ?? {};
+      final posterMap = attributes['posterImage'] as Map<String, dynamic>?;
+      final coverMap = attributes['coverImage'] as Map<String, dynamic>?;
+
+      return AnimeModel(
+        id: json['id'] as String,
+        title: attributes['canonicalTitle'] as String? ??
+            attributes['titles']?['en'] as String? ??
+            'No Title',
+        synopsis: attributes['synopsis'] as String? ?? 'No Synopsis',
+        posterImage: posterMap?['medium'] as String? ??
+            posterMap?['original'] as String? ??
+            posterMap?['small'] as String?,
+        coverImage: coverMap?['large'] as String? ??
+            coverMap?['original'] as String? ??
+            coverMap?['medium'] as String?,
+        youtubeVideoId: attributes['youtubeVideoId'] as String?,
+        rating: attributes['averageRating'] != null
+            ? double.tryParse(attributes['averageRating'].toString())
+            : null,
+        episodeCount: attributes['episodeCount'] as int?,
+        episodeLength: attributes['episodeLength']?.toString(),
+        status: attributes['status'] as String? ?? 'tba',
+        ageRating: attributes['ageRating'] as String?,
+        ageRatingGuide: attributes['ageRatingGuide'] as String?,
+      );
+    }
+
     return AnimeModel(
       id: json['id'] as String,
-      title: attributes['canonicalTitle'] as String? ?? 'No Title',
-      synopsis: attributes['synopsis'] as String? ?? 'No Synopsis',
-      posterImage: (attributes['posterImage']
-          as Map<String, dynamic>?)?['medium'] as String?,
-      coverImage: (attributes['coverImage'] as Map<String, dynamic>?)?['large']
-          as String?,
-      youtubeVideoId: attributes['youtubeVideoId'] as String?,
-      rating: attributes['averageRating'] != null
-          ? double.tryParse(attributes['averageRating'].toString())
+      title: json['title'] as String? ?? 'No Title',
+      synopsis: json['synopsis'] as String? ?? 'No Synopsis',
+      posterImage: json['posterImage'] as String?,
+      coverImage: json['coverImage'] as String?,
+      youtubeVideoId: json['youtubeVideoId'] as String?,
+      rating: json['rating'] != null
+          ? double.tryParse(json['rating'].toString())
           : null,
-      episodeCount: attributes['episodeCount'] as int?,
-      episodeLength: attributes['episodeLength']?.toString(),
-      status: attributes['status'] as String? ?? 'tba',
-      ageRating: attributes['ageRating'] as String?,
-      ageRatingGuide: attributes['ageRatingGuide'] as String?,
+      episodeCount: json['episodeCount'] as int?,
+      episodeLength: json['episodeLength']?.toString(),
+      status: json['status'] as String? ?? 'tba',
+      ageRating: json['ageRating'] as String?,
+      ageRatingGuide: json['ageRatingGuide'] as String?,
     );
   }
 

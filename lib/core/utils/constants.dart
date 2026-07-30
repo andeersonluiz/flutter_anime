@@ -15,7 +15,7 @@ class AppConstants {
   static const String languagePrefKey = 'language';
 
   // Default values
-  static const String defaultLanguage = 'en_US';
+  static const String defaultLanguage = 'en';
   static const String defaultAvatarAsset = 'assets/avatars/default.jpg';
   static const String defaultLoadingAsset = 'assets/loading.gif';
   static const String defaultNoImageUrl = 'https://i.imgur.com/DIhR3Po.jpg';

@@ -11,9 +11,14 @@ import 'package:animes_io/core/theme/app_theme.dart';
 import 'package:animes_io/core/utils/constants.dart';
 import 'package:animes_io/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:animes_io/features/auth/presentation/bloc/auth_event.dart';
+import 'package:animes_io/features/auth/presentation/bloc/auth_state.dart';
+import 'package:animes_io/features/favorites/presentation/bloc/favorites_event.dart';
 import 'package:animes_io/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:animes_io/features/settings/presentation/bloc/settings_event.dart';
 import 'package:animes_io/features/settings/presentation/bloc/settings_state.dart';
+
+import 'package:animes_io/core/utils/app_localization.dart';
+import 'package:animes_io/features/favorites/presentation/bloc/favorites_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,12 +31,22 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  final delegate = await LocalizationDelegate.create(
-    fallbackLocale: AppConstants.defaultLanguage,
-    supportedLocales: ['en_US', 'pt'],
-  );
+  LocalizationDelegate? delegate;
+  try {
+    delegate = await LocalizationDelegate.create(
+      fallbackLocale: 'en',
+      supportedLocales: ['en', 'pt'],
+      basePath: 'assets/i18n',
+    );
+  } catch (e) {
+    await AppLocalization.init('en');
+  }
 
-  runApp(LocalizedApp(delegate, const AnimesApp()));
+  if (delegate != null) {
+    runApp(LocalizedApp(delegate, const AnimesApp()));
+  } else {
+    runApp(const AnimesApp());
+  }
 }
 
 class AnimesApp extends StatelessWidget {
@@ -47,34 +62,89 @@ class AnimesApp extends StatelessWidget {
         BlocProvider<SettingsBloc>(
           create: (_) => sl<SettingsBloc>()..add(LoadSettings()),
         ),
+        BlocProvider<FavoritesBloc>(
+          create: (_) => sl<FavoritesBloc>(),
+        ),
       ],
-      child: BlocBuilder<SettingsBloc, SettingsState>(
-        builder: (context, settingsState) {
-          final isDark =
-              settingsState is SettingsLoaded && settingsState.isDark;
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<AuthBloc, AuthState>(
+            listener: (context, authState) {
+              if (authState is Authenticated) {
+                context
+                    .read<FavoritesBloc>()
+                    .add(LoadFavorites(authState.user.uid));
+              }
+            },
+          ),
+          BlocListener<SettingsBloc, SettingsState>(
+            listener: (context, settingsState) {
+              if (settingsState is SettingsLoaded) {
+                AppLocalization.setLanguage(settingsState.languageCode);
+                if (context.findAncestorWidgetOfExactType<LocalizedApp>() !=
+                    null) {
+                  changeLocale(context, settingsState.languageCode);
+                }
+              }
+            },
+          ),
+        ],
+        child: BlocBuilder<SettingsBloc, SettingsState>(
+          builder: (context, settingsState) {
+            final isDark =
+                settingsState is SettingsLoaded && settingsState.isDark;
+            final langCode = settingsState is SettingsLoaded
+                ? settingsState.languageCode
+                : 'en';
+            AppLocalization.setLanguage(langCode);
 
-          final localizationDelegate = LocalizedApp.of(context).delegate;
+            bool hasLocalizedApp = true;
+            try {
+              LocalizedApp.of(context);
+            } catch (_) {
+              hasLocalizedApp = false;
+            }
 
-          return LocalizationProvider(
-            state: LocalizationProvider.of(context).state,
-            child: MaterialApp.router(
+            if (hasLocalizedApp) {
+              final localizationDelegate = LocalizedApp.of(context).delegate;
+              return LocalizationProvider(
+                state: LocalizationProvider.of(context).state,
+                child: MaterialApp.router(
+                  title: AppConstants.appName,
+                  debugShowCheckedModeBanner: false,
+                  theme: AppTheme.light,
+                  darkTheme: AppTheme.dark,
+                  themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+                  localizationsDelegates: [
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                    localizationDelegate,
+                  ],
+                  supportedLocales: localizationDelegate.supportedLocales,
+                  locale: Locale(langCode),
+                  routerConfig: AppRouter.router,
+                ),
+              );
+            }
+
+            return MaterialApp.router(
               title: AppConstants.appName,
               debugShowCheckedModeBanner: false,
               theme: AppTheme.light,
               darkTheme: AppTheme.dark,
               themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
-              localizationsDelegates: [
+              localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
-                localizationDelegate,
               ],
-              supportedLocales: localizationDelegate.supportedLocales,
-              locale: localizationDelegate.currentLocale,
+              supportedLocales: const [Locale('en'), Locale('pt')],
+              locale: Locale(langCode),
               routerConfig: AppRouter.router,
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../../core/error/exceptions.dart';
 import '../models/user_model.dart';
@@ -91,6 +92,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return UserModel.fromJson(doc.data()!);
     } on FirebaseAuthException catch (e) {
       throw ServerException(e.message ?? 'Firebase Auth Error');
+    } on PlatformException catch (e) {
+      if (e.code == 'sign_in_failed' || e.message?.contains('10') == true) {
+        throw const ServerException(
+          'Falha no Login do Google: A chave SHA-1 não está cadastrada no Firebase Console para este dispositivo.',
+        );
+      }
+      throw ServerException(e.message ?? 'Erro no Google Sign-In');
     } catch (e) {
       throw ServerException(e.toString());
     }

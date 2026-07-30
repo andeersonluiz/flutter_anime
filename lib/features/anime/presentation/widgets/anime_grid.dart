@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import '../../domain/entities/anime.dart';
 import '../../../../core/utils/responsive.dart';
 import '../bloc/anime_bloc.dart';
 import '../bloc/anime_event.dart';
@@ -59,6 +61,14 @@ class _AnimeGridState extends State<AnimeGrid> {
     super.dispose();
   }
 
+  static const _dummyAnime = Anime(
+    id: 'dummy',
+    title: 'Loading Anime Title Header',
+    synopsis: 'Synopsis loading...',
+    status: 'current',
+    rating: 8.5,
+  );
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -68,7 +78,22 @@ class _AnimeGridState extends State<AnimeGrid> {
       child: BlocBuilder<AnimeBloc, AnimeState>(
         builder: (context, state) {
           if (state is AnimeLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return Skeletonizer(
+              enabled: true,
+              child: GridView.builder(
+                padding: const EdgeInsets.all(8.0),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: Responsive.gridColumns(context),
+                  childAspectRatio: Responsive.animeCardAspectRatio(context),
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                ),
+                itemCount: 8,
+                itemBuilder: (context, index) {
+                  return const AnimeCard(anime: _dummyAnime);
+                },
+              ),
+            );
           } else if (state is AnimeError) {
             return Center(child: Text(state.message));
           } else if (state is AnimeListLoaded || state is AnimeLoadingMore) {
@@ -105,7 +130,10 @@ class _AnimeGridState extends State<AnimeGrid> {
                 if (index >= animes.length) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                return AnimeCard(anime: animes[index]);
+                return AnimeCard(
+                  anime: animes[index],
+                  heroTagPrefix: widget.listType.name,
+                );
               },
             );
           }

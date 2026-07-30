@@ -5,39 +5,60 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:flutter_animate/flutter_animate.dart';
+
 import '../../../../core/router/app_router.dart';
 import '../../../favorites/presentation/bloc/favorites_bloc.dart';
 import '../../../favorites/presentation/bloc/favorites_state.dart';
 import '../../domain/entities/anime.dart';
 
 class AnimeCard extends StatelessWidget {
-  const AnimeCard({super.key, required this.anime});
+  const AnimeCard({
+    super.key,
+    required this.anime,
+    this.heroTagPrefix = 'card',
+  });
 
   final Anime anime;
+  final String heroTagPrefix;
 
   static final Uint8List kTransparentImage = base64Decode(
       'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==');
 
   @override
   Widget build(BuildContext context) {
+    final poster = anime.posterImage;
+    final hasPoster = poster != null && poster.isNotEmpty;
+
     return GestureDetector(
       onTap: () {
         context.push('/anime/${anime.id}', extra: AnimeRouteArgs(anime: anime));
       },
       child: Hero(
-        tag: 'anime_${anime.id}',
+        tag: 'anime_${heroTagPrefix}_${anime.id}',
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: Stack(
             fit: StackFit.expand,
             children: [
-              FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage,
-                image: anime.posterImage ?? '',
-                fit: BoxFit.cover,
-                imageErrorBuilder: (_, __, ___) =>
-                    const ColoredBox(color: Colors.grey),
-              ),
+              if (hasPoster)
+                Image.network(
+                  poster,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => const ColoredBox(
+                    color: Colors.grey,
+                    child: Center(
+                      child: Icon(Icons.broken_image, color: Colors.white54),
+                    ),
+                  ),
+                )
+              else
+                const ColoredBox(
+                  color: Colors.grey,
+                  child: Center(
+                    child: Icon(Icons.movie, color: Colors.white54),
+                  ),
+                ),
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -103,6 +124,9 @@ class AnimeCard extends StatelessWidget {
           ),
         ),
       ),
-    );
+    )
+        .animate()
+        .fade(duration: 300.ms)
+        .scale(begin: const Offset(0.95, 0.95), end: const Offset(1.0, 1.0));
   }
 }

@@ -6,6 +6,10 @@ import '../../../../core/utils/responsive.dart';
 import '../../../../shared/widgets/empty_state_widget.dart';
 import '../../../../shared/widgets/error_widget.dart';
 import '../../../../shared/widgets/loading_widget.dart';
+import '../../../../shared/widgets/profile_avatar_button.dart';
+import '../../../../core/utils/app_localization.dart';
+import '../../../settings/presentation/bloc/settings_bloc.dart';
+import '../../../settings/presentation/bloc/settings_state.dart';
 import '../bloc/character_bloc.dart';
 import '../bloc/character_event.dart';
 import '../bloc/character_state.dart';
@@ -51,11 +55,12 @@ class _CharacterPageState extends State<CharacterPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => sl<CharacterBloc>()..add(LoadCharacters()),
-      child: Builder(
-        builder: (context) {
+      child: BlocBuilder<SettingsBloc, SettingsState>(
+        builder: (context, settingsState) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Characters'),
+              title:
+                  Text(AppLocalization.translate('drawer_options.characters')),
             ),
             body: BlocBuilder<CharacterBloc, CharacterState>(
               builder: (context, state) {

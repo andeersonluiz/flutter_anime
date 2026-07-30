@@ -5,10 +5,6 @@ import '../error/exceptions.dart';
 import 'api_endpoints.dart';
 
 /// Configured Dio client for the Kitsu API.
-///
-/// Includes logging interceptor (debug only), error interceptor,
-/// and base configuration. Replaces 7+ direct http.get() calls
-/// previously scattered across MobX stores.
 class ApiClient {
   ApiClient({Dio? dio}) : _dio = dio ?? _createDio();
 
@@ -23,6 +19,8 @@ class ApiClient {
         headers: {
           'Accept': 'application/vnd.api+json',
           'Content-Type': 'application/vnd.api+json',
+          'User-Agent':
+              'Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36 AnimesIO/1.0',
         },
       ),
     );
@@ -64,14 +62,18 @@ class ApiClient {
       case DioExceptionType.receiveTimeout:
       case DioExceptionType.sendTimeout:
         return const ServerException(
-            'Connection timeout. Check your internet.');
+            'Conexão expirada. Verifique sua internet.');
       case DioExceptionType.connectionError:
-        return const ServerException('No internet connection.');
+        return const ServerException('Sem conexão com a internet.');
       case DioExceptionType.badResponse:
         final statusCode = e.response?.statusCode ?? 0;
-        return ServerException('Server error: $statusCode');
+        if (statusCode == 503) {
+          return const ServerException(
+              'Servidor em manutenção temporária (503). Tente novamente em instantes.');
+        }
+        return ServerException('Erro no servidor: $statusCode');
       default:
-        return ServerException(e.message ?? 'Unknown network error.');
+        return ServerException(e.message ?? 'Erro de rede desconhecido.');
     }
   }
 }

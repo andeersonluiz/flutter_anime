@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -7,8 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/anime/data/datasources/anime_local_datasource.dart';
 import '../../features/anime/data/datasources/anime_remote_datasource.dart';
+import '../../features/anime/data/datasources/translation_local_datasource.dart';
+import '../../features/anime/data/datasources/translation_remote_datasource.dart';
 import '../../features/anime/data/repositories/anime_repository_impl.dart';
+import '../../features/anime/data/repositories/translation_repository_impl.dart';
 import '../../features/anime/domain/repositories/anime_repository.dart';
+import '../../features/anime/domain/repositories/translation_repository.dart';
 import '../../features/anime/domain/usecases/get_animes_by_category.dart';
 import '../../features/anime/domain/usecases/get_anime_details.dart';
 import '../../features/anime/domain/usecases/get_currently_airing_animes.dart';
@@ -17,6 +22,7 @@ import '../../features/anime/domain/usecases/get_top_rated_animes.dart';
 import '../../features/anime/domain/usecases/get_trending_animes.dart';
 import '../../features/anime/domain/usecases/get_upcoming_animes.dart';
 import '../../features/anime/domain/usecases/search_animes.dart';
+import '../../features/anime/domain/usecases/translate_synopsis.dart';
 import '../../features/anime/presentation/bloc/anime_bloc.dart';
 import '../../features/auth/data/datasources/auth_remote_datasource.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
@@ -75,6 +81,8 @@ Future<void> initDependencies() async {
 
 Future<void> _initExternal() async {
   await Hive.initFlutter();
+  final animeCacheBox = await Hive.openBox<dynamic>('anime_cache');
+  sl.registerSingleton<Box<dynamic>>(animeCacheBox);
 
   final sharedPrefs = await SharedPreferences.getInstance();
   sl.registerSingleton<SharedPreferences>(sharedPrefs);
@@ -89,11 +97,27 @@ void _initCore() {
 }
 
 void _initAnimeFeature() {
+  sl.registerLazySingleton<Dio>(() => Dio());
+
+  sl.registerLazySingleton<TranslationRemoteDataSource>(
+    () => TranslationRemoteDataSourceImpl(dio: sl()),
+  );
+  sl.registerLazySingleton<TranslationLocalDataSource>(
+    () => TranslationLocalDataSourceImpl(),
+  );
+  sl.registerLazySingleton<TranslationRepository>(
+    () => TranslationRepositoryImpl(
+      remoteDataSource: sl(),
+      localDataSource: sl(),
+    ),
+  );
+  sl.registerLazySingleton(() => TranslateSynopsis(sl()));
+
   sl.registerLazySingleton<AnimeRemoteDataSource>(
     () => AnimeRemoteDataSourceImpl(apiClient: sl()),
   );
   sl.registerLazySingleton<AnimeLocalDataSource>(
-    AnimeLocalDataSourceImpl.new,
+    () => AnimeLocalDataSourceImpl(hiveBox: sl<Box<dynamic>>()),
   );
 
   sl.registerLazySingleton<AnimeRepository>(

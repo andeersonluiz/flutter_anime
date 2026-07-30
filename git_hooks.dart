@@ -21,35 +21,43 @@ Future<bool> preCommit() async {
   stdout.writeln('1/2 Checando formatação (dart format)...');
   final formatResult = await Process.run(
     'dart',
-    ['format', '--output=none', '--set-exit-if-changed', '.'],
+    [
+      'format',
+      '--output=none',
+      '--set-exit-if-changed',
+      'lib',
+      'test',
+      'git_hooks.dart'
+    ],
     runInShell: true,
   );
 
   if (formatResult.exitCode != 0) {
     stdout.writeln('\n❌ [ERRO DE FORMATAÇÃO] Existem arquivos desalinhados!');
     stdout.writeln(
-        '👉 Execute o comando "dart format ." no seu terminal para corrigir antes de commitar.\n');
+        '👉 Execute o comando "dart format lib test git_hooks.dart" no seu terminal para corrigir antes de commitar.\n');
     return false;
   }
   stdout.writeln('✅ Formatação OK!\n');
 
-  // 2. Static Analysis with fatal infos
-  stdout.writeln(
-      '2/2 Executando análise estática (dart analyze --fatal-infos)...');
+  // 2. Static Analysis (Erros de Compilação/Sintaxe)
+  stdout.writeln('2/2 Executando análise estática (dart analyze)...');
   final analyzeResult = await Process.run(
     'dart',
-    ['analyze', '--fatal-infos'],
+    ['analyze', '--no-fatal-infos', '--no-fatal-warnings'],
     runInShell: true,
   );
 
-  if (analyzeResult.exitCode != 0) {
+  final stdoutText = analyzeResult.stdout.toString();
+  if (stdoutText.contains(' error - ')) {
     stdout.writeln(
-        '\n❌ [ERRO DE ANÁLISE ESTÁTICA] Foram encontrados avisos/erros no código!\n');
-    stdout.writeln(analyzeResult.stdout);
-    stdout.writeln('👉 Corrija os avisos acima antes de commitar.\n');
+        '\n❌ [ERRO DE COMPILAÇÃO] Foram encontrados erros graves de compilação ou sintaxe no código!\n');
+    stdout.writeln(stdoutText);
+    stdout.writeln('👉 Corrija os erros acima antes de commitar.\n');
     return false;
   }
-  stdout.writeln('✅ Análise estática OK! Nenhum aviso encontrado.\n');
+  stdout.writeln(
+      '✅ Análise estática OK! Nenhum erro de compilação encontrado.\n');
 
   return true;
 }

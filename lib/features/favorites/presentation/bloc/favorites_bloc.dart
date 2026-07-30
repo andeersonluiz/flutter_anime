@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../domain/usecases/get_favorites.dart';
 import '../../domain/usecases/toggle_favorite.dart';
 import 'favorites_event.dart';
@@ -14,7 +15,6 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   }) : super(FavoritesInitial()) {
     on<LoadFavorites>(_onLoadFavorites);
     on<ToggleFavoriteEvent>(_onToggleFavorite);
-    // CheckIsFavorite might not change state fully, or you can implement it based on need.
   }
 
   Future<void> _onLoadFavorites(
@@ -29,24 +29,28 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
 
   Future<void> _onToggleFavorite(
       ToggleFavoriteEvent event, Emitter<FavoritesState> emit) async {
+    Set<String> currentIds = {};
     if (state is FavoritesLoaded) {
-      final currentState = state as FavoritesLoaded;
-      final Set<String> currentIds = Set.from(currentState.favoriteIds);
+      currentIds = Set.from((state as FavoritesLoaded).favoriteIds);
+    } else {
+      final fetchResult = await getFavorites(event.userId);
+      fetchResult.fold((_) {}, (favs) => currentIds = favs.toSet());
+    }
 
-      // Optimistic update
-      if (currentIds.contains(event.animeId)) {
-        currentIds.remove(event.animeId);
-      } else {
-        currentIds.add(event.animeId);
-      }
-      emit(FavoritesLoaded(favoriteIds: currentIds));
+    // Optimistic toggle update
+    if (currentIds.contains(event.animeId)) {
+      currentIds.remove(event.animeId);
+    } else {
+      currentIds.add(event.animeId);
+    }
+    emit(FavoritesLoaded(favoriteIds: currentIds));
 
-      final result = await toggleFavorite(event.userId, event.animeId);
+    // Persist change to Firestore
+    final result = await toggleFavorite(event.userId, event.animeId);
 
-      // On failure, rollback by reloading favorites
-      if (result.isLeft()) {
-        add(LoadFavorites(event.userId));
-      }
+    // On failure, rollback by reloading favorites
+    if (result.isLeft()) {
+      add(LoadFavorites(event.userId));
     }
   }
 }
