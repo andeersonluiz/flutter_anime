@@ -44,11 +44,9 @@ void main() {
         // --- 2.1 Test AnimeDetailsPage Deep Dive ---
         // Find the first AnimeCard and tap it to enter details
 
-        // Wait for Skeletonizer (loading state) to disappear so we can tap the real card
-        final skeletonFinder = find.byType(Skeletonizer);
-        await pumpUntilNotFound(tester, skeletonFinder);
-
-        final animeCardFinder = find.byType(AnimeCard);
+        // Wait until real data is loaded on the trending tab (ignores dummy skeleton cards)
+        final animeCardFinder = find.byWidgetPredicate((widget) =>
+            widget is AnimeCard && widget.heroTagPrefix == 'trending');
         await pumpUntilFound(tester, animeCardFinder);
         final firstAnimeCard = animeCardFinder.first;
         expect(firstAnimeCard, findsOneWidget);
