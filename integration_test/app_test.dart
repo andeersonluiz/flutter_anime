@@ -26,7 +26,9 @@ void main() {
         await tester.pump(const Duration(seconds: 1));
 
         // Close search delegate back to home
-        await tester.pageBack();
+        final backIcon = find.byIcon(Icons.arrow_back);
+        expect(backIcon, findsWidgets);
+        await tester.tap(backIcon.first);
         await tester.pump(const Duration(seconds: 1));
 
         // 4. Navigate to Categories Tab (Branch 1)

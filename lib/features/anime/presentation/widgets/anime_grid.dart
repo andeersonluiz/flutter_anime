@@ -90,7 +90,8 @@ class _AnimeGridState extends State<AnimeGrid> {
                 ),
                 itemCount: 8,
                 itemBuilder: (context, index) {
-                  return const AnimeCard(anime: _dummyAnime);
+                  return AnimeCard(
+                      anime: _dummyAnime, heroTagPrefix: 'dummy_$index');
                 },
               ),
             );
