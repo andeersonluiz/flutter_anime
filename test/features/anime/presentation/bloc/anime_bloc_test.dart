@@ -39,8 +39,8 @@ const tAnime = Anime(
   synopsis: 'Test Synopsis',
   status: 'current',
 );
-const tAnimeList = [tAnime];
-const tAnime10 = [
+const List<Anime> tAnimeList = [tAnime];
+const List<Anime> tAnime10 = [
   tAnime,
   tAnime,
   tAnime,

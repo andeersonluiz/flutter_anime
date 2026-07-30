@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,14 +16,14 @@ class ProfileBottomSheet extends StatelessWidget {
   const ProfileBottomSheet({super.key});
 
   static void show(BuildContext context) {
-    showModalBottomSheet<void>(
+    unawaited(showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (_) => const ProfileBottomSheet(),
-    );
+    ));
   }
 
   @override
@@ -78,10 +80,10 @@ class ProfileBottomSheet extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  if (user?.email != null) ...[
+                  if (user != null && user.email.isNotEmpty) ...[
                     const SizedBox(height: 4),
                     Text(
-                      user!.email!,
+                      user.email,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             color: Colors.grey,
                           ),
@@ -112,10 +114,10 @@ class ProfileBottomSheet extends StatelessWidget {
                       title: const Text('Edit Profile'),
                       onTap: () {
                         Navigator.pop(context);
-                        showDialog<void>(
+                        unawaited(showDialog<void>(
                           context: context,
                           builder: (_) => const EditProfileDialog(),
-                        );
+                        ));
                       },
                     ),
                     ListTile(
@@ -139,10 +141,10 @@ class ProfileBottomSheet extends StatelessWidget {
                         ),
                         onPressed: () {
                           Navigator.pop(context);
-                          showDialog<void>(
+                          unawaited(showDialog<void>(
                             context: context,
                             builder: (_) => const LoginDialog(),
-                          );
+                          ));
                         },
                       ),
                     ),

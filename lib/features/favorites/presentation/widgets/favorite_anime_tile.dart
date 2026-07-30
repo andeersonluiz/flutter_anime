@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -89,14 +91,14 @@ class _FavoriteAnimeTileState extends State<FavoriteAnimeTile> {
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             onTap: () {
-              context.push(
+              unawaited(context.push(
                 '/anime/${anime.id}',
                 extra: AnimeRouteArgs(
                   anime: anime,
                   isFavorite: true,
                   fromRoute: 'favorites',
                 ),
-              );
+              ));
             },
             child: Row(
               children: [

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -98,10 +100,10 @@ class AppDrawer extends StatelessWidget {
                   title: const Text('Edit Profile'),
                   onTap: () {
                     context.pop();
-                    showDialog<void>(
+                    unawaited(showDialog<void>(
                       context: context,
                       builder: (_) => const EditProfileDialog(),
-                    );
+                    ));
                   },
                 ),
                 ListTile(
@@ -119,10 +121,10 @@ class AppDrawer extends StatelessWidget {
                   title: const Text('Login'),
                   onTap: () {
                     context.pop();
-                    showDialog<void>(
+                    unawaited(showDialog<void>(
                       context: context,
                       builder: (_) => const LoginDialog(),
-                    );
+                    ));
                   },
                 ),
               ],

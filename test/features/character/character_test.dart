@@ -36,7 +36,7 @@ const tCharacter = Character(
   malId: '1',
 );
 
-final tCharacterList = [tCharacter];
+final List<Character> tCharacterList = [tCharacter];
 
 final tCharacterModel = CharacterModel(
   id: '1',

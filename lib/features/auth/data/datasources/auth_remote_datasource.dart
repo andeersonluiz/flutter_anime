@@ -93,7 +93,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on FirebaseAuthException catch (e) {
       throw ServerException(e.message ?? 'Firebase Auth Error');
     } on PlatformException catch (e) {
-      if (e.code == 'sign_in_failed' || e.message?.contains('10') == true) {
+      if (e.code == 'sign_in_failed' || (e.message?.contains('10') ?? false)) {
         throw const ServerException(
           'Falha no Login do Google: A chave SHA-1 não está cadastrada no Firebase Console para este dispositivo.',
         );

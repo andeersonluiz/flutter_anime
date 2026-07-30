@@ -34,7 +34,7 @@ const tEpisode = Episode(
   isMovie: false,
 );
 
-final tEpisodeList = [tEpisode];
+final List<Episode> tEpisodeList = [tEpisode];
 
 final tEpisodeModel = EpisodeModel(
   id: 'ep1',

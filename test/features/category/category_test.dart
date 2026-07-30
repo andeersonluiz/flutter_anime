@@ -42,7 +42,7 @@ const tCategory = Category(
   totalMediaCount: 500,
 );
 
-final tCategoryList = [tCategory];
+final List<Category> tCategoryList = [tCategory];
 final List<CategoryModel> tModelList = [tCategoryModel];
 
 // ── CategoryModel tests ───────────────────────────────────────────────────────

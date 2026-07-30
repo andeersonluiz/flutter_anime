@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:animes_io/features/episode/domain/entities/episode.dart';
 
@@ -7,7 +9,7 @@ class EpisodeTile extends StatelessWidget {
   const EpisodeTile({super.key, required this.episode});
 
   void _showSynopsisDialog(BuildContext context) {
-    showDialog<void>(
+    unawaited(showDialog<void>(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -23,7 +25,7 @@ class EpisodeTile extends StatelessWidget {
           ],
         );
       },
-    );
+    ));
   }
 
   @override

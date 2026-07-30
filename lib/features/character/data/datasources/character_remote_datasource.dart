@@ -35,13 +35,13 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
         if (item is Map<String, dynamic>) {
           try {
             list.add(CharacterModel.fromJson(item));
-          } catch (_) {
+          } on Exception catch (_) {
             // Skip invalid character entry gracefully
           }
         }
       }
       return list;
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(e.toString());
     }
   }
@@ -73,7 +73,7 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
           if (item is Map<String, dynamic> && item['type'] == 'characters') {
             try {
               characters.add(CharacterModel.fromJson(item));
-            } catch (_) {
+            } on Exception catch (_) {
               // Skip malformed item
             }
           }
@@ -111,13 +111,13 @@ class CharacterRemoteDataSourceImpl implements CharacterRemoteDataSource {
         if (charMap != null) {
           try {
             result.add(CharacterModel.fromJson(charMap));
-          } catch (_) {
+          } on Exception catch (_) {
             // Skip invalid character payload
           }
         }
       }
       return result;
-    } catch (e) {
+    } on Exception catch (e) {
       throw ServerException(e.toString());
     }
   }
