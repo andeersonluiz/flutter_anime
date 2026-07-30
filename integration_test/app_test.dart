@@ -5,6 +5,7 @@ import 'package:integration_test/integration_test.dart';
 
 import 'package:animes_io/features/anime/presentation/widgets/anime_card.dart';
 import 'package:animes_io/features/anime/presentation/widgets/anime_search_tile.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 Future<void> pumpUntilFound(WidgetTester tester, Finder finder,
     {int maxIterations = 30}) async {
@@ -13,6 +14,15 @@ Future<void> pumpUntilFound(WidgetTester tester, Finder finder,
     if (tester.any(finder)) return;
   }
   throw Exception('Timeout waiting for $finder');
+}
+
+Future<void> pumpUntilNotFound(WidgetTester tester, Finder finder,
+    {int maxIterations = 30}) async {
+  for (int i = 0; i < maxIterations; i++) {
+    await tester.pump(const Duration(milliseconds: 500));
+    if (!tester.any(finder)) return;
+  }
+  throw Exception('Timeout waiting for $finder to disappear');
 }
 
 void main() {
@@ -33,6 +43,11 @@ void main() {
 
         // --- 2.1 Test AnimeDetailsPage Deep Dive ---
         // Find the first AnimeCard and tap it to enter details
+
+        // Wait for Skeletonizer (loading state) to disappear so we can tap the real card
+        final skeletonFinder = find.byType(Skeletonizer);
+        await pumpUntilNotFound(tester, skeletonFinder);
+
         final animeCardFinder = find.byType(AnimeCard);
         await pumpUntilFound(tester, animeCardFinder);
         final firstAnimeCard = animeCardFinder.first;
@@ -60,6 +75,9 @@ void main() {
         await tester.enterText(searchField, 'Naruto');
 
         // wait for debounce and network
+        final progressFinder = find.byType(CircularProgressIndicator);
+        await pumpUntilNotFound(tester, progressFinder);
+
         final searchTileFinder = find.byType(AnimeSearchTile);
         await pumpUntilFound(tester, searchTileFinder);
 
