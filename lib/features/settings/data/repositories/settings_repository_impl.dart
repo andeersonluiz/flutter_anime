@@ -13,7 +13,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
     try {
       final isDark = localDataSource.getTheme();
       return Right(isDark);
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(CacheFailure(e.toString()));
     }
   }
@@ -23,7 +23,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
     try {
       await localDataSource.saveTheme(isDark);
       return const Right(unit);
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(CacheFailure(e.toString()));
     }
   }
@@ -33,7 +33,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
     try {
       final lang = localDataSource.getLanguage();
       return Right(lang);
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(CacheFailure(e.toString()));
     }
   }
@@ -43,7 +43,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
     try {
       await localDataSource.saveLanguage(code);
       return const Right(unit);
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(CacheFailure(e.toString()));
     }
   }

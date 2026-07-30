@@ -196,7 +196,7 @@ class _AnimeDetailPageState extends State<AnimeDetailPage>
                 preferredSize: const Size.fromHeight(48),
                 child: BlocBuilder<SettingsBloc, SettingsState>(
                   builder: (context, settingsState) {
-                    return Container(
+                    return ColoredBox(
                       color: isDark
                           ? Colors.black54
                           : Theme.of(context).colorScheme.surface,

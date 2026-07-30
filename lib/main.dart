@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,7 +40,8 @@ void main() async {
       supportedLocales: ['en', 'pt'],
       basePath: 'assets/i18n',
     );
-  } catch (e) {
+  } on Exception catch (e) {
+    debugPrint('LocalizationDelegate failed: $e');
     await AppLocalization.init('en');
   }
 
@@ -83,7 +86,7 @@ class AnimesApp extends StatelessWidget {
                 AppLocalization.setLanguage(settingsState.languageCode);
                 if (context.findAncestorWidgetOfExactType<LocalizedApp>() !=
                     null) {
-                  changeLocale(context, settingsState.languageCode);
+                  unawaited(changeLocale(context, settingsState.languageCode));
                 }
               }
             },
@@ -101,7 +104,7 @@ class AnimesApp extends StatelessWidget {
             bool hasLocalizedApp = true;
             try {
               LocalizedApp.of(context);
-            } catch (_) {
+            } on Exception {
               hasLocalizedApp = false;
             }
 

@@ -30,7 +30,7 @@ class AnimeRepositoryImpl implements AnimeRepository {
         return Right(remoteAnimes.map((e) => e.toEntity()).toList());
       } on ServerException catch (e) {
         return Left(ServerFailure(e.message));
-      } catch (e) {
+      } on Exception catch (e) {
         return Left(ServerFailure(e.toString()));
       }
     }
@@ -91,7 +91,7 @@ class AnimeRepositoryImpl implements AnimeRepository {
       return Right(remoteAnimes.map((e) => e.toEntity()).toList());
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -113,7 +113,7 @@ class AnimeRepositoryImpl implements AnimeRepository {
       return Right(remoteAnime.toEntity());
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }

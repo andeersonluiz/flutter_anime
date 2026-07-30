@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -32,7 +34,8 @@ class AnimeCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        context.push('/anime/${anime.id}', extra: AnimeRouteArgs(anime: anime));
+        unawaited(context.push('/anime/${anime.id}',
+            extra: AnimeRouteArgs(anime: anime)));
       },
       child: Hero(
         tag: 'anime_${heroTagPrefix}_${anime.id}',

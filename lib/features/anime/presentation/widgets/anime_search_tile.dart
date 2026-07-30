@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_router.dart';
@@ -21,7 +23,8 @@ class AnimeSearchTile extends StatelessWidget {
       title: Text(anime.title),
       subtitle: Text('Rating: ${anime.rating?.toStringAsFixed(1) ?? 'N/A'}'),
       onTap: () {
-        context.push('/anime/${anime.id}', extra: AnimeRouteArgs(anime: anime));
+        unawaited(context.push('/anime/${anime.id}',
+            extra: AnimeRouteArgs(anime: anime)));
       },
     );
   }

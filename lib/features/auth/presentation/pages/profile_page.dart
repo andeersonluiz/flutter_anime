@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -137,10 +139,10 @@ class ProfilePage extends StatelessWidget {
                               icon: const Icon(Icons.edit_outlined),
                               label: const Text('Edit Profile'),
                               onPressed: () {
-                                showDialog<void>(
+                                unawaited(showDialog<void>(
                                   context: context,
                                   builder: (_) => const EditProfileDialog(),
-                                );
+                                ));
                               },
                             )
                           else
@@ -152,10 +154,10 @@ class ProfilePage extends StatelessWidget {
                                 minimumSize: const Size.fromHeight(44),
                               ),
                               onPressed: () {
-                                showDialog<void>(
+                                unawaited(showDialog<void>(
                                   context: context,
                                   builder: (_) => const LoginDialog(),
-                                );
+                                ));
                               },
                             ),
                         ],
@@ -216,7 +218,7 @@ class ProfilePage extends StatelessWidget {
                                     'dialog_settings.portuguese_item')),
                               ),
                             ],
-                            onChanged: (String? newLang) {
+                            onChanged: (newLang) {
                               if (newLang != null) {
                                 context
                                     .read<SettingsBloc>()

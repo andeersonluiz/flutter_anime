@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -59,10 +61,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     label:
                         Text(AppLocalization.translate('drawer_options.login')),
                     onPressed: () {
-                      showDialog<void>(
+                      unawaited(showDialog<void>(
                         context: context,
                         builder: (_) => const LoginDialog(),
-                      );
+                      ));
                     },
                   ),
                 ],

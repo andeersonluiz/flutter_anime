@@ -49,7 +49,7 @@ class TranslationRepositoryImpl implements TranslationRepository {
       return Right(translated);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }

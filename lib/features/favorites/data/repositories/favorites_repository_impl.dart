@@ -16,7 +16,7 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -29,7 +29,7 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
       return const Right(unit);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -42,7 +42,7 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
       return const Right(unit);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -55,7 +55,7 @@ class FavoritesRepositoryImpl implements FavoritesRepository {
       return Right(result);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }

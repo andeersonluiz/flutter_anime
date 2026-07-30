@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:io';
 import 'package:git_hooks/git_hooks.dart';
 
@@ -40,24 +38,23 @@ Future<bool> preCommit() async {
   }
   stdout.writeln('✅ Formatação OK!\n');
 
-  // 2. Static Analysis (Erros de Compilação/Sintaxe)
-  stdout.writeln('2/2 Executando análise estática (dart analyze)...');
+  // 2. Static Analysis with fatal infos (idêntico ao CI)
+  stdout.writeln(
+      '2/2 Executando análise estática (dart analyze --fatal-infos)...');
   final analyzeResult = await Process.run(
     'dart',
-    ['analyze', '--no-fatal-infos', '--no-fatal-warnings'],
+    ['analyze', '--fatal-infos'],
     runInShell: true,
   );
 
-  final stdoutText = analyzeResult.stdout.toString();
-  if (stdoutText.contains(' error - ')) {
+  if (analyzeResult.exitCode != 0) {
     stdout.writeln(
-        '\n❌ [ERRO DE COMPILAÇÃO] Foram encontrados erros graves de compilação ou sintaxe no código!\n');
-    stdout.writeln(stdoutText);
-    stdout.writeln('👉 Corrija os erros acima antes de commitar.\n');
+        '\n❌ [ERRO DE ANÁLISE ESTÁTICA] Foram encontrados avisos/erros no código!\n');
+    stdout.writeln(analyzeResult.stdout);
+    stdout.writeln('👉 Corrija os avisos acima antes de commitar.\n');
     return false;
   }
-  stdout.writeln(
-      '✅ Análise estática OK! Nenhum erro de compilação encontrado.\n');
+  stdout.writeln('✅ Análise estática OK! Nenhum aviso encontrado.\n');
 
   return true;
 }

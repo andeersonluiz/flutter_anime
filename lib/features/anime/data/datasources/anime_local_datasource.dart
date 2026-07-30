@@ -34,7 +34,7 @@ class AnimeLocalDataSourceImpl implements AnimeLocalDataSource {
       await box.put(key, jsonEncode(jsonList));
       await box.put(
           '$cacheExpiryPrefix$key', DateTime.now().millisecondsSinceEpoch);
-    } catch (e) {
+    } on Exception catch (_) {
       throw const CacheException('Failed to cache data');
     }
   }

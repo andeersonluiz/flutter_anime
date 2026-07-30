@@ -52,8 +52,8 @@ class TranslationRemoteDataSourceImpl implements TranslationRemoteDataSource {
           return result;
         }
       }
-    } catch (_) {
-      // Fallback to strategy 2
+    } on Exception catch (_) {
+      // Fallback to next strategy
     }
 
     // Strategy 2: MyMemory Translation API
@@ -80,7 +80,7 @@ class TranslationRemoteDataSourceImpl implements TranslationRemoteDataSource {
           return translated;
         }
       }
-    } catch (_) {
+    } on Exception catch (_) {
       // Fallback to strategy 3
     }
 
@@ -107,7 +107,7 @@ class TranslationRemoteDataSourceImpl implements TranslationRemoteDataSource {
           return translated;
         }
       }
-    } catch (_) {
+    } on Exception catch (_) {
       // All strategies exhausted
     }
 

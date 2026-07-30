@@ -18,7 +18,7 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(userModel.toEntity());
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -30,7 +30,7 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(userModel.toEntity());
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -42,7 +42,7 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(userModel.toEntity());
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -54,7 +54,7 @@ class AuthRepositoryImpl implements AuthRepository {
       return const Right(unit);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }
@@ -63,7 +63,7 @@ class AuthRepositoryImpl implements AuthRepository {
   AppUser? getCurrentUser() {
     try {
       return remoteDataSource.getCurrentUser()?.toEntity();
-    } catch (e) {
+    } on Exception {
       return null;
     }
   }
@@ -83,7 +83,7 @@ class AuthRepositoryImpl implements AuthRepository {
       return Right(userModel.toEntity());
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
-    } catch (e) {
+    } on Exception catch (e) {
       return Left(ServerFailure(e.toString()));
     }
   }

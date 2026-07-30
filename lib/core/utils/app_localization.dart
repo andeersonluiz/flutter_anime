@@ -22,7 +22,7 @@ class AppLocalization {
       final Map<String, String> flattened = {};
       _flattenJson(jsonMap, '', flattened);
       _localizedStrings[lang] = flattened;
-    } catch (_) {
+    } on Exception catch (_) {
       _localizedStrings[lang] = {};
     }
   }
