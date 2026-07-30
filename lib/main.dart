@@ -25,7 +25,11 @@ import 'package:animes_io/features/favorites/presentation/bloc/favorites_bloc.da
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp();
+  try {
+    await Firebase.initializeApp();
+  } on Exception catch (e) {
+    debugPrint('Firebase initialization warning: $e');
+  }
   await initDependencies();
 
   await SystemChrome.setPreferredOrientations([
