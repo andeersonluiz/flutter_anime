@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
+import 'package:animes_io/features/anime/presentation/widgets/anime_card.dart';
+import 'package:animes_io/features/anime/presentation/widgets/anime_search_tile.dart';
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -19,11 +22,35 @@ void main() {
         expect(find.text('Animes IO'), findsOneWidget);
         expect(find.byType(NavigationBar), findsOneWidget);
 
+        // --- 2.1 Test AnimeDetailsPage Deep Dive ---
+        // Find the first AnimeCard and tap it to enter details
+        final firstAnimeCard = find.byType(AnimeCard).first;
+        expect(firstAnimeCard, findsOneWidget);
+        await tester.tap(firstAnimeCard);
+        await tester.pump(const Duration(seconds: 2));
+
+        // Verify AnimeDetailsPage is open (checking for TabBar)
+        expect(find.byType(TabBar), findsOneWidget);
+        
+        // Return to Home Page
+        await tester.tap(find.byIcon(Icons.arrow_back).first);
+        await tester.pump(const Duration(seconds: 2));
+
         // 3. Test Search Delegate trigger from Home AppBar
         final searchIcon = find.byIcon(Icons.search);
         expect(searchIcon, findsOneWidget);
         await tester.tap(searchIcon);
         await tester.pump(const Duration(seconds: 1));
+
+        // --- 3.1 Test Search Functionality ---
+        // Enter text into the search field
+        final searchField = find.byType(TextField);
+        expect(searchField, findsOneWidget);
+        await tester.enterText(searchField, 'Naruto');
+        await tester.pump(const Duration(seconds: 3)); // wait for debounce and network
+        
+        // Verify AnimeSearchTile is present
+        expect(find.byType(AnimeSearchTile), findsWidgets);
 
         // Close search delegate back to home
         final backIcon = find.byIcon(Icons.arrow_back);
@@ -60,7 +87,12 @@ void main() {
         await tester.pump(const Duration(seconds: 2));
 
         // Verify Dark Mode switch is present
-        expect(find.byType(SwitchListTile), findsOneWidget);
+        final themeSwitch = find.byType(SwitchListTile);
+        expect(themeSwitch, findsOneWidget);
+
+        // Toggle theme
+        await tester.tap(themeSwitch);
+        await tester.pump(const Duration(seconds: 1));
 
         // 8. Return safely to Home Tab (Branch 0)
         final homeTab = find.byIcon(Icons.home_outlined);
