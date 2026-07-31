@@ -43,11 +43,14 @@ void main() {
       build: () {
         when(() => mockRepository.getTheme()).thenReturn(const Right(false));
         when(() => mockRepository.getLanguage()).thenReturn(const Right('en'));
+        when(() => mockRepository.getAutoTranslate())
+            .thenReturn(const Right(false));
         return bloc;
       },
       act: (bloc) => bloc.add(LoadSettings()),
       expect: () => [
-        const SettingsLoaded(isDark: false, languageCode: 'en'),
+        const SettingsLoaded(
+            isDark: false, languageCode: 'en', autoTranslate: false),
       ],
     );
 
@@ -58,10 +61,12 @@ void main() {
             .thenAnswer((_) async => const Right(unit));
         return bloc;
       },
-      seed: () => const SettingsLoaded(isDark: false, languageCode: 'en'),
+      seed: () => const SettingsLoaded(
+          isDark: false, languageCode: 'en', autoTranslate: false),
       act: (bloc) => bloc.add(const ToggleThemeEvent(true)),
       expect: () => [
-        const SettingsLoaded(isDark: true, languageCode: 'en'),
+        const SettingsLoaded(
+            isDark: true, languageCode: 'en', autoTranslate: false),
       ],
     );
 
@@ -72,10 +77,28 @@ void main() {
             .thenAnswer((_) async => const Right(unit));
         return bloc;
       },
-      seed: () => const SettingsLoaded(isDark: false, languageCode: 'en'),
+      seed: () => const SettingsLoaded(
+          isDark: false, languageCode: 'en', autoTranslate: false),
       act: (bloc) => bloc.add(const ChangeLanguageEvent('pt')),
       expect: () => [
-        const SettingsLoaded(isDark: false, languageCode: 'pt'),
+        const SettingsLoaded(
+            isDark: false, languageCode: 'pt', autoTranslate: false),
+      ],
+    );
+
+    blocTest<SettingsBloc, SettingsState>(
+      'should update autoTranslate when ToggleAutoTranslateEvent is added',
+      build: () {
+        when(() => mockRepository.saveAutoTranslate(true))
+            .thenAnswer((_) async => const Right(unit));
+        return bloc;
+      },
+      seed: () => const SettingsLoaded(
+          isDark: false, languageCode: 'en', autoTranslate: false),
+      act: (bloc) => bloc.add(const ToggleAutoTranslateEvent(true)),
+      expect: () => [
+        const SettingsLoaded(
+            isDark: false, languageCode: 'en', autoTranslate: true),
       ],
     );
   });

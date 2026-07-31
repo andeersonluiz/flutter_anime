@@ -6,4 +6,6 @@ abstract class SettingsRepository {
   Future<Either<Failure, Unit>> saveTheme(bool isDark);
   Either<Failure, String> getLanguage();
   Future<Either<Failure, Unit>> saveLanguage(String code);
+  Either<Failure, bool> getAutoTranslate();
+  Future<Either<Failure, Unit>> saveAutoTranslate(bool autoTranslate);
 }

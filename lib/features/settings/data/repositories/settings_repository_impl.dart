@@ -47,4 +47,24 @@ class SettingsRepositoryImpl implements SettingsRepository {
       return Left(CacheFailure(e.toString()));
     }
   }
+
+  @override
+  Either<Failure, bool> getAutoTranslate() {
+    try {
+      final autoTranslate = localDataSource.getAutoTranslate();
+      return Right(autoTranslate);
+    } on Exception catch (e) {
+      return Left(CacheFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> saveAutoTranslate(bool autoTranslate) async {
+    try {
+      await localDataSource.saveAutoTranslate(autoTranslate);
+      return const Right(unit);
+    } on Exception catch (e) {
+      return Left(CacheFailure(e.toString()));
+    }
+  }
 }

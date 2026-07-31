@@ -5,6 +5,8 @@ abstract class SettingsLocalDataSource {
   Future<void> saveTheme(bool isDark);
   String getLanguage();
   Future<void> saveLanguage(String code);
+  bool getAutoTranslate();
+  Future<void> saveAutoTranslate(bool autoTranslate);
 }
 
 class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
@@ -30,5 +32,15 @@ class SettingsLocalDataSourceImpl implements SettingsLocalDataSource {
   @override
   Future<void> saveLanguage(String code) async {
     await sharedPreferences.setString('languageCode', code);
+  }
+
+  @override
+  bool getAutoTranslate() {
+    return sharedPreferences.getBool('autoTranslate') ?? false;
+  }
+
+  @override
+  Future<void> saveAutoTranslate(bool autoTranslate) async {
+    await sharedPreferences.setBool('autoTranslate', autoTranslate);
   }
 }
