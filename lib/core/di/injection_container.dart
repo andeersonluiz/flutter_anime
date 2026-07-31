@@ -64,6 +64,7 @@ import '../../features/settings/domain/usecases/change_language.dart';
 import '../../features/settings/domain/usecases/toggle_theme.dart';
 import '../../features/settings/presentation/bloc/settings_bloc.dart';
 import '../network/api_client.dart';
+import '../utils/translation_service.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -94,6 +95,7 @@ Future<void> _initExternal() async {
 
 void _initCore() {
   sl.registerLazySingleton<ApiClient>(ApiClient.new);
+  sl.registerLazySingleton<TranslationService>(() => TranslationService());
 }
 
 void _initAnimeFeature() {

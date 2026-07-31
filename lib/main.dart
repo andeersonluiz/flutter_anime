@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
@@ -30,6 +31,13 @@ Future<void> main() async {
   } on Object catch (e) {
     debugPrint('Firebase initialization warning: $e');
   }
+
+  try {
+    await Hive.openBox<String>('translations_box');
+  } on Object catch (e) {
+    debugPrint('Hive translations_box warning: $e');
+  }
+
   await initDependencies();
 
   await SystemChrome.setPreferredOrientations([

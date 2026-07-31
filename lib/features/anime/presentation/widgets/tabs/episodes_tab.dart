@@ -18,33 +18,12 @@ class EpisodesTab extends StatefulWidget {
 }
 
 class _EpisodesTabState extends State<EpisodesTab> {
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent * 0.8) {
-      context.read<EpisodeBloc>().add(LoadMoreEpisodes(widget.anime.id));
-    }
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => sl<EpisodeBloc>()..add(LoadEpisodes(widget.anime.id)),
       child: Builder(
-        builder: (context) {
+        builder: (innerContext) {
           return BlocBuilder<EpisodeBloc, EpisodeState>(
             builder: (context, state) {
               if (state is EpisodeLoading) {
@@ -56,20 +35,32 @@ class _EpisodesTabState extends State<EpisodesTab> {
                 if (episodes.isEmpty) {
                   return const Center(child: Text('No episodes found.'));
                 }
-                return ListView.builder(
-                  controller: _scrollController,
-                  itemCount: episodes.length + (state.hasMore ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index >= episodes.length) {
-                      return const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
+                return NotificationListener<ScrollNotification>(
+                  onNotification: (scrollInfo) {
+                    if (state.hasMore &&
+                        scrollInfo.metrics.pixels >=
+                            scrollInfo.metrics.maxScrollExtent * 0.8) {
+                      // Usar o innerContext que possui o EpisodeBloc
+                      innerContext
+                          .read<EpisodeBloc>()
+                          .add(LoadMoreEpisodes(widget.anime.id));
                     }
-                    return EpisodeTile(episode: episodes[index]);
+                    return false;
                   },
+                  child: ListView.builder(
+                    itemCount: episodes.length + (state.hasMore ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index >= episodes.length) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                      return EpisodeTile(episode: episodes[index]);
+                    },
+                  ),
                 );
               }
               return const SizedBox.shrink();

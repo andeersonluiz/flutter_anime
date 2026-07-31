@@ -13,6 +13,21 @@ class InfoTab extends StatelessWidget {
 
   final Anime anime;
 
+  String _translateStatus(String status) {
+    switch (status.toLowerCase()) {
+      case 'current':
+        return 'Em andamento';
+      case 'finished':
+        return 'Finalizado';
+      case 'upcoming':
+        return 'Em breve';
+      case 'tba':
+        return 'A ser anunciado';
+      default:
+        return status;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsState>(
@@ -22,7 +37,7 @@ class InfoTab extends StatelessWidget {
           children: [
             InfoRow(
                 label: AppLocalization.translate('anime_info.status'),
-                value: anime.status),
+                value: _translateStatus(anime.status)),
             InfoRow(
                 label: AppLocalization.translate('anime_info.episodes'),
                 value: anime.episodeCount?.toString() ?? 'N/A'),
