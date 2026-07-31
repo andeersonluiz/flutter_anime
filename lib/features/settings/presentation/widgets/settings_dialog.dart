@@ -24,6 +24,16 @@ class SettingsDialog extends StatelessWidget {
                     context.read<SettingsBloc>().add(ToggleThemeEvent(value));
                   },
                 ),
+                SwitchListTile(
+                  title: const Text('Tradução Automática'),
+                  subtitle: const Text('Traduzir conteúdos em segundo plano'),
+                  value: state.autoTranslate,
+                  onChanged: (value) {
+                    context
+                        .read<SettingsBloc>()
+                        .add(ToggleAutoTranslateEvent(value));
+                  },
+                ),
                 ListTile(
                   title: const Text('Language'),
                   trailing: DropdownButton<String>(

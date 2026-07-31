@@ -7,6 +7,7 @@ import '../../../../settings/presentation/bloc/settings_bloc.dart';
 import '../../../../settings/presentation/bloc/settings_state.dart';
 import '../../../domain/entities/anime.dart';
 import '../../../domain/usecases/translate_synopsis.dart';
+import '../../../../../shared/widgets/translated_text.dart';
 
 class SynopsisTab extends StatefulWidget {
   final Anime anime;
@@ -75,10 +76,6 @@ class _SynopsisTabState extends State<SynopsisTab> {
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsState>(
       builder: (context, settingsState) {
-        final currentText = (_isTranslated && _translatedSynopsis != null)
-            ? _translatedSynopsis!
-            : widget.anime.synopsis;
-
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -139,8 +136,9 @@ class _SynopsisTabState extends State<SynopsisTab> {
                 ),
               ],
               const SizedBox(height: 12),
-              Text(
-                currentText,
+              TranslatedText(
+                widget.anime.synopsis,
+                forceTranslate: _isTranslated,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       height: 1.5,
                     ),

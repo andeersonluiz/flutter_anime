@@ -21,3 +21,10 @@ class ChangeLanguageEvent extends SettingsEvent {
   @override
   List<Object?> get props => [code];
 }
+
+class ToggleAutoTranslateEvent extends SettingsEvent {
+  final bool autoTranslate;
+  const ToggleAutoTranslateEvent(this.autoTranslate);
+  @override
+  List<Object?> get props => [autoTranslate];
+}

@@ -11,11 +11,16 @@ class SettingsInitial extends SettingsState {}
 class SettingsLoaded extends SettingsState {
   final bool isDark;
   final String languageCode;
+  final bool autoTranslate;
 
-  const SettingsLoaded({required this.isDark, required this.languageCode});
+  const SettingsLoaded({
+    required this.isDark,
+    required this.languageCode,
+    this.autoTranslate = false,
+  });
 
   @override
-  List<Object?> get props => [isDark, languageCode];
+  List<Object?> get props => [isDark, languageCode, autoTranslate];
 }
 
 class SettingsError extends SettingsState {

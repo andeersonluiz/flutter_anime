@@ -18,19 +18,27 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<LoadSettings>(_onLoadSettings);
     on<ToggleThemeEvent>(_onToggleTheme);
     on<ChangeLanguageEvent>(_onChangeLanguage);
+    on<ToggleAutoTranslateEvent>(_onToggleAutoTranslate);
   }
 
   void _onLoadSettings(LoadSettings event, Emitter<SettingsState> emit) {
     final themeResult = repository.getTheme();
     final langResult = repository.getLanguage();
+    final autoTransResult = repository.getAutoTranslate();
 
     bool isDark = false;
     String langCode = 'en';
+    bool autoTranslate = false;
 
     themeResult.fold((_) {}, (val) => isDark = val);
     langResult.fold((_) {}, (val) => langCode = val);
+    autoTransResult.fold((_) {}, (val) => autoTranslate = val);
 
-    emit(SettingsLoaded(isDark: isDark, languageCode: langCode));
+    emit(SettingsLoaded(
+      isDark: isDark,
+      languageCode: langCode,
+      autoTranslate: autoTranslate,
+    ));
   }
 
   Future<void> _onToggleTheme(
@@ -41,7 +49,10 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       result.fold(
         (failure) => emit(SettingsError(failure.message)),
         (_) => emit(SettingsLoaded(
-            isDark: event.isDark, languageCode: currentState.languageCode)),
+          isDark: event.isDark,
+          languageCode: currentState.languageCode,
+          autoTranslate: currentState.autoTranslate,
+        )),
       );
     }
   }
@@ -54,7 +65,26 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       result.fold(
         (failure) => emit(SettingsError(failure.message)),
         (_) => emit(SettingsLoaded(
-            isDark: currentState.isDark, languageCode: event.code)),
+          isDark: currentState.isDark,
+          languageCode: event.code,
+          autoTranslate: currentState.autoTranslate,
+        )),
+      );
+    }
+  }
+
+  Future<void> _onToggleAutoTranslate(
+      ToggleAutoTranslateEvent event, Emitter<SettingsState> emit) async {
+    if (state is SettingsLoaded) {
+      final currentState = state as SettingsLoaded;
+      final result = await repository.saveAutoTranslate(event.autoTranslate);
+      result.fold(
+        (failure) => emit(SettingsError(failure.message)),
+        (_) => emit(SettingsLoaded(
+          isDark: currentState.isDark,
+          languageCode: currentState.languageCode,
+          autoTranslate: event.autoTranslate,
+        )),
       );
     }
   }
