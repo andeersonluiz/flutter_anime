@@ -33,6 +33,7 @@ Future<void> main() async {
   }
 
   try {
+    await Hive.initFlutter();
     await Hive.openBox<String>('translations_box');
   } on Object catch (e) {
     debugPrint('Hive translations_box warning: $e');
