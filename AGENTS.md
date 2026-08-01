@@ -57,7 +57,7 @@ lib/
 - Registrar Use Cases e Repositories com `registerLazySingleton`
 - Usar `sealed class` para estados de BLoC (Dart 3)
 - Usar `freezed` para entities e models
-- Usar `json_serializable` para fromJson/toJson (não manual)
+- Usar `json_serializable` para fromJson/toJson quando o formato externo mapeia diretamente; para envelopes/formatos Kitsu incompatíveis, manter adapters explícitos e testados
 - Usar `GoRouter` para navegação (não `Navigator.push` direto)
 - Seguir as regras de `very_good_analysis` (sem warnings)
 - **EXECUTAR SEMPRE `dart format lib test integration_test git_hooks.dart` E `flutter analyze` APÓS QUALQUER MODIFICAÇÃO DE CÓDIGO** para garantir 0 erros de sintaxe, tipos, compilação ou linter. O CI repete essa formatação, análise estática, testes unitários com cobertura e acrescenta o E2E no emulador Android.

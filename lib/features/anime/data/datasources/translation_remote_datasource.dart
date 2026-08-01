@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:dio/dio.dart';
 import '../../../../core/error/exceptions.dart';
 
@@ -52,7 +54,13 @@ class TranslationRemoteDataSourceImpl implements TranslationRemoteDataSource {
           return result;
         }
       }
-    } on Exception catch (_) {
+    } on Exception catch (error, stackTrace) {
+      developer.log(
+        'Google translation provider failed; trying fallback.',
+        name: 'TranslationRemoteDataSource',
+        error: error,
+        stackTrace: stackTrace,
+      );
       // Fallback to next strategy
     }
 
@@ -80,7 +88,13 @@ class TranslationRemoteDataSourceImpl implements TranslationRemoteDataSource {
           return translated;
         }
       }
-    } on Exception catch (_) {
+    } on Exception catch (error, stackTrace) {
+      developer.log(
+        'MyMemory translation provider failed; trying fallback.',
+        name: 'TranslationRemoteDataSource',
+        error: error,
+        stackTrace: stackTrace,
+      );
       // Fallback to strategy 3
     }
 
@@ -107,8 +121,13 @@ class TranslationRemoteDataSourceImpl implements TranslationRemoteDataSource {
           return translated;
         }
       }
-    } on Exception catch (_) {
-      // All strategies exhausted
+    } on Exception catch (error, stackTrace) {
+      developer.log(
+        'LibreTranslate provider failed; all translation providers exhausted.',
+        name: 'TranslationRemoteDataSource',
+        error: error,
+        stackTrace: stackTrace,
+      );
     }
 
     throw const ServerException(
