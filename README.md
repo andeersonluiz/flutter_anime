@@ -46,11 +46,17 @@ lib/
 
 📐 **[Documentação de Arquitetura →](docs/ARCHITECTURE.md)**
 
+🔐 **[Procedimentos de Segurança e Publicação →](docs/SECURITY.md)**
+
 ---
+
+## 🤖 Engenharia assistida por agentes
+
+Esta modernização foi conduzida com agentes de IA sob revisão humana. O agente ajudou a mapear a dívida técnica, propor a migração por fases e gerar boilerplate/testes; as decisões de escopo, revisão das mudanças e validação por CI permaneceram humanas. O processo completo, incluindo uma sugestão do agente que foi rejeitada, está no [estudo de caso](docs/CASE_STUDY.md).
 
 ## 📊 Métricas de Evolução (Antes vs Depois)
 
-| Métrica | 🔴 Versão Legada (`branch: legacy`) | ✅ Versão Refatorada (`branch: main / refactor`) |
+| Métrica | 🔴 Versão Legada (`branch: legacy`) | ✅ Versão Refatorada (`branch: main`) |
 |---|---|---|
 | Arquitetura | Sem padrão definido (código acoplado) | Clean Architecture + Feature-First |
 | Gerenciamento de Estado | MobX (God Stores) | Flutter BLoC (Sealed States & Events) |

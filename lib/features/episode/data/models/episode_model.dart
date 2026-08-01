@@ -1,5 +1,10 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import '../../domain/entities/episode.dart';
 
+part 'episode_model.g.dart';
+
+@JsonSerializable()
 class EpisodeModel {
   final String id;
   final EpisodeAttributes attributes;
@@ -9,20 +14,10 @@ class EpisodeModel {
     required this.attributes,
   });
 
-  factory EpisodeModel.fromJson(Map<String, dynamic> json) {
-    return EpisodeModel(
-      id: json['id'] as String,
-      attributes: EpisodeAttributes.fromJson(
-          json['attributes'] as Map<String, dynamic>),
-    );
-  }
+  factory EpisodeModel.fromJson(Map<String, dynamic> json) =>
+      _$EpisodeModelFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'attributes': attributes.toJson(),
-    };
-  }
+  Map<String, dynamic> toJson() => _$EpisodeModelToJson(this);
 
   Episode toEntity() {
     return Episode(
@@ -38,6 +33,7 @@ class EpisodeModel {
   }
 }
 
+@JsonSerializable()
 class EpisodeAttributes {
   final String? canonicalTitle;
   final String? synopsis;
@@ -55,45 +51,20 @@ class EpisodeAttributes {
     this.airdate,
   });
 
-  factory EpisodeAttributes.fromJson(Map<String, dynamic> json) {
-    return EpisodeAttributes(
-      canonicalTitle: json['canonicalTitle'] as String?,
-      synopsis: json['synopsis'] as String?,
-      thumbnail: json['thumbnail'] != null
-          ? Thumbnail.fromJson(json['thumbnail'] as Map<String, dynamic>)
-          : null,
-      number: json['number'] as int?,
-      seasonNumber: json['seasonNumber'] as int?,
-      airdate: json['airdate'] as String?,
-    );
-  }
+  factory EpisodeAttributes.fromJson(Map<String, dynamic> json) =>
+      _$EpisodeAttributesFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    return {
-      'canonicalTitle': canonicalTitle,
-      'synopsis': synopsis,
-      'thumbnail': thumbnail?.toJson(),
-      'number': number,
-      'seasonNumber': seasonNumber,
-      'airdate': airdate,
-    };
-  }
+  Map<String, dynamic> toJson() => _$EpisodeAttributesToJson(this);
 }
 
+@JsonSerializable()
 class Thumbnail {
   final String? original;
 
   Thumbnail({this.original});
 
-  factory Thumbnail.fromJson(Map<String, dynamic> json) {
-    return Thumbnail(
-      original: json['original'] as String?,
-    );
-  }
+  factory Thumbnail.fromJson(Map<String, dynamic> json) =>
+      _$ThumbnailFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    return {
-      'original': original,
-    };
-  }
+  Map<String, dynamic> toJson() => _$ThumbnailToJson(this);
 }

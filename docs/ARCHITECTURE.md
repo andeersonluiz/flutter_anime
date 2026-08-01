@@ -174,11 +174,11 @@ Retornos usam `Either<Failure, T>` do pacote `dartz`:
 
 | Métrica | Antes (Legacy) | Depois (Refatorado) |
 |---|---|---|
-| Maior arquivo | 571 linhas (27KB) | ~150 linhas |
+| Maior arquivo | 571 linhas (27KB) | 299 linhas |
 | God Objects | 3 | 0 |
 | Duplicação de código | ~80% entre 2 telas | 0% |
 | Chamadas HTTP na UI/Store | 7+ stores | 0 (só em data sources) |
 | Tratamento de erros | Nenhum | Failures tipadas em toda chamada |
-| Testes | 0 | ~X% de cobertura |
+| Testes | 0 | 75,0% de cobertura (1009/1345 linhas; 220 testes no baseline de 01/08/2026) |
 | Null safety | ❌ (Dart 2.7) | ✅ (Dart 3.x) |
 | Responsividade | Valores hardcoded | Adaptativo por tamanho de tela |

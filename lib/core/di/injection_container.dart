@@ -23,6 +23,7 @@ import '../../features/anime/domain/usecases/get_trending_animes.dart';
 import '../../features/anime/domain/usecases/get_upcoming_animes.dart';
 import '../../features/anime/domain/usecases/search_animes.dart';
 import '../../features/anime/domain/usecases/translate_synopsis.dart';
+import '../../features/anime/domain/usecases/translate_text.dart';
 import '../../features/anime/presentation/bloc/anime_bloc.dart';
 import '../../features/auth/data/datasources/auth_remote_datasource.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
@@ -64,7 +65,6 @@ import '../../features/settings/domain/usecases/change_language.dart';
 import '../../features/settings/domain/usecases/toggle_theme.dart';
 import '../../features/settings/presentation/bloc/settings_bloc.dart';
 import '../network/api_client.dart';
-import '../utils/translation_service.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -95,7 +95,6 @@ Future<void> _initExternal() async {
 
 void _initCore() {
   sl.registerLazySingleton<ApiClient>(ApiClient.new);
-  sl.registerLazySingleton<TranslationService>(() => TranslationService());
 }
 
 void _initAnimeFeature() {
@@ -114,6 +113,7 @@ void _initAnimeFeature() {
     ),
   );
   sl.registerLazySingleton(() => TranslateSynopsis(sl()));
+  sl.registerLazySingleton(() => TranslateText(sl()));
 
   sl.registerLazySingleton<AnimeRemoteDataSource>(
     () => AnimeRemoteDataSourceImpl(apiClient: sl()),

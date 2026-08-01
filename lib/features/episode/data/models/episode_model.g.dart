@@ -15,7 +15,7 @@ EpisodeModel _$EpisodeModelFromJson(Map<String, dynamic> json) => EpisodeModel(
 Map<String, dynamic> _$EpisodeModelToJson(EpisodeModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'attributes': instance.attributes,
+      'attributes': instance.attributes.toJson(),
     };
 
 EpisodeAttributes _$EpisodeAttributesFromJson(Map<String, dynamic> json) =>
@@ -34,7 +34,7 @@ Map<String, dynamic> _$EpisodeAttributesToJson(EpisodeAttributes instance) =>
     <String, dynamic>{
       'canonicalTitle': instance.canonicalTitle,
       'synopsis': instance.synopsis,
-      'thumbnail': instance.thumbnail,
+      'thumbnail': instance.thumbnail?.toJson(),
       'number': instance.number,
       'seasonNumber': instance.seasonNumber,
       'airdate': instance.airdate,

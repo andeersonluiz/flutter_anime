@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animes_io/core/di/injection_container.dart';
-import 'package:animes_io/core/utils/translation_service.dart';
+import 'package:animes_io/features/anime/domain/usecases/translate_text.dart';
 import 'package:animes_io/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:animes_io/features/settings/presentation/bloc/settings_state.dart';
 
@@ -34,6 +34,7 @@ class TranslatedText extends StatefulWidget {
 class _TranslatedTextState extends State<TranslatedText> {
   String? _translatedText;
   bool _isTranslating = false;
+  int _translationRequestId = 0;
 
   @override
   void initState() {
@@ -48,6 +49,8 @@ class _TranslatedTextState extends State<TranslatedText> {
         oldWidget.forceTranslate != widget.forceTranslate ||
         oldWidget.targetLanguage != widget.targetLanguage) {
       _translatedText = null;
+      _isTranslating = false;
+      _translationRequestId++;
       _checkAndTranslate();
     }
   }
@@ -64,18 +67,22 @@ class _TranslatedTextState extends State<TranslatedText> {
   }
 
   Future<void> _translate() async {
-    if (_isTranslating) return;
+    final requestId = ++_translationRequestId;
+    final sourceText = widget.text;
+    final targetLanguage = widget.targetLanguage;
+
     setState(() => _isTranslating = true);
 
-    final translationService = sl<TranslationService>();
-    final result = await translationService.translate(
-      widget.text,
-      targetLanguage: widget.targetLanguage,
+    final result = await sl<TranslateText>()(
+      TranslateTextParams(
+        text: sourceText,
+        targetLang: targetLanguage,
+      ),
     );
 
-    if (mounted) {
+    if (mounted && requestId == _translationRequestId) {
       setState(() {
-        _translatedText = result;
+        _translatedText = result.fold((_) => sourceText, (text) => text);
         _isTranslating = false;
       });
     }
@@ -88,6 +95,14 @@ class _TranslatedTextState extends State<TranslatedText> {
         if (state is SettingsLoaded) {
           if (state.autoTranslate && _translatedText == null) {
             unawaited(_translate());
+          } else if (!state.autoTranslate && !widget.forceTranslate) {
+            _translationRequestId++;
+            if (_translatedText != null || _isTranslating) {
+              setState(() {
+                _translatedText = null;
+                _isTranslating = false;
+              });
+            }
           }
         }
       },

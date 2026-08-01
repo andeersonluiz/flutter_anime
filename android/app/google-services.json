@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:946900606440:android:849011b8031ae4baba585d",
         "android_client_info": {
-          "package_name": "com.example.project1"
+          "package_name": "io.github.andeersonluiz.animesio"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "946900606440-uebjq96h2uleck96tsjcc3lp0l45tvbk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.project1",
+            "package_name": "io.github.andeersonluiz.animesio",
             "certificate_hash": "151d2c62e05bc94147f04acff6c6d0b1c89de36d"
           }
         },

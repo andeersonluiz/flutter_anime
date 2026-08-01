@@ -2,11 +2,11 @@ name: CI/CD Pipeline & Release
 
 on:
   push:
-    branches: [main, refactor]
+    branches: [main]
     tags:
       - 'v*'
   pull_request:
-    branches: [main, refactor]
+    branches: [main]
 
 jobs:
   analyze-and-test:
@@ -35,7 +35,7 @@ jobs:
         run: flutter pub get
 
       - name: Verify Formatting
-        run: dart format --output=none --set-exit-if-changed .
+        run: dart format --output=none --set-exit-if-changed lib test integration_test git_hooks.dart
 
       - name: Run Static Analysis
         run: dart analyze --fatal-infos
@@ -64,7 +64,7 @@ jobs:
   build-and-release:
     name: Build & Publish Release APK
     needs: analyze-and-test
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/refactor' || startsWith(github.ref, 'refs/tags/'))
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -135,7 +135,7 @@ jobs:
             - **Versão**: ${{ env.APP_VERSION }}
             - **Flutter SDK**: `3.38.5` / Dart `3.x`
             - **Arquitetura**: Clean Architecture + BLoC Pattern + GetIt
-            - **Cobertura de Testes**: `76.4%` (213 testes unitários automatizados)
+            - **Cobertura de Testes**: verificada pelo job de testes da pipeline
             - **Backend / API**: Kitsu REST API & Firebase (Auth + Firestore)
 
             ---
@@ -147,4 +147,3 @@ jobs:
             4. Conclua a instalação e aproveite! 🎉
           files: output_apk/Animes_IO-v${{ env.APP_VERSION }}.apk
           prerelease: false
-

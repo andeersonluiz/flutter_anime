@@ -16,6 +16,36 @@ class TranslationRepositoryImpl implements TranslationRepository {
   });
 
   @override
+  Future<Either<Failure, String>> translateText({
+    required String text,
+    required String targetLang,
+  }) async {
+    try {
+      final cached = await localDataSource.getCachedText(
+        text: text,
+        targetLang: targetLang,
+      );
+      if (cached != null && cached.isNotEmpty) return Right(cached);
+
+      final translated = await remoteDataSource.translateText(
+        text: text,
+        sourceLang: 'en',
+        targetLang: targetLang,
+      );
+      await localDataSource.cacheText(
+        text: text,
+        targetLang: targetLang,
+        translatedText: translated,
+      );
+      return Right(translated);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on Exception catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
   Future<Either<Failure, String>> translateSynopsis({
     required String animeId,
     required String synopsisText,

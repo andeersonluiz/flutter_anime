@@ -25,6 +25,7 @@ Future<bool> preCommit() async {
       '--set-exit-if-changed',
       'lib',
       'test',
+      'integration_test',
       'git_hooks.dart'
     ],
     runInShell: true,
@@ -33,7 +34,7 @@ Future<bool> preCommit() async {
   if (formatResult.exitCode != 0) {
     stdout.writeln('\n❌ [ERRO DE FORMATAÇÃO] Existem arquivos desalinhados!');
     stdout.writeln(
-        '👉 Execute o comando "dart format lib test git_hooks.dart" no seu terminal para corrigir antes de commitar.\n');
+        '👉 Execute o comando "dart format lib test integration_test git_hooks.dart" no seu terminal para corrigir antes de commitar.\n');
     return false;
   }
   stdout.writeln('✅ Formatação OK!\n');
@@ -67,7 +68,7 @@ Future<bool> prePush() async {
 
   final testResult = await Process.run(
     'flutter',
-    ['test'],
+    ['test', '--coverage'],
     runInShell: true,
   );
 
@@ -76,7 +77,7 @@ Future<bool> prePush() async {
         '\n❌ [TESTES FALHARAM] O push foi CANCELADO porque existem testes falhando!\n');
     stdout.writeln(testResult.stdout);
     stdout.writeln(
-        '👉 Execute "flutter test" localmente e corrija as falhas antes de subir pro GitHub.\n');
+        '👉 Execute "flutter test --coverage" localmente e corrija as falhas antes de subir pro GitHub.\n');
     return false;
   }
 

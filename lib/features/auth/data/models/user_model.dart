@@ -1,5 +1,10 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import '../../domain/entities/app_user.dart';
 
+part 'user_model.g.dart';
+
+@JsonSerializable()
 class UserModel {
   final String uid;
   final String email;
@@ -19,32 +24,10 @@ class UserModel {
     this.favoriteAnimeIds = const [],
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      uid: json['uid'] as String,
-      email: json['email'] as String,
-      username: json['username'] as String,
-      avatarUrl: json['avatarUrl'] as String?,
-      backgroundUrl: json['backgroundUrl'] as String?,
-      isAnonymous: json['isAnonymous'] as bool? ?? false,
-      favoriteAnimeIds: (json['favoriteAnimeIds'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
-    );
-  }
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    return {
-      'uid': uid,
-      'email': email,
-      'username': username,
-      'avatarUrl': avatarUrl,
-      'backgroundUrl': backgroundUrl,
-      'isAnonymous': isAnonymous,
-      'favoriteAnimeIds': favoriteAnimeIds,
-    };
-  }
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
   AppUser toEntity() {
     return AppUser(
