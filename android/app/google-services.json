@@ -7,17 +7,62 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:946900606440:android:849011b8031ae4baba585d",
+        "mobilesdk_app_id": "1:946900606440:android:2d0bd06e9010303eba585d",
         "android_client_info": {
-          "package_name": "io.github.andeersonluiz.animesio"
+          "package_name": "com.andeersonluiz.animesio"
         }
       },
       "oauth_client": [
         {
+          "client_id": "946900606440-7trscnjpopdag1upoi829m32jptfrtes.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv_xHQjVMhdL_m9QZ6sc0UfZ6ToJJcpDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "946900606440-7trscnjpopdag1upoi829m32jptfrtes.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946900606440:android:849011b8031ae4baba585d",
+        "android_client_info": {
+          "package_name": "com.example.project1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "946900606440-67id355rtrtme1b3pad5qa4ecdklijal.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.project1",
+            "certificate_hash": "091e1160fdd0579ed9128bcf665376f9aff327e1"
+          }
+        },
+        {
+          "client_id": "946900606440-8ktbvbrlcsi3lppqr7lv40rbste67eab.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.project1",
+            "certificate_hash": "0fff59cb1835467ede0781ad201a8257f52c82ef"
+          }
+        },
+        {
           "client_id": "946900606440-uebjq96h2uleck96tsjcc3lp0l45tvbk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "io.github.andeersonluiz.animesio",
+            "package_name": "com.example.project1",
             "certificate_hash": "151d2c62e05bc94147f04acff6c6d0b1c89de36d"
           }
         },

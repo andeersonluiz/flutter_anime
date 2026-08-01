@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.github.andeersonluiz.animesio">
+    package="com.andeersonluiz.animesio">
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application

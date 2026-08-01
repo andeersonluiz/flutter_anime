@@ -1,4 +1,4 @@
-package io.github.andeersonluiz.animesio
+package com.andeersonluiz.animesio
 
 import io.flutter.embedding.android.FlutterActivity
 

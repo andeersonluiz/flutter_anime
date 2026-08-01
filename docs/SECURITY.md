@@ -20,4 +20,4 @@ O histórico anterior contém artefatos de assinatura que foram removidos da ár
 
 ## Firebase e identificador do app
 
-O identificador foi atualizado para `io.github.andeersonluiz.animesio`. Registre esse package/bundle ID no Firebase, gere um novo `google-services.json` e atualize as credenciais OAuth/SHA antes de publicar uma build autenticada.
+O identificador foi atualizado para `com.andeersonluiz.animesio`. Registre esse package/bundle ID no Firebase, gere um novo `google-services.json` e atualize as credenciais OAuth/SHA antes de publicar uma build autenticada.
