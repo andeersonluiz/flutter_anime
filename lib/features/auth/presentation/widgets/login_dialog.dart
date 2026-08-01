@@ -107,12 +107,6 @@ class _LoginDialogState extends State<LoginDialog> {
                           context.read<AuthBloc>().add(SignInWithGoogleEvent());
                         },
                       ),
-                      TextButton(
-                        child: const Text('Continue as Guest'),
-                        onPressed: () {
-                          context.read<AuthBloc>().add(SignInAsGuestEvent());
-                        },
-                      ),
                     ],
                   );
                 },
