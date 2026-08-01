@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/router/app_router.dart';
 import '../../domain/entities/anime.dart';
+import '../../../../shared/widgets/translated_text.dart';
 
 class AnimeSearchTile extends StatelessWidget {
   const AnimeSearchTile({super.key, required this.anime});
@@ -20,7 +21,7 @@ class AnimeSearchTile extends StatelessWidget {
         fit: BoxFit.cover,
         errorBuilder: (_, __, ___) => const Icon(Icons.movie),
       ),
-      title: Text(anime.title),
+      title: TranslatedText(anime.title),
       subtitle: Text('Rating: ${anime.rating?.toStringAsFixed(1) ?? 'N/A'}'),
       onTap: () {
         unawaited(context.push('/anime/${anime.id}',

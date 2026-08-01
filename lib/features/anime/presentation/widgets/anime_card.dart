@@ -12,6 +12,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../favorites/presentation/bloc/favorites_bloc.dart';
 import '../../../favorites/presentation/bloc/favorites_state.dart';
+import '../../../../shared/widgets/translated_text.dart';
 import '../../domain/entities/anime.dart';
 
 class AnimeCard extends StatelessWidget {
@@ -75,7 +76,7 @@ class AnimeCard extends StatelessWidget {
                     ),
                   ),
                   padding: const EdgeInsets.all(8),
-                  child: Text(
+                  child: TranslatedText(
                     anime.title,
                     style: const TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),

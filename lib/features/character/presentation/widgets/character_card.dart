@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/character.dart';
+import '../../../../shared/widgets/translated_text.dart';
 
 class CharacterCard extends StatelessWidget {
   final Character character;
@@ -52,7 +53,7 @@ class CharacterCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                child: Text(
+                child: TranslatedText(
                   character.name,
                   style: const TextStyle(
                     color: Colors.white,

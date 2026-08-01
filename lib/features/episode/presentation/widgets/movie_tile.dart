@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animes_io/shared/widgets/translated_text.dart';
 import 'package:animes_io/features/episode/domain/entities/episode.dart';
 
 class MovieTile extends StatelessWidget {
@@ -14,7 +15,7 @@ class MovieTile extends StatelessWidget {
           label: Text('Movie'),
           child: Icon(Icons.movie),
         ),
-        title: Text(movie.title ?? 'Unknown Movie'),
+        title: TranslatedText(movie.title ?? 'Unknown Movie'),
         subtitle: Text(
           movie.episodeLength != null
               ? '${movie.episodeLength} min'

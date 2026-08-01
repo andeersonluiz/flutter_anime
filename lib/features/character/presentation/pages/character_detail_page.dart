@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/character.dart';
+import '../../../../shared/widgets/translated_text.dart';
 
 class CharacterDetailPage extends StatelessWidget {
   const CharacterDetailPage({
@@ -22,7 +23,7 @@ class CharacterDetailPage extends StatelessWidget {
             expandedHeight: 300,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(character.name),
+              title: TranslatedText(character.name),
               background: Hero(
                 tag: 'character_${character.id}',
                 child: Image.network(
@@ -41,14 +42,14 @@ class CharacterDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (japaneseName != null && japaneseName.isNotEmpty) ...[
-                    Text(
+                    TranslatedText(
                       japaneseName,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 8),
                   ],
                   if (character.otherNames.isNotEmpty) ...[
-                    Text(
+                    TranslatedText(
                       'Other Names: ${character.otherNames.join(', ')}',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontStyle: FontStyle.italic,
@@ -63,7 +64,7 @@ class CharacterDetailPage extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 8),
-                  Text(
+                  TranslatedText(
                     description != null && description.isNotEmpty
                         ? description
                         : 'No description available.',

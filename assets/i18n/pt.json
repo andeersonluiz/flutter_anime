@@ -55,6 +55,8 @@
     },
 
     "dialog_settings":{
+        "auto_translate":"Tradução automática",
+        "auto_translate_subtitle":"Traduzir conteúdos automaticamente",
         "language":"Idioma",
         "english_item":"Inglês",
         "portuguese_item":"Portugues",
