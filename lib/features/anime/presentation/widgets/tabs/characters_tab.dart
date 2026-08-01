@@ -7,11 +7,17 @@ import '../../../../character/presentation/bloc/character_bloc.dart';
 import '../../../../character/presentation/bloc/character_event.dart';
 import '../../../../character/presentation/bloc/character_state.dart';
 import '../../../domain/entities/anime.dart';
+import '../../../../../shared/widgets/translated_text.dart';
 
 class CharactersTab extends StatelessWidget {
-  const CharactersTab({super.key, required this.anime});
+  const CharactersTab({
+    super.key,
+    required this.anime,
+    this.translateAll = false,
+  });
 
   final Anime anime;
+  final bool translateAll;
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +58,9 @@ class CharactersTab extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text(
+                        child: TranslatedText(
                           character.name,
+                          forceTranslate: translateAll,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontSize: 12),

@@ -4,42 +4,35 @@ import 'package:flutter/material.dart';
 import 'package:animes_io/features/episode/domain/entities/episode.dart';
 import 'package:animes_io/shared/widgets/translated_text.dart';
 
-class EpisodeTile extends StatefulWidget {
+class EpisodeTile extends StatelessWidget {
+  const EpisodeTile({
+    super.key,
+    required this.episode,
+    this.translateAll = false,
+  });
+
   final Episode episode;
-
-  const EpisodeTile({super.key, required this.episode});
-
-  @override
-  State<EpisodeTile> createState() => _EpisodeTileState();
-}
-
-class _EpisodeTileState extends State<EpisodeTile> {
-  bool _isTranslated = false;
-
-  void _toggleTranslation() {
-    setState(() {
-      _isTranslated = !_isTranslated;
-    });
-  }
+  final bool translateAll;
 
   void _showSynopsisDialog(BuildContext context) {
     unawaited(showDialog<void>(
       context: context,
-      builder: (context) {
-        return _SynopsisDialog(episode: widget.episode);
-      },
+      builder: (context) => _SynopsisDialog(
+        episode: episode,
+        translateAll: translateAll,
+      ),
     ));
   }
 
   @override
   Widget build(BuildContext context) {
-    final titleText = widget.episode.title ?? 'No title';
+    final titleText = episode.title ?? 'No title';
 
     return ListTile(
       onTap: () => _showSynopsisDialog(context),
-      leading: widget.episode.thumbnail != null
+      leading: episode.thumbnail != null
           ? Image.network(
-              widget.episode.thumbnail!,
+              episode.thumbnail!,
               width: 100,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
@@ -49,85 +42,45 @@ class _EpisodeTileState extends State<EpisodeTile> {
               width: 100,
               child: Icon(Icons.image),
             ),
-      title: Row(
-        children: [
-          Expanded(
-            child: TranslatedText(
-              titleText,
-              forceTranslate: _isTranslated,
-            ),
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.g_translate,
-              color:
-                  _isTranslated ? Theme.of(context).primaryColor : Colors.grey,
-              size: 20,
-            ),
-            onPressed: _toggleTranslation,
-            tooltip: 'Translate Title',
-          ),
-        ],
+      title: TranslatedText(
+        titleText,
+        forceTranslate: translateAll,
       ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-              'S${widget.episode.seasonNumber ?? '-'} E${widget.episode.episodeNumber ?? '-'}'),
-          if (widget.episode.airdate != null) Text(widget.episode.airdate!),
+              'S${episode.seasonNumber ?? '-'} E${episode.episodeNumber ?? '-'}'),
+          if (episode.airdate != null) Text(episode.airdate!),
         ],
       ),
     );
   }
 }
 
-class _SynopsisDialog extends StatefulWidget {
+class _SynopsisDialog extends StatelessWidget {
+  const _SynopsisDialog({
+    required this.episode,
+    required this.translateAll,
+  });
+
   final Episode episode;
-
-  const _SynopsisDialog({required this.episode});
-
-  @override
-  State<_SynopsisDialog> createState() => _SynopsisDialogState();
-}
-
-class _SynopsisDialogState extends State<_SynopsisDialog> {
-  bool _isTranslated = false;
-
-  void _toggleTranslation() {
-    setState(() {
-      _isTranslated = !_isTranslated;
-    });
-  }
+  final bool translateAll;
 
   @override
   Widget build(BuildContext context) {
-    final titleText = widget.episode.title ?? 'Episode';
-    final synopsisText = widget.episode.synopsis ?? 'No synopsis available.';
+    final titleText = episode.title ?? 'Episode';
+    final synopsisText = episode.synopsis ?? 'No synopsis available.';
 
     return AlertDialog(
-      title: Row(
-        children: [
-          Expanded(
-            child: TranslatedText(
-              titleText,
-              forceTranslate: _isTranslated,
-            ),
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.g_translate,
-              color:
-                  _isTranslated ? Theme.of(context).primaryColor : Colors.grey,
-            ),
-            onPressed: _toggleTranslation,
-            tooltip: 'Translate Synopsis',
-          ),
-        ],
+      title: TranslatedText(
+        titleText,
+        forceTranslate: translateAll,
       ),
       content: SingleChildScrollView(
         child: TranslatedText(
           synopsisText,
-          forceTranslate: _isTranslated,
+          forceTranslate: translateAll,
         ),
       ),
       actions: [

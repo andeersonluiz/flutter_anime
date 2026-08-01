@@ -9,9 +9,14 @@ import '../../../../episode/presentation/widgets/episode_tile.dart';
 import '../../../domain/entities/anime.dart';
 
 class EpisodesTab extends StatefulWidget {
-  const EpisodesTab({super.key, required this.anime});
+  const EpisodesTab({
+    super.key,
+    required this.anime,
+    this.translateAll = false,
+  });
 
   final Anime anime;
+  final bool translateAll;
 
   @override
   State<EpisodesTab> createState() => _EpisodesTabState();
@@ -58,7 +63,10 @@ class _EpisodesTabState extends State<EpisodesTab> {
                           ),
                         );
                       }
-                      return EpisodeTile(episode: episodes[index]);
+                      return EpisodeTile(
+                        episode: episodes[index],
+                        translateAll: widget.translateAll,
+                      );
                     },
                   ),
                 );
