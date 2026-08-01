@@ -14,7 +14,6 @@ import '../widgets/tabs/characters_tab.dart';
 import '../widgets/tabs/episodes_tab.dart';
 import '../widgets/tabs/info_tab.dart';
 import '../widgets/tabs/synopsis_tab.dart';
-import '../../../../shared/widgets/translated_text.dart';
 
 class AnimeDetailPage extends StatefulWidget {
   const AnimeDetailPage({
@@ -84,9 +83,8 @@ class _AnimeDetailPageState extends State<AnimeDetailPage>
                     title: AnimatedOpacity(
                       duration: const Duration(milliseconds: 200),
                       opacity: isCollapsed ? 1.0 : 0.0,
-                      child: TranslatedText(
+                      child: Text(
                         widget.anime.title,
-                        forceTranslate: _translateAll,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -138,9 +136,8 @@ class _AnimeDetailPageState extends State<AnimeDetailPage>
                           child: AnimatedOpacity(
                             duration: const Duration(milliseconds: 200),
                             opacity: isCollapsed ? 0.0 : 1.0,
-                            child: TranslatedText(
+                            child: Text(
                               widget.anime.title,
-                              forceTranslate: _translateAll,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
@@ -280,7 +277,10 @@ class _AnimeDetailPageState extends State<AnimeDetailPage>
               anime: widget.anime,
               translateAll: _translateAll,
             ),
-            InfoTab(anime: widget.anime),
+            InfoTab(
+              anime: widget.anime,
+              translateAll: _translateAll,
+            ),
           ],
         ),
       ),

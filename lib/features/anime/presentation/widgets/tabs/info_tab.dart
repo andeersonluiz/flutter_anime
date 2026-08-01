@@ -7,11 +7,17 @@ import '../../../domain/entities/anime.dart';
 import 'package:animes_io/core/utils/app_localization.dart';
 import 'package:animes_io/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:animes_io/features/settings/presentation/bloc/settings_state.dart';
+import '../../../../../shared/widgets/translated_text.dart';
 
 class InfoTab extends StatelessWidget {
-  const InfoTab({super.key, required this.anime});
+  const InfoTab({
+    super.key,
+    required this.anime,
+    this.translateAll = false,
+  });
 
   final Anime anime;
+  final bool translateAll;
 
   String _translateStatus(String status) {
     switch (status.toLowerCase()) {
@@ -35,26 +41,53 @@ class InfoTab extends StatelessWidget {
         return ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
-            InfoRow(
-                label: AppLocalization.translate('anime_info.status'),
-                value: _translateStatus(anime.status)),
-            InfoRow(
-                label: AppLocalization.translate('anime_info.episodes'),
-                value: anime.episodeCount?.toString() ?? 'N/A'),
-            InfoRow(
-                label: AppLocalization.translate('anime_info.size_ep'),
-                value: anime.episodeLength != null
-                    ? '${anime.episodeLength} mins'
-                    : 'N/A'),
-            InfoRow(
-                label: AppLocalization.translate('anime_info.info'),
-                value: anime.ageRating ?? 'N/A'),
-            InfoRow(
-                label: AppLocalization.translate('anime_info.genres'),
-                value: anime.rating?.toStringAsFixed(1) ?? 'N/A'),
+            _buildRow(
+              context,
+              'anime_info.status',
+              _translateStatus(anime.status),
+            ),
+            _buildRow(
+              context,
+              'anime_info.episodes',
+              anime.episodeCount?.toString() ?? 'N/A',
+            ),
+            _buildRow(
+              context,
+              'anime_info.size_ep',
+              anime.episodeLength != null
+                  ? '${anime.episodeLength} mins'
+                  : 'N/A',
+            ),
+            _buildRow(
+              context,
+              'anime_info.info',
+              anime.ageRating ?? 'N/A',
+            ),
+            _buildRow(
+              context,
+              'anime_info.genres',
+              anime.rating?.toStringAsFixed(1) ?? 'N/A',
+            ),
           ],
         );
       },
+    );
+  }
+
+  Widget _buildRow(BuildContext context, String labelKey, String value) {
+    final label = AppLocalization.translate(labelKey);
+    return InfoRow(
+      label: label,
+      value: value,
+      labelWidget: translateAll
+          ? TranslatedText(
+              label,
+              forceTranslate: true,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            )
+          : null,
+      valueWidget:
+          translateAll ? TranslatedText(value, forceTranslate: true) : null,
     );
   }
 }
