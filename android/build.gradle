@@ -18,14 +18,14 @@ subprojects {
     if (subproject.state.executed) {
         if (subproject.plugins.hasPlugin("com.android.application") || subproject.plugins.hasPlugin("com.android.library")) {
             subproject.android {
-                ndkVersion = "28.2.13676358"
+                ndkVersion = "27.0.12077973"
             }
         }
     } else {
         subproject.afterEvaluate {
             if (subproject.plugins.hasPlugin("com.android.application") || subproject.plugins.hasPlugin("com.android.library")) {
                 subproject.android {
-                ndkVersion = "28.2.13676358"
+                ndkVersion = "27.0.12077973"
                 }
             }
         }

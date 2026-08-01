@@ -20,6 +20,7 @@ if (Test-Path -LiteralPath $keystorePath) {
 
 & keytool -genkeypair -v `
   -keystore $keystorePath `
+  -storetype JKS `
   -storepass $storePassword `
   -keypass $keyPassword `
   -alias $keyAlias `
