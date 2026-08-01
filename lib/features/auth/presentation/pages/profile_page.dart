@@ -199,21 +199,6 @@ class ProfilePage extends StatelessWidget {
                           },
                         ),
                         const Divider(height: 1),
-                        SwitchListTile(
-                          secondary: const Icon(Icons.translate_outlined),
-                          title: Text(AppLocalization.translate(
-                              'dialog_settings.auto_translate')),
-                          subtitle: Text(AppLocalization.translate(
-                              'dialog_settings.auto_translate_subtitle')),
-                          value: settingsState is SettingsLoaded &&
-                              settingsState.autoTranslate,
-                          onChanged: (val) {
-                            context
-                                .read<SettingsBloc>()
-                                .add(ToggleAutoTranslateEvent(val));
-                          },
-                        ),
-                        const Divider(height: 1),
                         ListTile(
                           leading: const Icon(Icons.language_outlined),
                           title: Text(AppLocalization.translate(

@@ -13,11 +13,9 @@ class CharactersTab extends StatelessWidget {
   const CharactersTab({
     super.key,
     required this.anime,
-    this.translateAll = false,
   });
 
   final Anime anime;
-  final bool translateAll;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +58,6 @@ class CharactersTab extends StatelessWidget {
                         padding: const EdgeInsets.all(4.0),
                         child: TranslatedText(
                           character.name,
-                          forceTranslate: translateAll,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontSize: 12),

@@ -34,7 +34,6 @@ class AnimeDetailPage extends StatefulWidget {
 class _AnimeDetailPageState extends State<AnimeDetailPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  bool _translateAll = false;
 
   @override
   void initState() {
@@ -165,17 +164,6 @@ class _AnimeDetailPageState extends State<AnimeDetailPage>
                 },
               ),
               actions: [
-                IconButton(
-                  tooltip: _translateAll
-                      ? 'Mostrar conteúdo original'
-                      : 'Traduzir anime completo',
-                  icon: Icon(
-                    _translateAll ? Icons.translate : Icons.g_translate,
-                  ),
-                  onPressed: () {
-                    setState(() => _translateAll = !_translateAll);
-                  },
-                ),
                 if (userId != null)
                   BlocBuilder<FavoritesBloc, FavoritesState>(
                     builder: (context, state) {
@@ -265,22 +253,10 @@ class _AnimeDetailPageState extends State<AnimeDetailPage>
         body: TabBarView(
           controller: _tabController,
           children: [
-            SynopsisTab(
-              anime: widget.anime,
-              translateAll: _translateAll,
-            ),
-            CharactersTab(
-              anime: widget.anime,
-              translateAll: _translateAll,
-            ),
-            EpisodesTab(
-              anime: widget.anime,
-              translateAll: _translateAll,
-            ),
-            InfoTab(
-              anime: widget.anime,
-              translateAll: _translateAll,
-            ),
+            SynopsisTab(anime: widget.anime),
+            CharactersTab(anime: widget.anime),
+            EpisodesTab(anime: widget.anime),
+            InfoTab(anime: widget.anime),
           ],
         ),
       ),

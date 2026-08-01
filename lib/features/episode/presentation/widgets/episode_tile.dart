@@ -8,18 +8,15 @@ class EpisodeTile extends StatelessWidget {
   const EpisodeTile({
     super.key,
     required this.episode,
-    this.translateAll = false,
   });
 
   final Episode episode;
-  final bool translateAll;
 
   void _showSynopsisDialog(BuildContext context) {
     unawaited(showDialog<void>(
       context: context,
       builder: (context) => _SynopsisDialog(
         episode: episode,
-        translateAll: translateAll,
       ),
     ));
   }
@@ -44,7 +41,6 @@ class EpisodeTile extends StatelessWidget {
             ),
       title: TranslatedText(
         titleText,
-        forceTranslate: translateAll,
       ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,11 +57,9 @@ class EpisodeTile extends StatelessWidget {
 class _SynopsisDialog extends StatelessWidget {
   const _SynopsisDialog({
     required this.episode,
-    required this.translateAll,
   });
 
   final Episode episode;
-  final bool translateAll;
 
   @override
   Widget build(BuildContext context) {
@@ -75,12 +69,10 @@ class _SynopsisDialog extends StatelessWidget {
     return AlertDialog(
       title: TranslatedText(
         titleText,
-        forceTranslate: translateAll,
       ),
       content: SingleChildScrollView(
         child: TranslatedText(
           synopsisText,
-          forceTranslate: translateAll,
         ),
       ),
       actions: [

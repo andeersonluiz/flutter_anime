@@ -13,11 +13,9 @@ class InfoTab extends StatelessWidget {
   const InfoTab({
     super.key,
     required this.anime,
-    this.translateAll = false,
   });
 
   final Anime anime;
-  final bool translateAll;
 
   String _translateStatus(String status) {
     switch (status.toLowerCase()) {
@@ -79,8 +77,7 @@ class InfoTab extends StatelessWidget {
     return InfoRow(
       label: label,
       value: value,
-      valueWidget:
-          translateAll ? TranslatedText(value, forceTranslate: true) : null,
+      valueWidget: TranslatedText(value),
     );
   }
 }

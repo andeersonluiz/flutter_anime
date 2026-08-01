@@ -8,11 +8,9 @@ class SynopsisTab extends StatelessWidget {
   const SynopsisTab({
     super.key,
     required this.anime,
-    this.translateAll = false,
   });
 
   final Anime anime;
-  final bool translateAll;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +28,6 @@ class SynopsisTab extends StatelessWidget {
           const SizedBox(height: 12),
           TranslatedText(
             anime.synopsis,
-            forceTranslate: translateAll,
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   height: 1.5,
                 ),
