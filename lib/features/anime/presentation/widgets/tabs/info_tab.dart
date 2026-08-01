@@ -22,13 +22,13 @@ class InfoTab extends StatelessWidget {
   String _translateStatus(String status) {
     switch (status.toLowerCase()) {
       case 'current':
-        return 'Em andamento';
+        return AppLocalization.translate('anime_info.status_current');
       case 'finished':
-        return 'Finalizado';
+        return AppLocalization.translate('anime_info.status_finished');
       case 'upcoming':
-        return 'Em breve';
+        return AppLocalization.translate('anime_info.status_upcoming');
       case 'tba':
-        return 'A ser anunciado';
+        return AppLocalization.translate('anime_info.status_tba');
       default:
         return status;
     }
@@ -79,13 +79,6 @@ class InfoTab extends StatelessWidget {
     return InfoRow(
       label: label,
       value: value,
-      labelWidget: translateAll
-          ? TranslatedText(
-              label,
-              forceTranslate: true,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            )
-          : null,
       valueWidget:
           translateAll ? TranslatedText(value, forceTranslate: true) : null,
     );
