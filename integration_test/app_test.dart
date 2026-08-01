@@ -117,7 +117,10 @@ void main() {
         await tester.pump(const Duration(seconds: 2));
 
         // Verify Dark Mode switch is present
-        final themeSwitch = find.byType(SwitchListTile);
+        final themeSwitch = find.ancestor(
+          of: find.byIcon(Icons.dark_mode_outlined),
+          matching: find.byType(SwitchListTile),
+        );
         expect(themeSwitch, findsOneWidget);
 
         // Toggle theme
